@@ -1,0 +1,8 @@
+query songs {
+	songs {
+		id
+		createdAt
+		updatedAt
+		name
+	}
+}

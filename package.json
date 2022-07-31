@@ -1,0 +1,44 @@
+{
+	"name": "nextjs-with-typescript",
+	"version": "5.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
+		"gen": "graphql-codegen"
+	},
+	"dependencies": {
+		"@emotion/cache": "latest",
+		"@emotion/react": "latest",
+		"@emotion/server": "latest",
+		"@emotion/styled": "latest",
+		"@mui/icons-material": "latest",
+		"@mui/lab": "latest",
+		"@mui/material": "latest",
+		"@urql/exchange-graphcache": "^4.4.3",
+		"formik": "^2.2.9",
+		"graphql": "^16.5.0",
+		"isomorphic-fetch": "^3.0.0",
+		"next": "latest",
+		"next-urql": "^3.3.3",
+		"react": "latest",
+		"react-dom": "latest",
+		"react-is": "^18.2.0",
+		"urql": "^2.2.3",
+		"yup": "^0.32.11"
+	},
+	"devDependencies": {
+		"@graphql-codegen/cli": "^2.11.2",
+		"@graphql-codegen/typescript": "latest",
+		"@graphql-codegen/typescript-operations": "latest",
+		"@graphql-codegen/typescript-urql": "latest",
+		"@types/node": "latest",
+		"@types/react": "latest",
+		"eslint": "latest",
+		"eslint-config-next": "latest",
+		"typescript": "latest"
+	}
+}

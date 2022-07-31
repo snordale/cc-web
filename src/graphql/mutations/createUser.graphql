@@ -1,0 +1,16 @@
+mutation createUser($email: String!, $username: String!, $password: String!) {
+	createUser(data: {
+		email: $email,
+		username: $username,
+		passwordHash: $password
+	}) {
+		user {
+			...NormalUser
+			createdAt
+		}
+		errors {
+			field
+			message
+		}
+	}
+}
