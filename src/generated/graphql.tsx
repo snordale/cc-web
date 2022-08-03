@@ -21,6 +21,12 @@ export type CreateUserInput = {
   username: Scalars['String'];
 };
 
+export type ExchangeResponse = {
+  __typename?: 'ExchangeResponse';
+  error: Scalars['String'];
+  user?: Maybe<User>;
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -37,7 +43,8 @@ export type Mutation = {
   createSong: Song;
   createUser: UserResponse;
   deleteSongById: Scalars['Boolean'];
-  incrementPlistViews: Scalars['Boolean'];
+  exchangeAuthCode: ExchangeResponse;
+  getAuthLink: Scalars['String'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   sendPasswordReset: Scalars['Boolean'];
@@ -47,7 +54,7 @@ export type Mutation = {
 
 
 export type MutationCreateSongArgs = {
-  name: Scalars['String'];
+  data: SongData;
 };
 
 
@@ -61,8 +68,9 @@ export type MutationDeleteSongByIdArgs = {
 };
 
 
-export type MutationIncrementPlistViewsArgs = {
-  id: Scalars['Float'];
+export type MutationExchangeAuthCodeArgs = {
+  code: Scalars['String'];
+  state: Scalars['String'];
 };
 
 
@@ -87,11 +95,20 @@ export type MutationUpdateSongArgs = {
   name: Scalars['String'];
 };
 
+export type Playlist = {
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
+  songs: Array<Scalars['String']>;
+  updatedAt: Scalars['String'];
+  views?: InputMaybe<Scalars['Float']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   song?: Maybe<Song>;
   songs: Array<Song>;
+  users: Array<User>;
 };
 
 
@@ -101,13 +118,22 @@ export type QuerySongArgs = {
 
 export type Song = {
   __typename?: 'Song';
-  album: Scalars['String'];
-  artists: Array<Scalars['String']>;
+  album?: Maybe<Scalars['String']>;
+  artists?: Maybe<Array<Scalars['String']>>;
   createdAt: Scalars['String'];
   id: Scalars['Float'];
   isrc: Scalars['String'];
   name: Scalars['String'];
+  playlist: Array<Scalars['String']>;
   updatedAt: Scalars['String'];
+};
+
+export type SongData = {
+  album: Scalars['String'];
+  artists: Array<Scalars['String']>;
+  isrc: Scalars['String'];
+  name: Scalars['String'];
+  playlist: Playlist;
 };
 
 export type User = {
@@ -115,7 +141,10 @@ export type User = {
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Float'];
-  spotifyId: Scalars['String'];
+  permission: Scalars['String'];
+  profilePhoto?: Maybe<Scalars['String']>;
+  spotifyId?: Maybe<Scalars['String']>;
+  spotifyRefreshToken?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -128,7 +157,7 @@ export type UserResponse = {
 
 export type ErrorsFragFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type NormalUserFragment = { __typename?: 'User', id: number, username: string };
+export type PrivateUserFragment = { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -137,7 +166,20 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', createdAt: string, id: number, username: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type ExchangeAuthCodeMutationVariables = Exact<{
+  code: Scalars['String'];
+  state: Scalars['String'];
+}>;
+
+
+export type ExchangeAuthCodeMutation = { __typename?: 'Mutation', exchangeAuthCode: { __typename?: 'ExchangeResponse', error: string, user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null } };
+
+export type GetAuthLinkMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAuthLinkMutation = { __typename?: 'Mutation', getAuthLink: string };
 
 export type LoginMutationVariables = Exact<{
   emailOrUsername: Scalars['String'];
@@ -145,7 +187,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', createdAt: string, id: number, username: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -165,17 +207,22 @@ export type SetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, username: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null };
 
 export type SongsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SongsQuery = { __typename?: 'Query', songs: Array<{ __typename?: 'Song', id: number, createdAt: string, updatedAt: string, name: string }> };
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string }> };
 
 export const ErrorsFragFragmentDoc = gql`
     fragment ErrorsFrag on FieldError {
@@ -183,18 +230,23 @@ export const ErrorsFragFragmentDoc = gql`
   message
 }
     `;
-export const NormalUserFragmentDoc = gql`
-    fragment NormalUser on User {
+export const PrivateUserFragmentDoc = gql`
+    fragment PrivateUser on User {
   id
+  createdAt
+  updatedAt
   username
+  profilePhoto
+  spotifyId
+  spotifyRefreshToken
+  permission
 }
     `;
 export const CreateUserDocument = gql`
     mutation createUser($email: String!, $username: String!, $password: String!) {
   createUser(data: {email: $email, username: $username, passwordHash: $password}) {
     user {
-      ...NormalUser
-      createdAt
+      ...PrivateUser
     }
     errors {
       field
@@ -202,17 +254,39 @@ export const CreateUserDocument = gql`
     }
   }
 }
-    ${NormalUserFragmentDoc}`;
+    ${PrivateUserFragmentDoc}`;
 
 export function useCreateUserMutation() {
   return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
+};
+export const ExchangeAuthCodeDocument = gql`
+    mutation exchangeAuthCode($code: String!, $state: String!) {
+  exchangeAuthCode(code: $code, state: $state) {
+    user {
+      ...PrivateUser
+    }
+    error
+  }
+}
+    ${PrivateUserFragmentDoc}`;
+
+export function useExchangeAuthCodeMutation() {
+  return Urql.useMutation<ExchangeAuthCodeMutation, ExchangeAuthCodeMutationVariables>(ExchangeAuthCodeDocument);
+};
+export const GetAuthLinkDocument = gql`
+    mutation getAuthLink {
+  getAuthLink
+}
+    `;
+
+export function useGetAuthLinkMutation() {
+  return Urql.useMutation<GetAuthLinkMutation, GetAuthLinkMutationVariables>(GetAuthLinkDocument);
 };
 export const LoginDocument = gql`
     mutation login($emailOrUsername: String!, $password: String!) {
   login(data: {emailOrUsername: $emailOrUsername, passwordHash: $password}) {
     user {
-      ...NormalUser
-      createdAt
+      ...PrivateUser
     }
     errors {
       field
@@ -220,7 +294,7 @@ export const LoginDocument = gql`
     }
   }
 }
-    ${NormalUserFragmentDoc}`;
+    ${PrivateUserFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
@@ -247,14 +321,14 @@ export const SetPasswordDocument = gql`
     mutation setPassword($token: String!, $newPassword: String!) {
   setPassword(token: $token, newPassword: $newPassword) {
     user {
-      ...NormalUser
+      ...PrivateUser
     }
     errors {
       ...ErrorsFrag
     }
   }
 }
-    ${NormalUserFragmentDoc}
+    ${PrivateUserFragmentDoc}
 ${ErrorsFragFragmentDoc}`;
 
 export function useSetPasswordMutation() {
@@ -263,10 +337,10 @@ export function useSetPasswordMutation() {
 export const MeDocument = gql`
     query Me {
   me {
-    ...NormalUser
+    ...PrivateUser
   }
 }
-    ${NormalUserFragmentDoc}`;
+    ${PrivateUserFragmentDoc}`;
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
@@ -284,4 +358,15 @@ export const SongsDocument = gql`
 
 export function useSongsQuery(options?: Omit<Urql.UseQueryArgs<SongsQueryVariables>, 'query'>) {
   return Urql.useQuery<SongsQuery, SongsQueryVariables>({ query: SongsDocument, ...options });
+};
+export const UsersDocument = gql`
+    query users {
+  users {
+    ...PrivateUser
+  }
+}
+    ${PrivateUserFragmentDoc}`;
+
+export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<UsersQuery, UsersQueryVariables>({ query: UsersDocument, ...options });
 };

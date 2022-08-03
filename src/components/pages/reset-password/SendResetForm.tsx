@@ -5,6 +5,7 @@ import { Stack, TextField } from '@mui/material'
 
 import { LoadingButton } from '@mui/lab'
 import React from 'react'
+import toast from "react-hot-toast"
 import { useSendPasswordResetMutation } from '../../../generated/graphql'
 
 const validationSchema = yup.object({
@@ -21,10 +22,13 @@ export const SendResetForm: React.FC<{}> = ({ }) => {
 			initialValues={{ email: "" }}
 			validationSchema={validationSchema}
 			onSubmit={async (data, { setErrors }) => {
-				console.log("data")
-				console.log(data)
 				const res = await sendPasswordReset({ ...data })
-
+				if (!res.data?.sendPasswordReset) {
+					toast.error("Something went wrong.")
+				}
+				else {
+					toast.success("Email sent.")
+				}
 				// is sent --- TODO validate email on backend
 			}}
 		>

@@ -5,8 +5,7 @@ mutation createUser($email: String!, $username: String!, $password: String!) {
 		passwordHash: $password
 	}) {
 		user {
-			...NormalUser
-			createdAt
+			...PrivateUser
 		}
 		errors {
 			field

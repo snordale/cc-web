@@ -1,32 +1,27 @@
 import * as React from 'react'
 
-import { Box, Container, Typography } from '@mui/material'
+import { Home, Landing } from '../src/components/pages/index'
+import { useMeQuery, useSongsQuery } from '../src/generated/graphql'
 
-import { NavBar } from '../src/components/NavBar'
 import type { NextPage } from 'next'
+import { NormalPage } from '../src/components/global/NormalPage'
 import { createUrqlClient } from '../src/utils/createUrqlClient'
-import { useSongsQuery } from '../src/generated/graphql'
 import { withUrqlClient } from 'next-urql';
 
-const Home: NextPage = () => {
-	const [{ data }] = useSongsQuery()
+const Index: NextPage = () => {
+	const [{ data }] = useMeQuery()
 
 	if (!data) return null
 
 	return (
-		<>
-			<NavBar />
-			<div>common collections</div>
-			{data.songs.map(song => {
-				return (
-					<div>
-						<div>{song.id}</div>
-						<div>{song.name}</div>
-					</div>
-				)
-			})}
-		</>
+		<NormalPage>
+			{data?.me ? (
+				<Home />
+			) : (
+				<Landing />
+			)}
+		</NormalPage>
 	)
 }
 
-export default withUrqlClient(createUrqlClient)(Home)
+export default withUrqlClient(createUrqlClient)(Index)

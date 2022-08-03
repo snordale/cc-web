@@ -1,0 +1,10 @@
+fragment PrivateUser on User {
+	id
+	createdAt
+	updatedAt
+	username
+	profilePhoto
+	spotifyId
+	spotifyRefreshToken
+	permission
+}

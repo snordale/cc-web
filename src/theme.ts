@@ -1,7 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
-// Create a theme instance.
 const theme = createTheme({
 	typography: {
 		fontFamily: [
@@ -22,19 +21,44 @@ const theme = createTheme({
 		secondary: {
 			main: '#B0D7FE',
 		},
+		green: {
+			main: '#D6FDD7',
+		},
 		error: {
 			main: '#D45E5E',
 		},
+		neutral: {
+			light: "#DFDFDF",
+			main: "#CACACA",
+			dark: "#A4A4A4",
+		}
 	},
 	components: {
 		MuiButton: {
 			styleOverrides: {
 				root: {
-					textTransform: "none"
+					textTransform: "none",
+					borderRadius: "0px"
 				}
 			}
 		}
 	}
-});
+})
 
-export default theme;
+declare module '@mui/material/styles' {
+	interface Palette {
+		neutral: Palette['primary']
+	}
+	interface PaletteOptions {
+		neutral: PaletteOptions['primary']
+	}
+	interface Palette {
+		green: Palette['primary']
+	}
+	interface PaletteOptions {
+		green: PaletteOptions['primary']
+	}
+}
+
+
+export default theme

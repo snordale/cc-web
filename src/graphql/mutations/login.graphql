@@ -4,8 +4,7 @@ mutation login($emailOrUsername: String!, $password: String!) {
 		passwordHash: $password
 	}) {
 		user {
-			...NormalUser
-			createdAt
+			...PrivateUser
 		}
 		errors {
 			field

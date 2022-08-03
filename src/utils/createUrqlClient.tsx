@@ -1,6 +1,8 @@
 import { Cache, QueryInput, cacheExchange } from "@urql/exchange-graphcache";
-import { CreateUserMutation, LoginMutation, LogoutMutation, MeDocument, MeQuery } from '../generated/graphql';
-import { createClient, dedupExchange, fetchExchange } from 'urql';
+import { CreateUserMutation, ExchangeAuthCodeMutation, LoginMutation, LogoutMutation, MeDocument, MeQuery } from '../generated/graphql';
+import { createClient, dedupExchange, errorExchange, fetchExchange } from 'urql';
+
+import Router from "next/router";
 
 function typedUpdateQuery<Result, Query> (
 	cache: Cache,
@@ -25,8 +27,6 @@ export const createUrqlClient = (ssrExchange:any) => ({
 							{ query: MeDocument },
 							result,
 							(res, query) => {
-								console.log("res")
-								console.log(res)
 								if (res.createUser.errors) return query
 
 								query.me = res.createUser.user
@@ -59,6 +59,14 @@ export const createUrqlClient = (ssrExchange:any) => ({
 			}
 		}),
 		ssrExchange,
+		errorExchange({
+			onError(error) {
+				if (error.message.includes("Not authenticated")) {
+					Router.replace("/login")
+				}
+				console.error(error);
+			},
+		}),
 		fetchExchange
 	],
 })

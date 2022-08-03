@@ -2,10 +2,11 @@ import * as yup from "yup"
 
 import { Form, Formik } from 'formik'
 import { Stack, TextField } from '@mui/material'
+import router, { useRouter } from "next/router"
 
 import { LoadingButton } from '@mui/lab'
 import React from 'react'
-import router from "next/router"
+import toast from "react-hot-toast"
 import { useSetPasswordMutation } from '../../../generated/graphql'
 
 const validationSchema = yup.object({
@@ -15,29 +16,38 @@ const validationSchema = yup.object({
 		.required()
 })
 
-export const SetPasswordForm: React.FC<{token: string}> = ({ token }) => {
+export const SetPasswordForm: React.FC<{}> = ({ }) => {
+	const router = useRouter()
+
 	const [, setPassword] = useSetPasswordMutation()
+
 	return (
 		<Formik
 			initialValues={{ newPassword: "" }}
 			validationSchema={validationSchema}
 			onSubmit={async (data, { setErrors }) => {
-				console.log("data")
-				console.log(data)
 				const res = await setPassword({
-					token,
+					token: router.query.token as string,
 					newPassword: data.newPassword
 				})
 				const errors = res.data?.setPassword.errors
 
 				if (errors) {
+					const tokenError = errors.find(error => error.field === "token")
+					toast.error(tokenError ?
+						"Invalid token." :
+						"Something went wrong."
+					)
+
 					const errorObject: {[key: string]: string} = {}
 					errors.forEach(error => {
 						errorObject[error.field] = error.message
 					})
 					setErrors(errorObject)
+
 				}
 				else {
+					toast.error("Password set.")
 					router.push("/")
 				}
 			}}

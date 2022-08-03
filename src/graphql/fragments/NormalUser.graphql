@@ -1,4 +1,0 @@
-fragment NormalUser on User {
-	id
-	username
-}
