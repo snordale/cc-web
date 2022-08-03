@@ -1,8 +1,10 @@
-import * as React from 'react';
-
 import {
 	Box,
 	Checkbox,
+	Dialog,
+	List,
+	ListItem,
+	ListItemText,
 	Paper,
 	Table,
 	TableBody,
@@ -13,11 +15,14 @@ import {
 	TableRow,
 	TableSortLabel,
 } from '@mui/material';
+import { DialogTypes, Toolbar } from './Toolbar';
+import { useSetUserPermissionsMutation, useUsersQuery } from '../../../../generated/graphql'
 
 import { Row } from './Row';
 import { Spinner } from '../../../global/animations'
-import { Toolbar } from './Toolbar';
-import { useUsersQuery } from '../../../../generated/graphql'
+import { permissions } from '../../../../constants';
+import toast from 'react-hot-toast';
+import {useState} from "react"
 import { visuallyHidden } from '@mui/utils'
 
 export interface UserTableData {
@@ -73,16 +78,16 @@ const headCells: readonly HeadCell[] = [
 		label: 'Username',
 	},
 	{
-		id: 'createdAt',
-		numeric: true,
-		disablePadding: false,
-		label: 'Joined',
-	},
-	{
 		id: 'spotifyId',
 		numeric: false,
 		disablePadding: false,
 		label: 'Spotify ID',
+	},
+	{
+		id: 'createdAt',
+		numeric: false,
+		disablePadding: false,
+		label: 'Joined',
 	},
 	{
 		id: 'permission',
@@ -124,25 +129,25 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 				/>
 				</TableCell>
 				{headCells.map((headCell) => (
-				<TableCell
-					key={headCell.id}
-					align={headCell.numeric ? 'right' : 'left'}
-					padding={headCell.disablePadding ? 'none' : 'normal'}
-					sortDirection={orderBy === headCell.id ? order : false}
-				>
-					<TableSortLabel
-					active={orderBy === headCell.id}
-					direction={orderBy === headCell.id ? order : 'asc'}
-					onClick={createSortHandler(headCell.id)}
+					<TableCell
+						key={headCell.id}
+						align={headCell.numeric ? 'right' : 'left'}
+						padding={headCell.disablePadding ? 'none' : 'normal'}
+						sortDirection={orderBy === headCell.id ? order : false}
 					>
-					{headCell.label}
-					{orderBy === headCell.id ? (
-						<Box component="span" sx={visuallyHidden}>
-						{order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-						</Box>
-					) : null}
-					</TableSortLabel>
-				</TableCell>
+						<TableSortLabel
+							active={orderBy === headCell.id}
+							direction={orderBy === headCell.id ? order : 'asc'}
+							onClick={createSortHandler(headCell.id)}
+						>
+							{headCell.label}
+							{orderBy === headCell.id ? (
+								<Box component="span" sx={visuallyHidden}>
+								{order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+								</Box>
+							) : null}
+						</TableSortLabel>
+					</TableCell>
 				))}
 			</TableRow>
 		</TableHead>
@@ -151,17 +156,40 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 
 export function UserTable() {
-	const [order, setOrder] = React.useState<Order>('asc')
-	const [orderBy, setOrderBy] = React.useState<keyof UserTableData>('createdAt')
-	const [selected, setSelected] = React.useState<readonly string[]>([])
-	const [page, setPage] = React.useState(0)
-	const [rowsPerPage, setRowsPerPage] = React.useState(5)
+	const [order, setOrder] = useState<Order>('asc')
+	const [orderBy, setOrderBy] = useState<keyof UserTableData>('id')
+	const [selected, setSelected] = useState<number[]>([])
+	const [page, setPage] = useState(0)
+	const [rowsPerPage, setRowsPerPage] = useState(5)
+
+	const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none)
+	const [openDialog, setOpenDialog] = useState(false)
 
 	const [{ data, fetching }] = useUsersQuery()
+	const [, setUserPermissions] = useSetUserPermissionsMutation()
 
 	if (fetching) return <Spinner />
 
 	const users = data?.users!
+
+	const handleDialogClose = () => {
+		setDialogType(DialogTypes.none)
+		setOpenDialog(false)
+	}
+
+	const onActionSelect = (type: DialogTypes) => {
+		setDialogType(type)
+		setOpenDialog(true)
+	}
+
+	const onPermissionSelect = async (permission: string) => {
+		const res = await setUserPermissions({ userIds: selected, permission })
+		if (res) {
+			toast.success("Permissions updated.")
+		}
+		setSelected([])
+		handleDialogClose()
+	}
 
 	const handleRequestSort = (
 		event: React.MouseEvent<unknown>,
@@ -174,19 +202,19 @@ export function UserTable() {
 
 	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.checked) {
-			const newSelected = users.map(user => user.username)
+			const newSelected = users.map(user => user.id)
 			setSelected(newSelected)
 			return
 		}
 		setSelected([])
 	}
 
-	const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-		const selectedIndex = selected.indexOf(name)
-		let newSelected: readonly string[] = []
+	const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+		const selectedIndex = selected.indexOf(id)
+		let newSelected: number[] = []
 
 		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name)
+			newSelected = newSelected.concat(selected, id)
 		}
 		else if (selectedIndex === 0) {
 			newSelected = newSelected.concat(selected.slice(1))
@@ -201,7 +229,7 @@ export function UserTable() {
 			)
 		}
 
-		setSelected(newSelected);
+		setSelected(newSelected)
 	}
 
 	const handleChangePage = (_event: unknown, newPage: number) => {
@@ -215,7 +243,7 @@ export function UserTable() {
 		setPage(0)
 	}
 
-	const isSelected = (name: string) => selected.indexOf(name) !== -1
+	const isSelected = (id: number) => selected.indexOf(id) !== -1
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows = page > 0 ?
@@ -225,7 +253,7 @@ export function UserTable() {
 	return (
 		<Box sx={{ width: '100%' }}>
 			<Paper sx={{ width: '100%', mb: 2 }}>
-				<Toolbar numSelected={selected.length} />
+				<Toolbar numSelected={selected.length} onActionSelect={onActionSelect} />
 				<TableContainer>
 					<Table
 						sx={{ minWidth: 750 }}
@@ -274,6 +302,22 @@ export function UserTable() {
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			</Paper>
+			<Dialog
+				open={openDialog}
+				onClose={handleDialogClose}
+			>
+				<List sx={{ pt: 0 }}>
+					{Object.values(permissions).map(perm => (
+						<ListItem
+							button
+							onClick={() => onPermissionSelect(perm)}
+							key={perm}
+						>
+							<ListItemText primary={perm} />
+						</ListItem>
+					))}
+				</List>
+			</Dialog>
 		</Box>
 	)
 }

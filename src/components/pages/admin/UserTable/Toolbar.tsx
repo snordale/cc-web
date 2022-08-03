@@ -6,15 +6,24 @@ import {
 	alpha
 } from "@mui/material"
 
-import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
+import KeyIcon from '@mui/icons-material/Key'
 import React from 'react'
+
+export enum DialogTypes {
+	none = "none",
+	permissions = "permissions"
+}
 
 interface ToolbarProps {
 	numSelected: number
+	onActionSelect: (type: DialogTypes) => void
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ numSelected }) => {
+export const Toolbar: React.FC<ToolbarProps> = ({
+	numSelected,
+	onActionSelect
+}) => {
 	return (
 		<MuiToolbar
 			sx={{
@@ -45,13 +54,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({ numSelected }) => {
 					id="tableTitle"
 					component="div"
 				>
-					Nutrition
+					Users
 				</Typography>
 			)}
 			{numSelected > 0 ? (
-				<Tooltip title="Delete">
-					<IconButton>
-						<DeleteIcon />
+				<Tooltip title="Set Permissions">
+					<IconButton onClick={() => onActionSelect(DialogTypes.permissions)}>
+						<KeyIcon />
 					</IconButton>
 				</Tooltip>
 			) : (

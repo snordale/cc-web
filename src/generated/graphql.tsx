@@ -49,6 +49,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   sendPasswordReset: Scalars['Boolean'];
   setPassword: UserResponse;
+  setUserPermissions: Scalars['Boolean'];
   updateSong?: Maybe<Song>;
 };
 
@@ -87,6 +88,12 @@ export type MutationSendPasswordResetArgs = {
 export type MutationSetPasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationSetUserPermissionsArgs = {
+  permission: Scalars['String'];
+  userIds: Array<Scalars['Int']>;
 };
 
 
@@ -208,6 +215,14 @@ export type SetPasswordMutationVariables = Exact<{
 
 
 export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, permission: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type SetUserPermissionsMutationVariables = Exact<{
+  userIds: Array<Scalars['Int']> | Scalars['Int'];
+  permission: Scalars['String'];
+}>;
+
+
+export type SetUserPermissionsMutation = { __typename?: 'Mutation', setUserPermissions: boolean };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -333,6 +348,15 @@ ${ErrorsFragFragmentDoc}`;
 
 export function useSetPasswordMutation() {
   return Urql.useMutation<SetPasswordMutation, SetPasswordMutationVariables>(SetPasswordDocument);
+};
+export const SetUserPermissionsDocument = gql`
+    mutation setUserPermissions($userIds: [Int!]!, $permission: String!) {
+  setUserPermissions(userIds: $userIds, permission: $permission)
+}
+    `;
+
+export function useSetUserPermissionsMutation() {
+  return Urql.useMutation<SetUserPermissionsMutation, SetUserPermissionsMutationVariables>(SetUserPermissionsDocument);
 };
 export const MeDocument = gql`
     query Me {

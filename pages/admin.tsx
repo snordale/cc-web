@@ -15,10 +15,6 @@ import { withUrqlClient } from 'next-urql'
 const Admin: React.FC<{}> = ({ }) => {
 	const router = useRouter()
 	const [{ data, fetching }] = useMeQuery()
-	const [{
-		data: usersData,
-		fetching: fetchingUsers
-	}] = useUsersQuery()
 
 	if (fetching) return <Spinner />
 
@@ -34,7 +30,10 @@ const Admin: React.FC<{}> = ({ }) => {
 			<Box width="100%">
 				<PageHeader text="Admin" />
 				<Typography>The world is yours.</Typography>
-				<Box width="100%">
+				<Box
+					width="100%"
+					marginTop="30px"
+				>
 					<UserTable />
 				</Box>
 			</Box>

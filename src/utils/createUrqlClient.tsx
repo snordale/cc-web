@@ -1,5 +1,5 @@
 import { Cache, QueryInput, cacheExchange } from "@urql/exchange-graphcache";
-import { CreateUserMutation, ExchangeAuthCodeMutation, LoginMutation, LogoutMutation, MeDocument, MeQuery } from '../generated/graphql';
+import { CreateUserMutation, ExchangeAuthCodeMutation, LoginMutation, LogoutMutation, MeDocument, MeQuery, SetUserPermissionsMutation, UsersDocument, UsersQuery, useUsersQuery } from '../generated/graphql';
 import { createClient, dedupExchange, errorExchange, fetchExchange } from 'urql';
 
 import Router from "next/router";
@@ -21,6 +21,9 @@ export const createUrqlClient = (ssrExchange:any) => ({
 		cacheExchange({
 			updates: {
 				Mutation: {
+					setUserPermissions: (_result, _args, cache, _info) => {
+						cache.invalidate({ __typename: 'Query' }, 'users')
+					},
 					createUser: (result, _args, cache, _info) => {
 						typedUpdateQuery<CreateUserMutation, MeQuery>(
 							cache,
