@@ -5,12 +5,46 @@ export enum permissions {
 	GOD = "god",
 	ADMIN = "admin",
 	CURATOR = "curator",
-	TIER1 = "tier1",
 	TIER2 = "tier2",
+	TIER1 = "tier1",
 	NONE = "none",
 }
 
 export const headerStyle = {
 	fontSize: "30px",
 	fontWeight: "500",
+}
+
+export enum SpotifyScopes {
+	userReadRecentlyPlayed = "user-read-recently-played",
+	userTopRead = "user-top-read",
+	playlistReadPrivate = "playlist-read-private",
+	userLibraryModify = "user-library-modify",
+}
+
+export const spotifyScopeData = {
+	[SpotifyScopes.userReadRecentlyPlayed]: {
+		scope: "user-read-recently-played",
+		label: "Recently Played Tracks",
+		endpoint: "Get Current User's Recently Played Tracks",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played"
+	},
+	[SpotifyScopes.userTopRead]: {
+		scope: "user-top-read",
+		label: "Top Artists and Tracks",
+		endpoint: "Get a User's Top Artists and Tracks",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-users-top-artists-and-tracks"
+	},
+	[SpotifyScopes.playlistReadPrivate]: {
+		scope: "playlist-read-private",
+		label: "Public + Private Playlists",
+		endpoint: "Get a List of Current User's Playlists",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists"
+	},
+	[SpotifyScopes.userLibraryModify]: {
+		scope: "user-library-modify",
+		label: "Like + Unlike Songs",
+		endpoint: "Save Tracks for User",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/save-tracks-user"
+	},
 }

@@ -3,8 +3,10 @@ fragment PrivateUser on User {
 	createdAt
 	updatedAt
 	username
+	permission
 	profilePhoto
 	spotifyId
 	spotifyRefreshToken
-	permission
+	spotifyScope
+	spotifyScopes
 }

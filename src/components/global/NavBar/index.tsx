@@ -59,8 +59,8 @@ export const NavBar: React.FC<{}> = ({ }) => {
 							/>
 						)}
 						<DesktopLink
-							text={data.me.username}
-							href="/profile"
+							text="Account"
+							href="/account"
 							borderLeft
 						/>
 						<DesktopLink

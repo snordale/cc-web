@@ -26,13 +26,13 @@ const SpotifyCallback: React.FC = () => {
 
 			if (res.data?.exchangeAuthCode.user) {
 				toast.success("Spotify linked")
-				router.replace("/profile")
+				router.replace("/account")
 			}
 			else {
 				if (res.data?.exchangeAuthCode.error === "Spotify account connected to another account.") {
 					toast.error("Spotify account in use.")
 				}
-				router.replace("/profile")
+				router.replace("/account")
 			}
 		}
 

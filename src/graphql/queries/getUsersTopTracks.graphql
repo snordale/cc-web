@@ -1,0 +1,8 @@
+query getUsersTopTracks($id: Int!) {
+	getUsersTopTracks(id: $id) {
+		tracks {
+			name
+			href
+		}
+	}
+}

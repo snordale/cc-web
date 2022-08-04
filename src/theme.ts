@@ -24,9 +24,6 @@ const theme = createTheme({
 		green: {
 			main: '#D6FDD7',
 		},
-		error: {
-			main: '#D45E5E',
-		},
 		neutral: {
 			light: "#DFDFDF",
 			main: "#CACACA",
