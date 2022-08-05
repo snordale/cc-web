@@ -24,6 +24,9 @@ export const createUrqlClient = (ssrExchange:any) => ({
 					setUserPermissions: (_result, _args, cache, _info) => {
 						cache.invalidate({ __typename: 'Query' }, 'users')
 					},
+					exchangeAuthCode: (_result, _args, cache, _info) => {
+						cache.invalidate({ __typename: 'Query' }, 'me')
+					},
 					createUser: (result, _args, cache, _info) => {
 						typedUpdateQuery<CreateUserMutation, MeQuery>(
 							cache,

@@ -7,6 +7,5 @@ fragment PrivateUser on User {
 	profilePhoto
 	spotifyId
 	spotifyRefreshToken
-	spotifyScope
 	spotifyScopes
 }

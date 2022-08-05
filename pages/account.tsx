@@ -1,12 +1,14 @@
+import { Api, OpenInNew } from '@mui/icons-material'
 import { Avatar, Box, Dialog, Link, Stack, Switch, Tooltip, Typography } from '@mui/material'
 import { CommonButton, PageHeader } from '../src/components/common'
-import React, { useMemo, useState } from 'react'
-import { SpotifyScopes, permissions, signatureGradientLight, spotifyScopeData } from '../src/constants'
+import React, { useEffect, useMemo, useState } from 'react'
+import { SpotifyScopes, curatorRequiredScopes, permissions, requiredScopes, signatureGradientLight, spotifyScopeData } from '../src/constants'
 import { useGetAuthLinkMutation, useGetUsersTopTracksQuery, useMeQuery } from '../src/generated/graphql'
 
 import { NormalPage } from '../src/components/global/NormalPage'
 import { Spinner } from '../src/components/global/animations'
 import { createUrqlClient } from '../src/utils/createUrqlClient'
+import { getArrayDiff } from '../src/utils'
 import { useMustLogin } from '../src/hooks'
 import { useRouter } from "next/router"
 import { withUrqlClient } from 'next-urql'
@@ -20,15 +22,40 @@ const Account: React.FC<{}> = ({ }) => {
 	const [{ data: topTracks, fetching: fetchingTracks }] = useGetUsersTopTracksQuery({ variables: { id: 31 } })
 
 	const [openDialog, setOpenDialog] = useState(false)
-	const [permInputs, setPermInputs] = useState<string[]>([])
+	const [scopes, setScopes] = useState<string[]>([])
 
-	useMemo(() => {
-		if (data && data.me) {
-			if (data.me.spotifyScopes) {
-				setPermInputs(data?.me?.spotifyScopes)
-			}
+	useEffect(() => {
+		if (data && data.me && data.me.spotifyScopes) {
+			setScopes(data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]))
 		}
 	}, [data])
+
+		const getButtonText = (): string => {
+			const diff = getArrayDiff(scopes, data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]))
+			if (diff.length === 0) return "No Changes"
+			if (
+				data?.me?.permission === permissions.CURATOR &&
+				!curatorRequiredScopes.every(scope => scopes.includes(scope))
+			) {
+				return "Resign as Curator"
+			}
+			if (!scopes.every(scope => data?.me?.spotifyScopes.includes(scope as any))) {
+				return "Authorize with Spotify"
+			}
+			return "Save"
+			// if scopes === me.spotifyScopes -> No Changes
+			// else if user is curator and missing required scope -> Resign as Curator
+			// else if scopes contains new scope -> Authorize with Spotify
+			// else -> Save
+			//if (scopes)
+		}
+
+	const buttonText = useMemo(() => {
+		if (data && data.me && data.me.spotifyScopes) {
+			return getButtonText()
+		}
+	}, [data, scopes])
+
 
 	if (fetching || !data) return <Spinner />
 
@@ -76,6 +103,16 @@ const Account: React.FC<{}> = ({ }) => {
 		setOpenDialog(true)
 	}
 
+	const handlePermToggle = (_: React.ChangeEvent<HTMLInputElement>, targetScope: string) => {
+		if (scopes.includes(targetScope)) {
+			setScopes(prev => prev.filter(scope => scope !== targetScope))
+		}
+		else {
+			setScopes(prev => [...prev, targetScope])
+		}
+	}
+
+
 	return (
 		<NormalPage>
 			<Stack
@@ -121,26 +158,42 @@ const Account: React.FC<{}> = ({ }) => {
 								<Stack
 									direction="row"
 									alignItems="flex-end"
-									spacing="6px"
+									spacing="12px"
+									paddingY="4px"
 								>
-									<Typography>{data.label}</Typography>
-									<Tooltip title={data.endpoint} >
-										<Link href={data.link} target="_blank">
-											<Typography fontSize="12px" fontWeight="600">
-												Endpoint
-											</Typography>
-										</Link>
-									</Tooltip>
-									<Switch
-										value={permInputs.includes(data.scope)}
-										setValue={() => handlePermToggle}
+									<Stack
+										direction="row"
+									>
+
+										<Typography
+											fontSize={14}
+											fontWeight="600"
+											color={requiredScopes.includes(data.scope as SpotifyScopes) ? "#AAA" : "primary.main"}
+										>
+											{data.label}
+											{curatorRequiredScopes.includes(data.scope as SpotifyScopes) && "*"}
+										</Typography>
+									</Stack>
+									<Tooltip
+										title={data.endpoint}
 										sx={{
 											marginLeft: "auto !important"
 										}}
+										disableInteractive
+									>
+										<Link href={data.link} target="_blank">
+											<Api fontSize="small" />
+										</Link>
+									</Tooltip>
+									<Switch
+										checked={scopes.includes(data.scope)}
+										onChange={(event) => handlePermToggle(event, data.scope)}
+
 									/>
 								</Stack>
 							))}
 						</Box>
+						<CommonButton text={buttonText} />
 					</Dialog>
 				</Stack>
 				{!fetchingTracks && (

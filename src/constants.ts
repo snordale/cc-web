@@ -16,34 +16,59 @@ export const headerStyle = {
 }
 
 export enum SpotifyScopes {
+	userReadEmail = "user-read-email",
+	userReadPrivate = "user-read-private",
 	userReadRecentlyPlayed = "user-read-recently-played",
 	userTopRead = "user-top-read",
 	playlistReadPrivate = "playlist-read-private",
 	userLibraryModify = "user-library-modify",
 }
 
+export const requiredScopes = [
+	SpotifyScopes.userReadEmail,
+	SpotifyScopes.userReadPrivate
+]
+
+export const curatorRequiredScopes = [
+	SpotifyScopes.userReadRecentlyPlayed,
+	SpotifyScopes.userTopRead,
+	SpotifyScopes.playlistReadPrivate,
+]
+
 export const spotifyScopeData = {
+	[SpotifyScopes.userReadEmail]: {
+		scope: "user-read-email",
+		label: "Email",
+		endpoint: "Get Current User's Profile",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile"
+	},
+	[SpotifyScopes.userReadPrivate]: {
+		scope: "user-read-private",
+		label: "Account",
+		endpoint: "Get Current User's Profile",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile"
+	},
+	[SpotifyScopes.playlistReadPrivate]: {
+		scope: "playlist-read-private",
+		label: "View Playlists",
+		endpoint: "Get a List of Current User's Playlists",
+		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists"
+	},
 	[SpotifyScopes.userReadRecentlyPlayed]: {
 		scope: "user-read-recently-played",
-		label: "Recently Played Tracks",
+		label: "View Recently Played Tracks",
 		endpoint: "Get Current User's Recently Played Tracks",
 		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played"
 	},
 	[SpotifyScopes.userTopRead]: {
 		scope: "user-top-read",
-		label: "Top Artists and Tracks",
+		label: "View Top Artists and Tracks",
 		endpoint: "Get a User's Top Artists and Tracks",
 		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-users-top-artists-and-tracks"
 	},
-	[SpotifyScopes.playlistReadPrivate]: {
-		scope: "playlist-read-private",
-		label: "Public + Private Playlists",
-		endpoint: "Get a List of Current User's Playlists",
-		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists"
-	},
 	[SpotifyScopes.userLibraryModify]: {
 		scope: "user-library-modify",
-		label: "Like + Unlike Songs",
+		label: "Like + Unlike Songs from CC",
 		endpoint: "Save Tracks for User",
 		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/save-tracks-user"
 	},

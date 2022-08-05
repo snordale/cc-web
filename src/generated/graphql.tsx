@@ -185,7 +185,6 @@ export type User = {
   profilePhoto?: Maybe<Scalars['String']>;
   spotifyId?: Maybe<Scalars['String']>;
   spotifyRefreshToken?: Maybe<Scalars['String']>;
-  spotifyScope?: Maybe<Scalars['String']>;
   spotifyScopes: Array<SpotifyScopes>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
@@ -199,7 +198,7 @@ export type UserResponse = {
 
 export type ErrorsFragFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type PrivateUserFragment = { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> };
+export type PrivateUserFragment = { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -208,7 +207,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ExchangeAuthCodeMutationVariables = Exact<{
   code: Scalars['String'];
@@ -216,7 +215,7 @@ export type ExchangeAuthCodeMutationVariables = Exact<{
 }>;
 
 
-export type ExchangeAuthCodeMutation = { __typename?: 'Mutation', exchangeAuthCode: { __typename?: 'ExchangeResponse', error: string, user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> } | null } };
+export type ExchangeAuthCodeMutation = { __typename?: 'Mutation', exchangeAuthCode: { __typename?: 'ExchangeResponse', error: string, user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null } };
 
 export type GetAuthLinkMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -229,7 +228,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -249,7 +248,7 @@ export type SetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type SetPasswordMutation = { __typename?: 'Mutation', setPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type SetUserPermissionsMutationVariables = Exact<{
   userIds: Array<Scalars['Int']> | Scalars['Int'];
@@ -269,7 +268,7 @@ export type GetUsersTopTracksQuery = { __typename?: 'Query', getUsersTopTracks: 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null };
 
 export type SongsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -279,7 +278,7 @@ export type SongsQuery = { __typename?: 'Query', songs: Array<{ __typename?: 'So
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScope?: string | null, spotifyScopes: Array<SpotifyScopes> }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> }> };
 
 export const ErrorsFragFragmentDoc = gql`
     fragment ErrorsFrag on FieldError {
@@ -297,7 +296,6 @@ export const PrivateUserFragmentDoc = gql`
   profilePhoto
   spotifyId
   spotifyRefreshToken
-  spotifyScope
   spotifyScopes
 }
     `;
