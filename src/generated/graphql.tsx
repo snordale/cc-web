@@ -18,6 +18,7 @@ export type Scalars = {
 export type CreateUserInput = {
   email: Scalars['String'];
   passwordHash: Scalars['String'];
+  token: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -44,7 +45,9 @@ export type Mutation = {
   createUser: UserResponse;
   deleteSongById: Scalars['Boolean'];
   exchangeAuthCode: ExchangeResponse;
-  getAuthLink: Scalars['String'];
+  getBasicAuthLink: Scalars['String'];
+  getCuratorAuthLink: Scalars['String'];
+  getNewCuratorToken?: Maybe<Scalars['String']>;
   login: UserResponse;
   logout: Scalars['Boolean'];
   sendPasswordReset: Scalars['Boolean'];
@@ -158,6 +161,8 @@ export type SongData = {
 export enum SpotifyScopes {
   PlaylistReadPrivate = 'playlistReadPrivate',
   UserLibraryModify = 'userLibraryModify',
+  UserReadEmail = 'userReadEmail',
+  UserReadPrivate = 'userReadPrivate',
   UserReadRecentlyPlayed = 'userReadRecentlyPlayed',
   UserTopRead = 'userTopRead'
 }
@@ -204,6 +209,7 @@ export type CreateUserMutationVariables = Exact<{
   email: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+  token: Scalars['String'];
 }>;
 
 
@@ -217,10 +223,20 @@ export type ExchangeAuthCodeMutationVariables = Exact<{
 
 export type ExchangeAuthCodeMutation = { __typename?: 'Mutation', exchangeAuthCode: { __typename?: 'ExchangeResponse', error: string, user?: { __typename?: 'User', id: number, createdAt: string, updatedAt: string, username: string, permission: string, profilePhoto?: string | null, spotifyId?: string | null, spotifyRefreshToken?: string | null, spotifyScopes: Array<SpotifyScopes> } | null } };
 
-export type GetAuthLinkMutationVariables = Exact<{ [key: string]: never; }>;
+export type GetBasicAuthLinkMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAuthLinkMutation = { __typename?: 'Mutation', getAuthLink: string };
+export type GetBasicAuthLinkMutation = { __typename?: 'Mutation', getBasicAuthLink: string };
+
+export type GetCuratorAuthLinkMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCuratorAuthLinkMutation = { __typename?: 'Mutation', getCuratorAuthLink: string };
+
+export type GetNewCuratorTokenMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNewCuratorTokenMutation = { __typename?: 'Mutation', getNewCuratorToken?: string | null };
 
 export type LoginMutationVariables = Exact<{
   emailOrUsername: Scalars['String'];
@@ -300,8 +316,10 @@ export const PrivateUserFragmentDoc = gql`
 }
     `;
 export const CreateUserDocument = gql`
-    mutation createUser($email: String!, $username: String!, $password: String!) {
-  createUser(data: {email: $email, username: $username, passwordHash: $password}) {
+    mutation createUser($email: String!, $username: String!, $password: String!, $token: String!) {
+  createUser(
+    data: {email: $email, username: $username, passwordHash: $password, token: $token}
+  ) {
     user {
       ...PrivateUser
     }
@@ -330,14 +348,32 @@ export const ExchangeAuthCodeDocument = gql`
 export function useExchangeAuthCodeMutation() {
   return Urql.useMutation<ExchangeAuthCodeMutation, ExchangeAuthCodeMutationVariables>(ExchangeAuthCodeDocument);
 };
-export const GetAuthLinkDocument = gql`
-    mutation getAuthLink {
-  getAuthLink
+export const GetBasicAuthLinkDocument = gql`
+    mutation getBasicAuthLink {
+  getBasicAuthLink
 }
     `;
 
-export function useGetAuthLinkMutation() {
-  return Urql.useMutation<GetAuthLinkMutation, GetAuthLinkMutationVariables>(GetAuthLinkDocument);
+export function useGetBasicAuthLinkMutation() {
+  return Urql.useMutation<GetBasicAuthLinkMutation, GetBasicAuthLinkMutationVariables>(GetBasicAuthLinkDocument);
+};
+export const GetCuratorAuthLinkDocument = gql`
+    mutation getCuratorAuthLink {
+  getCuratorAuthLink
+}
+    `;
+
+export function useGetCuratorAuthLinkMutation() {
+  return Urql.useMutation<GetCuratorAuthLinkMutation, GetCuratorAuthLinkMutationVariables>(GetCuratorAuthLinkDocument);
+};
+export const GetNewCuratorTokenDocument = gql`
+    mutation getNewCuratorToken {
+  getNewCuratorToken
+}
+    `;
+
+export function useGetNewCuratorTokenMutation() {
+  return Urql.useMutation<GetNewCuratorTokenMutation, GetNewCuratorTokenMutationVariables>(GetNewCuratorTokenDocument);
 };
 export const LoginDocument = gql`
     mutation login($emailOrUsername: String!, $password: String!) {

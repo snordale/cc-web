@@ -17,7 +17,7 @@ export const Row: React.FC<RowProps> = ({
 	handleClick
 }) => {
 	const isItemSelected = isSelected(user.id)
-	const labelId = `enhanced-table-checkbox-${index}`
+	const labelId = `user-table-checkbox-${index}`
 	return (
 		<TableRow
 			hover
@@ -25,7 +25,6 @@ export const Row: React.FC<RowProps> = ({
 			role="checkbox"
 			aria-checked={isItemSelected}
 			tabIndex={-1}
-			key={user.username}
 			selected={isItemSelected}
 		>
 			<TableCell padding="checkbox">
@@ -33,7 +32,7 @@ export const Row: React.FC<RowProps> = ({
 					color="primary"
 					checked={isItemSelected}
 					inputProps={{
-					'aria-labelledby': labelId,
+						'aria-labelledby': labelId,
 					}}
 				/>
 			</TableCell>

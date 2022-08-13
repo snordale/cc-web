@@ -1,13 +1,15 @@
 import { Box, Typography } from '@mui/material'
 import { LoadingBar, Spinner } from '../src/components/global/animations'
-import { useMeQuery, useUsersQuery } from '../src/generated/graphql'
+import { useGetNewCuratorTokenMutation, useMeQuery, useUsersQuery } from '../src/generated/graphql'
 
+import { CommonButton } from '../src/components/common'
 import { NormalPage } from '../src/components/global'
 import { PageHeader } from '../src/components/common/PageHeader'
 import React from 'react'
 import { UserTable } from "../src/components/pages/admin"
 import { createUrqlClient } from '../src/utils/createUrqlClient'
 import { permissions } from '../src/constants'
+import { routing } from '../src/config'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
 import { withUrqlClient } from 'next-urql'
@@ -15,6 +17,8 @@ import { withUrqlClient } from 'next-urql'
 const Admin: React.FC<{}> = ({ }) => {
 	const router = useRouter()
 	const [{ data, fetching }] = useMeQuery()
+	const [, getNewCuratorToken] = useGetNewCuratorTokenMutation()
+	//const [, createPlaylist] = useCreatePlaylist()
 
 	if (fetching) return <Spinner />
 
@@ -30,6 +34,16 @@ const Admin: React.FC<{}> = ({ }) => {
 			<Box width="100%">
 				<PageHeader text="Admin" />
 				<Typography>The world is yours.</Typography>
+				<CommonButton
+					text="Create Curator Link"
+					sx={{ marginTop: "12px" }}
+					onClick={async () => console.log(`http://localhost:3000/join?token=${await (await getNewCuratorToken()).data?.getNewCuratorToken}`)}
+				/>
+				<CommonButton
+					text="Create Playlist"
+					sx={{ marginTop: "12px" }}
+					//onClick={async () => createPlaylist())}
+				/>
 				<Box
 					width="100%"
 					marginTop="30px"

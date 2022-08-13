@@ -68,7 +68,7 @@ export const NavBar: React.FC<{}> = ({ }) => {
 							onClick={() => {
 								router.replace("/").then(_ => {
 									logout()
-									toast.success("Logged out.")
+									toast.success("Logged out.", { id: "logout" })
 								})
 							}}
 							borderLeft

@@ -36,15 +36,9 @@ export const curatorRequiredScopes = [
 ]
 
 export const spotifyScopeData = {
-	[SpotifyScopes.userReadEmail]: {
-		scope: "user-read-email",
-		label: "Email",
-		endpoint: "Get Current User's Profile",
-		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile"
-	},
 	[SpotifyScopes.userReadPrivate]: {
 		scope: "user-read-private",
-		label: "Account",
+		label: "View Account",
 		endpoint: "Get Current User's Profile",
 		link: "https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile"
 	},

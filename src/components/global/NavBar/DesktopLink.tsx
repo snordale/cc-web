@@ -19,7 +19,7 @@ export const DesktopLink: React.FC<DesktopLinkProps> = ({
 		return (
 			<Button
 				sx={{
-					padding: "12px 18px",
+					padding: "6px 18px",
 					"&:hover": {
 						//bgcolor: "green.main"
 						background: signatureGradientLight

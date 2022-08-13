@@ -1,68 +1,117 @@
-import { Api, OpenInNew } from '@mui/icons-material'
-import { Avatar, Box, Dialog, Link, Stack, Switch, Tooltip, Typography } from '@mui/material'
-import { CommonButton, PageHeader } from '../src/components/common'
+import {
+	Avatar,
+	Box,
+	Link,
+	Stack,
+	Tooltip,
+	Typography
+} from '@mui/material'
+import { CommonButton, Dialog, PageHeader } from '../src/components/common'
+import { FormStates, SpotifyScope } from '../src/components/pages/account'
+import { NormalPage, Spinner } from '../src/components/global'
 import React, { useEffect, useMemo, useState } from 'react'
-import { SpotifyScopes, curatorRequiredScopes, permissions, requiredScopes, signatureGradientLight, spotifyScopeData } from '../src/constants'
-import { useGetAuthLinkMutation, useGetUsersTopTracksQuery, useMeQuery } from '../src/generated/graphql'
+import {
+	SpotifyScopes,
+	curatorRequiredScopes,
+	permissions,
+	requiredScopes,
+	signatureGradientLight,
+	spotifyScopeData
+} from '../src/constants'
+import {
+	useGetBasicAuthLinkMutation,
+	useGetCuratorAuthLinkMutation,
+	useGetUsersTopTracksQuery,
+	useMeQuery
+} from '../src/generated/graphql'
 
-import { NormalPage } from '../src/components/global/NormalPage'
-import { Spinner } from '../src/components/global/animations'
+import { Api } from '@mui/icons-material'
 import { createUrqlClient } from '../src/utils/createUrqlClient'
 import { getArrayDiff } from '../src/utils'
-import { useMustLogin } from '../src/hooks'
+import toast from 'react-hot-toast'
+import { useRequireLogin } from '../src/hooks'
 import { useRouter } from "next/router"
+import { useUserPermission } from '../src/hooks/use-user-permission'
 import { withUrqlClient } from 'next-urql'
 
 const Account: React.FC<{}> = ({ }) => {
 	const router = useRouter()
-	useMustLogin()
 
-	const [, getAuthLink] = useGetAuthLinkMutation()
+	useRequireLogin()
+
+	const [, getCuratorAuthLink] = useGetCuratorAuthLinkMutation()
+	const [, getBasicAuthLink] = useGetBasicAuthLinkMutation()
+
 	const [{ data, fetching }] = useMeQuery()
-	const [{ data: topTracks, fetching: fetchingTracks }] = useGetUsersTopTracksQuery({ variables: { id: 31 } })
+	const [{
+		data: topTracks,
+		fetching: fetchingTracks
+	}] = useGetUsersTopTracksQuery({ variables: { id: 31 } })
+
+	const { isCurator } = useUserPermission()
 
 	const [openDialog, setOpenDialog] = useState(false)
 	const [scopes, setScopes] = useState<string[]>([])
 
+	const currentScopes: string[] = data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]) ?? []
+
 	useEffect(() => {
-		if (data && data.me && data.me.spotifyScopes) {
-			setScopes(data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]))
+		if (currentScopes) {
+			setScopes(currentScopes)
 		}
 	}, [data])
 
-		const getButtonText = (): string => {
-			const diff = getArrayDiff(scopes, data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]))
-			if (diff.length === 0) return "No Changes"
-			if (
-				data?.me?.permission === permissions.CURATOR &&
-				!curatorRequiredScopes.every(scope => scopes.includes(scope))
-			) {
-				return "Resign as Curator"
-			}
-			if (!scopes.every(scope => data?.me?.spotifyScopes.includes(scope as any))) {
-				return "Authorize with Spotify"
-			}
-			return "Save"
-			// if scopes === me.spotifyScopes -> No Changes
-			// else if user is curator and missing required scope -> Resign as Curator
-			// else if scopes contains new scope -> Authorize with Spotify
-			// else -> Save
-			//if (scopes)
-		}
+	const formState = useMemo(() => {
+		const diff = getArrayDiff(scopes, currentScopes)
 
-	const buttonText = useMemo(() => {
-		if (data && data.me && data.me.spotifyScopes) {
-			return getButtonText()
+		if (diff.length === 0) return FormStates.noChanges
+		if (
+			data?.me?.permission === permissions.CURATOR &&
+			!curatorRequiredScopes.every(scope => scopes.includes(scope))
+		) {
+			return FormStates.resignAsCurator
 		}
-	}, [data, scopes])
+		if (!scopes.every(scope => currentScopes.includes(scope as any))) {
+			return FormStates.renewAuth
+		}
+		return FormStates.save
+	}, [scopes, data])
 
+	const hasRequiredScope = useMemo(() => {
+		if (currentScopes) {
+			const hasBasicScope = requiredScopes.every(rqd => currentScopes.includes(rqd as string))
+
+			if (!isCurator) return hasBasicScope
+
+			return curatorRequiredScopes.every(rqd => currentScopes.includes(rqd))
+		}
+		return false
+	}, [data])
 
 	if (fetching || !data) return <Spinner />
 
 
 	const handleRedirect = async () => {
-		const res = await getAuthLink()
-		if (res.data?.getAuthLink) router.replace(res.data?.getAuthLink)
+		if (isCurator) {
+			const res = await getCuratorAuthLink()
+			if (!res.data) {
+				toast.error("Something went wrong.", { id: "something" })
+			}
+			else {
+				router.replace(res.data?.getCuratorAuthLink)
+			}
+			return
+		}
+		else {
+			const res = await getBasicAuthLink()
+			if (!res.data) {
+				toast.error("Something went wrong.", { id: "something" })
+			}
+			else {
+				router.replace(res.data?.getBasicAuthLink)
+			}
+			return
+		}
 	}
 
 	const spotifyConnected = Boolean(data.me?.spotifyRefreshToken)
@@ -103,7 +152,7 @@ const Account: React.FC<{}> = ({ }) => {
 		setOpenDialog(true)
 	}
 
-	const handlePermToggle = (_: React.ChangeEvent<HTMLInputElement>, targetScope: string) => {
+	const toggleScope = (_: React.ChangeEvent<HTMLInputElement>, targetScope: string) => {
 		if (scopes.includes(targetScope)) {
 			setScopes(prev => prev.filter(scope => scope !== targetScope))
 		}
@@ -111,7 +160,6 @@ const Account: React.FC<{}> = ({ }) => {
 			setScopes(prev => [...prev, targetScope])
 		}
 	}
-
 
 	return (
 		<NormalPage>
@@ -129,72 +177,36 @@ const Account: React.FC<{}> = ({ }) => {
 				>
 					{data.me?.username.slice(0, 1)}
 				</Avatar>
-				<Typography>{!fetching && data.me?.username}</Typography>
+				<Typography
+					fontSize="18px"
+					fontWeight="600"
+				>
+					{!fetching && data.me?.username}
+				</Typography>
+				<Typography
+					fontSize="14px"
+					fontWeight="600"
+				>
+					Account Type
+				</Typography>
 				<Typography>{getAccountType()}</Typography>
 				<Stack
-					border="1px solid black"
-					padding="18px"
+					paddingBottom="18px"
 					spacing="12px"
 				>
-					<Stack direction="row" justifyContent="space-between">
-						<Stack direction="row" spacing="6px">
-							<Typography>Spotify Link &#8211; </Typography>
-							{renderSpotifyStatus()}
-						</Stack>
-						<CommonButton
-							text={spotifyConnected ? "Manage" : "Connect"}
-							onClick={spotifyConnected ? handleOpenDialog : handleRedirect}
-						/>
+					<Stack direction="row" spacing="6px">
+						<Typography
+							fontSize="14px"
+							fontWeight="600"
+						>
+							Spotify Link
+						</Typography>
 					</Stack>
-					<Dialog
-						open={openDialog}
-						onClose={handleDialogClose}
-					>
-						<Box padding="24px" minWidth="460px">
-							<Typography fontSize="24px" fontWeight="600">
-								Spotify Permissions
-							</Typography>
-							{Object.values(spotifyScopeData).map(data => (
-								<Stack
-									direction="row"
-									alignItems="flex-end"
-									spacing="12px"
-									paddingY="4px"
-								>
-									<Stack
-										direction="row"
-									>
-
-										<Typography
-											fontSize={14}
-											fontWeight="600"
-											color={requiredScopes.includes(data.scope as SpotifyScopes) ? "#AAA" : "primary.main"}
-										>
-											{data.label}
-											{curatorRequiredScopes.includes(data.scope as SpotifyScopes) && "*"}
-										</Typography>
-									</Stack>
-									<Tooltip
-										title={data.endpoint}
-										sx={{
-											marginLeft: "auto !important"
-										}}
-										disableInteractive
-									>
-										<Link href={data.link} target="_blank">
-											<Api fontSize="small" />
-										</Link>
-									</Tooltip>
-									<Switch
-										checked={scopes.includes(data.scope)}
-										onChange={(event) => handlePermToggle(event, data.scope)}
-
-									/>
-								</Stack>
-							))}
-						</Box>
-						<CommonButton text={buttonText} />
-					</Dialog>
+					<CommonButton
+						text={hasRequiredScope ? "Connected" : "Connect"}
+						disabled={hasRequiredScope}
+						onClick={handleRedirect}
+					/>
 				</Stack>
 				{!fetchingTracks && (
 					<>
@@ -207,6 +219,11 @@ const Account: React.FC<{}> = ({ }) => {
 						})}
 					</>
 				)}
+				{/*<SpotifyScope
+					scopes={scopes}
+					toggleScope={toggleScope}
+					formState={formState}
+				/>*/}
 			</Stack>
 		</NormalPage>
 	)

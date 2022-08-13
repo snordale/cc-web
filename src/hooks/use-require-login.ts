@@ -3,7 +3,7 @@ import toast from "react-hot-toast"
 import { useEffect } from "react"
 import { useMeQuery } from "../generated/graphql"
 
-export const useMustLogin = () => {
+export const useRequireLogin = () => {
 	const [{ data, fetching}] = useMeQuery()
 
 	useEffect(() => {

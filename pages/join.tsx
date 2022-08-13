@@ -8,6 +8,7 @@ import { NormalPage } from '../src/components/global/NormalPage';
 import { createUrqlClient } from '../src/utils/createUrqlClient';
 import toast from 'react-hot-toast';
 import { useCreateUserMutation } from '../src/generated/graphql';
+import { useMemo } from 'react';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 import { withUrqlClient } from 'next-urql';
@@ -29,8 +30,12 @@ const validationSchema = yup.object({
 
 const Join = ({ }) => {
 	const router = useRouter()
+	console.log("router.query")
+	console.log(router.query)
 
 	const [, createUser] = useCreateUserMutation()
+
+	const curatorToken = router.query.token ? router.query.token as string : ""
 
 	return (
 		<NormalPage>
@@ -41,7 +46,11 @@ const Join = ({ }) => {
 					password: ""
 				}}
 				onSubmit={async (data, { setErrors }) => {
-					const res = await createUser(data)
+					const res = await createUser({
+						...data,
+						token: curatorToken
+					})
+
 					const errors = res.data?.createUser.errors
 
 					if (errors) {
@@ -50,6 +59,7 @@ const Join = ({ }) => {
 							errorObject[error.field] = error.message
 						})
 						setErrors(errorObject)
+						if (errorObject.token) toast.error(errorObject.token)
 					}
 					else {
 						toast.success(`Welcome ${res.data?.createUser.user?.username}`, { id: "welcome" })

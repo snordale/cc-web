@@ -275,6 +275,7 @@ export function UserTable() {
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((user, index) => (
 									<Row
+										key={index}
 										user={user}
 										index={index}
 										isSelected={isSelected}
