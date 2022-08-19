@@ -1,6 +1,7 @@
-import { Box, Button as MuiButton, SxProps, Theme } from '@mui/material'
+import { Box, SxProps, Theme } from '@mui/material'
+import React, { useState } from 'react'
 
-import React from 'react'
+import {LoadingButton as MuiButton} from "@mui/lab"
 import { signatureGradientLight } from '../../constants'
 
 interface ButtonProps {
@@ -10,7 +11,7 @@ interface ButtonProps {
 	disabled?: boolean
 	sx?: SxProps<Theme>
 	variant?: "outlined" | "contained" | "text"
-	onClick?: () => void
+	onClick?: () => void | Promise<void>
 	children?: React.ReactNode
 }
 
@@ -24,13 +25,24 @@ export const CommonButton: React.FC<ButtonProps> = ({
 	onClick,
 	children,
 }) => {
+	const [loading, setLoading] = useState(false)
+
+	const handleOnClick = async () => {
+		if (!loading && onClick) {
+			setLoading(true)
+			await onClick()
+			setLoading(false)
+		}
+
+	}
 	return (
 		<Box>
 			<MuiButton
 				variant={variant}
 				size={size}
 				href={href}
-				onClick={onClick}
+				onClick={handleOnClick}
+				loading={loading}
 				disabled={disabled}
 				sx={[
 					{

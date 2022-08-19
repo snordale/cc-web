@@ -37,7 +37,17 @@ const Admin: React.FC<{}> = ({ }) => {
 				<CommonButton
 					text="Create Curator Link"
 					sx={{ marginTop: "12px" }}
-					onClick={async () => console.log(`http://localhost:3000/join?token=${await (await getNewCuratorToken()).data?.getNewCuratorToken}`)}
+					onClick={async () => {
+						const res = await getNewCuratorToken()
+						if (res.data?.getNewCuratorToken) {
+							const token = res.data.getNewCuratorToken
+							await navigator.clipboard.writeText((`http://localhost:3000/join?token=${token}`))
+							toast.success("Copied to clipboard.")
+						}
+						else {
+							toast.error("Unsuccessful.")
+						}
+					}}
 				/>
 				<CommonButton
 					text="Create Playlist"

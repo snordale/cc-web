@@ -21,7 +21,9 @@ export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
 			<Box
 				width="100%"
 				display="flex"
+				flexDirection="column"
 				justifyContent="center"
+				alignItems="center"
 				paddingX={isMobile ? "18px" : "40px"}
 				paddingY={isMobile ? "24px" : "40px"}
 			>
