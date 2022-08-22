@@ -78,6 +78,9 @@ const Account: React.FC<{}> = ({ }) => {
 	}, [scopes, data])
 
 	const hasRequiredScope = useMemo(() => {
+		console.log("scopes log")
+		console.log(currentScopes)
+		console.log(requiredScopes)
 		if (currentScopes) {
 			const hasBasicScope = requiredScopes.every(rqd => currentScopes.includes(rqd as string))
 
@@ -219,11 +222,6 @@ const Account: React.FC<{}> = ({ }) => {
 						})}
 					</>
 				)}
-				{/*<SpotifyScope
-					scopes={scopes}
-					toggleScope={toggleScope}
-					formState={formState}
-				/>*/}
 			</Stack>
 		</NormalPage>
 	)
