@@ -14,47 +14,50 @@ import {
 	TablePagination,
 	TableRow,
 	TableSortLabel,
-} from '@mui/material';
-import { DialogTypes, Toolbar } from './Toolbar';
-import { useSetUserPermissionsMutation, useUsersQuery } from '../../../../generated/graphql'
+} from "@mui/material";
+import { DialogTypes, Toolbar } from "./Toolbar";
+import {
+	useSetUserPermissionsMutation,
+	useUsersQuery,
+} from "../../../../generated/graphql";
 
-import { Row } from './Row';
-import { Spinner } from '../../../global/animations'
-import { permissions } from '../../../../constants';
-import toast from 'react-hot-toast';
-import {useState} from "react"
-import { visuallyHidden } from '@mui/utils'
+import { Row } from "./Row";
+import { Spinner } from "../../../global/animations";
+import { permissions } from "../../../../constants";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import { visuallyHidden } from "@mui/utils";
 
 export interface UserTableData {
-	id: number
-	createdAt: string
-	username: string
-	spotifyId: string
-	permission: string
+	id: number;
+	createdAt: string;
+	username: string;
+	spotifyId: string;
+	permission: string;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 	if (b[orderBy] < a[orderBy]) {
-		return -1
+		return -1;
 	}
 	if (b[orderBy] > a[orderBy]) {
-		return 1
+		return 1;
 	}
-	return 0
+	return 0;
 }
 
-type Order = 'asc' | 'desc';
+type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof any>(
 	order: Order,
-	orderBy: Key,
+	orderBy: Key
 ): (
 	a: { [key in Key]: number | string },
-	b: { [key in Key]: number | string},
+	b: { [key in Key]: number | string }
 ) => number {
-	return order === 'desc' ?
-		(a, b) => descendingComparator(a, b, orderBy) :
-		(a, b) => -descendingComparator(a, b, orderBy);
+	return order === "desc"
+		? (a, b) => descendingComparator(a, b, orderBy)
+		: (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 interface HeadCell {
@@ -66,40 +69,43 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
 	{
-		id: 'id',
+		id: "id",
 		numeric: true,
 		disablePadding: false,
-		label: 'ID'
+		label: "ID",
 	},
 	{
-		id: 'username',
+		id: "username",
 		numeric: false,
 		disablePadding: false,
-		label: 'Username',
+		label: "Username",
 	},
 	{
-		id: 'spotifyId',
+		id: "spotifyId",
 		numeric: false,
 		disablePadding: false,
-		label: 'Spotify ID',
+		label: "Spotify ID",
 	},
 	{
-		id: 'createdAt',
+		id: "createdAt",
 		numeric: false,
 		disablePadding: false,
-		label: 'Joined',
+		label: "Joined",
 	},
 	{
-		id: 'permission',
+		id: "permission",
 		numeric: false,
 		disablePadding: false,
-		label: 'Permission',
-	}
-]
+		label: "Permission",
+	},
+];
 
 interface EnhancedTableProps {
 	numSelected: number;
-	onRequestSort: (event: React.MouseEvent<unknown>, property: keyof UserTableData) => void;
+	onRequestSort: (
+		event: React.MouseEvent<unknown>,
+		property: keyof UserTableData
+	) => void;
 	onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	order: Order;
 	orderBy: string;
@@ -107,43 +113,54 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-	const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-		props;
+	const {
+		onSelectAllClick,
+		order,
+		orderBy,
+		numSelected,
+		rowCount,
+		onRequestSort,
+	} = props;
 	const createSortHandler =
-		(property: keyof UserTableData) => (event: React.MouseEvent<unknown>) => {
-		onRequestSort(event, property);
+		(property: keyof UserTableData) =>
+		(event: React.MouseEvent<unknown>) => {
+			onRequestSort(event, property);
 		};
 
 	return (
 		<TableHead>
 			<TableRow>
 				<TableCell padding="checkbox">
-				<Checkbox
-					color="primary"
-					indeterminate={numSelected > 0 && numSelected < rowCount}
-					checked={rowCount > 0 && numSelected === rowCount}
-					onChange={onSelectAllClick}
-					inputProps={{
-					'aria-label': 'select all desserts',
-					}}
-				/>
+					<Checkbox
+						color="primary"
+						indeterminate={
+							numSelected > 0 && numSelected < rowCount
+						}
+						checked={rowCount > 0 && numSelected === rowCount}
+						onChange={onSelectAllClick}
+						inputProps={{
+							"aria-label": "select all desserts",
+						}}
+					/>
 				</TableCell>
 				{headCells.map((headCell) => (
 					<TableCell
 						key={headCell.id}
-						align={headCell.numeric ? 'right' : 'left'}
-						padding={headCell.disablePadding ? 'none' : 'normal'}
+						align={headCell.numeric ? "right" : "left"}
+						padding={headCell.disablePadding ? "none" : "normal"}
 						sortDirection={orderBy === headCell.id ? order : false}
 					>
 						<TableSortLabel
 							active={orderBy === headCell.id}
-							direction={orderBy === headCell.id ? order : 'asc'}
+							direction={orderBy === headCell.id ? order : "asc"}
 							onClick={createSortHandler(headCell.id)}
 						>
 							{headCell.label}
 							{orderBy === headCell.id ? (
 								<Box component="span" sx={visuallyHidden}>
-								{order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+									{order === "desc"
+										? "sorted descending"
+										: "sorted ascending"}
 								</Box>
 							) : null}
 						</TableSortLabel>
@@ -151,109 +168,109 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 				))}
 			</TableRow>
 		</TableHead>
-	)
+	);
 }
 
-
 export function UserTable() {
-	const [order, setOrder] = useState<Order>('asc')
-	const [orderBy, setOrderBy] = useState<keyof UserTableData>('id')
-	const [selected, setSelected] = useState<number[]>([])
-	const [page, setPage] = useState(0)
-	const [rowsPerPage, setRowsPerPage] = useState(5)
+	const [order, setOrder] = useState<Order>("asc");
+	const [orderBy, setOrderBy] = useState<keyof UserTableData>("id");
+	const [selected, setSelected] = useState<number[]>([]);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
 
-	const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none)
-	const [openDialog, setOpenDialog] = useState(false)
+	const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none);
+	const [openDialog, setOpenDialog] = useState(false);
 
-	const [{ data, fetching }] = useUsersQuery()
-	const [, setUserPermissions] = useSetUserPermissionsMutation()
+	const [{ data, fetching }] = useUsersQuery();
+	const [, setUserPermissions] = useSetUserPermissionsMutation();
 
-	if (fetching) return <Spinner />
+	if (fetching) return <Spinner />;
 
-	const users = data?.users!
+	const users = data?.users!;
 
 	const handleDialogClose = () => {
-		setDialogType(DialogTypes.none)
-		setOpenDialog(false)
-	}
+		setDialogType(DialogTypes.none);
+		setOpenDialog(false);
+	};
 
 	const onActionSelect = (type: DialogTypes) => {
-		setDialogType(type)
-		setOpenDialog(true)
-	}
+		setDialogType(type);
+		setOpenDialog(true);
+	};
 
 	const onPermissionSelect = async (permission: string) => {
-		const res = await setUserPermissions({ userIds: selected, permission })
+		const res = await setUserPermissions({ userIds: selected, permission });
 		if (res) {
-			toast.success("Permissions updated.")
+			toast.success("Permissions updated.");
 		}
-		setSelected([])
-		handleDialogClose()
-	}
+		setSelected([]);
+		handleDialogClose();
+	};
 
 	const handleRequestSort = (
 		event: React.MouseEvent<unknown>,
-		property: keyof UserTableData,
+		property: keyof UserTableData
 	) => {
-		const isAsc = orderBy === property && order === 'asc'
-		setOrder(isAsc ? 'desc' : 'asc')
-		setOrderBy(property)
-	}
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
+		setOrderBy(property);
+	};
 
-	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSelectAllClick = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
 		if (event.target.checked) {
-			const newSelected = users.map(user => user.id)
-			setSelected(newSelected)
-			return
+			const newSelected = users.map((user) => user.id);
+			setSelected(newSelected);
+			return;
 		}
-		setSelected([])
-	}
+		setSelected([]);
+	};
 
 	const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-		const selectedIndex = selected.indexOf(id)
-		let newSelected: number[] = []
+		const selectedIndex = selected.indexOf(id);
+		let newSelected: number[] = [];
 
 		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id)
-		}
-		else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1))
-		}
-		else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1))
-		}
-		else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
 			newSelected = newSelected.concat(
 				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1),
-			)
+				selected.slice(selectedIndex + 1)
+			);
 		}
 
-		setSelected(newSelected)
-	}
+		setSelected(newSelected);
+	};
 
 	const handleChangePage = (_event: unknown, newPage: number) => {
-		setPage(newPage)
-	}
+		setPage(newPage);
+	};
 
 	const handleChangeRowsPerPage = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		setRowsPerPage(parseInt(event.target.value, 10))
-		setPage(0)
-	}
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 
-	const isSelected = (id: number) => selected.indexOf(id) !== -1
+	const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ?
-		Math.max(0, (1 + page) * rowsPerPage - users.length) :
-		0
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			<Paper sx={{ width: '100%', mb: 2 }}>
-				<Toolbar numSelected={selected.length} onActionSelect={onActionSelect} />
+		<Box sx={{ width: "100%" }}>
+			<Paper sx={{ width: "100%", mb: 2 }}>
+				<Toolbar
+					numSelected={selected.length}
+					onActionSelect={onActionSelect}
+				/>
 				<TableContainer>
 					<Table
 						sx={{ minWidth: 750 }}
@@ -269,10 +286,12 @@ export function UserTable() {
 							rowCount={users.length}
 						/>
 						<TableBody>
-							{
-								(users as UserTableData[])
+							{(users as UserTableData[])
 								.sort(getComparator(order, orderBy))
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								.slice(
+									page * rowsPerPage,
+									page * rowsPerPage + rowsPerPage
+								)
 								.map((user, index) => (
 									<Row
 										key={index}
@@ -281,12 +300,13 @@ export function UserTable() {
 										isSelected={isSelected}
 										handleClick={handleClick}
 									/>
-								))
-							}
+								))}
 							{emptyRows > 0 && (
-								<TableRow style={{
-									height: 53 * emptyRows
-								}}>
+								<TableRow
+									style={{
+										height: 53 * emptyRows,
+									}}
+								>
 									<TableCell colSpan={6} />
 								</TableRow>
 							)}
@@ -303,12 +323,9 @@ export function UserTable() {
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			</Paper>
-			<Dialog
-				open={openDialog}
-				onClose={handleDialogClose}
-			>
+			<Dialog open={openDialog} onClose={handleDialogClose}>
 				<List sx={{ pt: 0 }}>
-					{Object.values(permissions).map(perm => (
+					{Object.values(permissions).map((perm) => (
 						<ListItem
 							button
 							onClick={() => onPermissionSelect(perm)}
@@ -320,5 +337,5 @@ export function UserTable() {
 				</List>
 			</Dialog>
 		</Box>
-	)
+	);
 }

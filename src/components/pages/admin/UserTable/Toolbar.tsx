@@ -3,26 +3,26 @@ import {
 	Toolbar as MuiToolbar,
 	Tooltip,
 	Typography,
-	alpha
-} from "@mui/material"
+	alpha,
+} from "@mui/material";
 
-import FilterListIcon from '@mui/icons-material/FilterList'
-import KeyIcon from '@mui/icons-material/Key'
-import React from 'react'
+import FilterListIcon from "@mui/icons-material/FilterList";
+import KeyIcon from "@mui/icons-material/Key";
+import React from "react";
 
 export enum DialogTypes {
 	none = "none",
-	permissions = "permissions"
+	permissions = "permissions",
 }
 
 interface ToolbarProps {
-	numSelected: number
-	onActionSelect: (type: DialogTypes) => void
+	numSelected: number;
+	onActionSelect: (type: DialogTypes) => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
 	numSelected,
-	onActionSelect
+	onActionSelect,
 }) => {
 	return (
 		<MuiToolbar
@@ -30,7 +30,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 				pl: { sm: 2 },
 				pr: { xs: 1, sm: 1 },
 				...(numSelected > 0 && {
-				bgcolor: (theme) =>
+					bgcolor: (theme) =>
 						alpha(
 							theme.palette.primary.main,
 							theme.palette.action.activatedOpacity
@@ -40,7 +40,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 		>
 			{numSelected > 0 ? (
 				<Typography
-					sx={{ flex: '1 1 100%' }}
+					sx={{ flex: "1 1 100%" }}
 					color="inherit"
 					variant="subtitle1"
 					component="div"
@@ -49,7 +49,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 				</Typography>
 			) : (
 				<Typography
-					sx={{ flex: '1 1 100%' }}
+					sx={{ flex: "1 1 100%" }}
 					variant="h6"
 					id="tableTitle"
 					component="div"
@@ -59,7 +59,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 			)}
 			{numSelected > 0 ? (
 				<Tooltip title="Set Permissions">
-					<IconButton onClick={() => onActionSelect(DialogTypes.permissions)}>
+					<IconButton
+						onClick={() => onActionSelect(DialogTypes.permissions)}
+					>
 						<KeyIcon />
 					</IconButton>
 				</Tooltip>
@@ -71,5 +73,5 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 				</Tooltip>
 			)}
 		</MuiToolbar>
-	)
-}
+	);
+};

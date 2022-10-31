@@ -1,16 +1,16 @@
-import { Box, Button, Stack } from '@mui/material'
-import { useLogoutMutation, useMeQuery } from '../../../generated/graphql'
+import { Box, Button, Stack } from "@mui/material";
+import { useLogoutMutation, useMeQuery } from "../../../generated/graphql";
 
-import { DesktopLink } from './DesktopLink'
-import React from 'react'
-import { isAdmin } from '../../../utils'
-import toast from 'react-hot-toast'
-import { useRouter } from 'next/router'
+import { DesktopLink } from "./DesktopLink";
+import React from "react";
+import { isAdmin } from "../../../utils";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
-export const NavBar: React.FC<{}> = ({ }) => {
-	const router = useRouter()
-	const [{ data, fetching: isLoading }] = useMeQuery()
-	const [, logout] = useLogoutMutation()
+export const NavBar: React.FC<{}> = ({}) => {
+	const router = useRouter();
+	const [{ data, fetching: isLoading }] = useMeQuery();
+	const [, logout] = useLogoutMutation();
 
 	return (
 		<Box
@@ -21,32 +21,17 @@ export const NavBar: React.FC<{}> = ({ }) => {
 			top="0px"
 			zIndex={1}
 			sx={{
-				outline: "1px solid black"
+				outline: "1px solid black",
 			}}
 		>
-			<Box
-				display="flex"
-				flexDirection="row"
-			>
-				<DesktopLink
-					text="Common Collections"
-					href="/"
-					borderRight
-				/>
+			<Box display="flex" flexDirection="row">
+				<DesktopLink text="Common Collections" href="/" borderRight />
 			</Box>
-			<Stack direction="row" >
+			<Stack direction="row">
 				{!isLoading && !data?.me && (
 					<>
-						<DesktopLink
-							text="Login"
-							href="/login"
-							borderLeft
-						/>
-						<DesktopLink
-							text="Join"
-							href="/join"
-							borderLeft
-						/>
+						<DesktopLink text="Login" href="/login" borderLeft />
+						<DesktopLink text="Join" href="/join" borderLeft />
 					</>
 				)}
 				{!isLoading && data?.me && (
@@ -66,10 +51,12 @@ export const NavBar: React.FC<{}> = ({ }) => {
 						<DesktopLink
 							text="Logout"
 							onClick={() => {
-								router.replace("/").then(_ => {
-									logout()
-									toast.success("Logged out.", { id: "logout" })
-								})
+								router.replace("/").then((_) => {
+									logout();
+									toast.success("Logged out.", {
+										id: "logout",
+									});
+								});
 							}}
 							borderLeft
 						/>
@@ -77,5 +64,5 @@ export const NavBar: React.FC<{}> = ({ }) => {
 				)}
 			</Stack>
 		</Box>
-	)
-}
+	);
+};

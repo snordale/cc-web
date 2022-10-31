@@ -1,6 +1,6 @@
-import { Box, LinearProgress } from "@mui/material"
+import { Box, LinearProgress } from "@mui/material";
 
-import { signatureGradient } from "../../../../constants"
+import { signatureGradient } from "../../../../constants";
 
 export const LoadingBar: React.FC<{}> = () => {
 	return (
@@ -9,13 +9,12 @@ export const LoadingBar: React.FC<{}> = () => {
 				sx={{
 					backgroundColor: "none",
 					background: signatureGradient,
-					"span": {
+					span: {
 						backgroundColor: "none",
 						background: "inherit",
-					}
+					},
 				}}
 			/>
 		</Box>
-	)
-
-}
+	);
+};

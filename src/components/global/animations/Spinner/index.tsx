@@ -1,4 +1,4 @@
-import { Box, CircularProgress, LinearProgress } from "@mui/material"
+import { Box, CircularProgress, LinearProgress } from "@mui/material";
 
 export const Spinner: React.FC<{}> = () => {
 	return (
@@ -12,6 +12,5 @@ export const Spinner: React.FC<{}> = () => {
 		>
 			<CircularProgress />
 		</Box>
-	)
-
-}
+	);
+};

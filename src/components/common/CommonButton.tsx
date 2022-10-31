@@ -1,18 +1,18 @@
-import { Box, SxProps, Theme } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, SxProps, Theme } from "@mui/material";
+import React, { useState } from "react";
 
-import {LoadingButton as MuiButton} from "@mui/lab"
-import { signatureGradientLight } from '../../constants'
+import { LoadingButton as MuiButton } from "@mui/lab";
+import { signatureGradientLight } from "../../constants";
 
 interface ButtonProps {
-	text?: string
-	size?: "small" | "medium" | "large"
-	href?: string
-	disabled?: boolean
-	sx?: SxProps<Theme>
-	variant?: "outlined" | "contained" | "text"
-	onClick?: () => void | Promise<void>
-	children?: React.ReactNode
+	text?: string;
+	size?: "small" | "medium" | "large";
+	href?: string;
+	disabled?: boolean;
+	sx?: SxProps<Theme>;
+	variant?: "outlined" | "contained" | "text";
+	onClick?: () => void | Promise<void>;
+	children?: React.ReactNode;
 }
 
 export const CommonButton: React.FC<ButtonProps> = ({
@@ -25,16 +25,15 @@ export const CommonButton: React.FC<ButtonProps> = ({
 	onClick,
 	children,
 }) => {
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(false);
 
 	const handleOnClick = async () => {
 		if (!loading && onClick) {
-			setLoading(true)
-			await onClick()
-			setLoading(false)
+			setLoading(true);
+			await onClick();
+			setLoading(false);
 		}
-
-	}
+	};
 	return (
 		<Box>
 			<MuiButton
@@ -49,19 +48,19 @@ export const CommonButton: React.FC<ButtonProps> = ({
 						borderColor: "primary.main",
 						color: "primary.main",
 						":hover": {
-							background: signatureGradientLight
+							background: signatureGradientLight,
 						},
 						"&.Mui-disabled": {
 							borderColor: "#aaa",
-							color: "#aaa"
-						}
+							color: "#aaa",
+						},
 					},
-					...(Array.isArray(sx) ? sx : [sx])
+					...(Array.isArray(sx) ? sx : [sx]),
 				]}
 			>
 				{text}
 				{children}
 			</MuiButton>
 		</Box>
-	)
-}
+	);
+};

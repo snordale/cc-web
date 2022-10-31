@@ -1,1 +1,1 @@
-export * from "./SpotifyScope"
+export * from "./SpotifyScope";

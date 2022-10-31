@@ -1,2 +1,2 @@
-export * from "./LoadingBar"
-export * from "./Spinner"
+export * from "./LoadingBar";
+export * from "./Spinner";

@@ -1,15 +1,17 @@
 mutation createUser(
-	$email: String!,
-	$username: String!,
-	$password: String!,
+	$email: String!
+	$username: String!
+	$password: String!
 	$token: String!
 ) {
-	createUser(data: {
-		email: $email,
-		username: $username,
-		passwordHash: $password
-		token: $token
-	}) {
+	createUser(
+		data: {
+			email: $email
+			username: $username
+			passwordHash: $password
+			token: $token
+		}
+	) {
 		user {
 			...PrivateUser
 		}

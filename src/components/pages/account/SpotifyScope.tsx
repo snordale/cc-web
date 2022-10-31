@@ -1,57 +1,80 @@
-import { Accordion, AccordionSummary, Box, Dialog, Stack, Switch, Tooltip, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
-import { SpotifyScopes, curatorRequiredScopes, permissions, requiredScopes, spotifyScopeData } from '../../../constants'
+import {
+	Accordion,
+	AccordionSummary,
+	Box,
+	Dialog,
+	Stack,
+	Switch,
+	Tooltip,
+	Typography,
+} from "@mui/material";
+import React, { useMemo } from "react";
+import {
+	SpotifyScopes,
+	curatorRequiredScopes,
+	permissions,
+	requiredScopes,
+	spotifyScopeData,
+} from "../../../constants";
 
-import { Api } from '@mui/icons-material'
-import { CommonButton } from '../../common'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Link from 'next/link'
-import { getArrayDiff } from '../../../utils'
-import { useMeQuery } from '../../../generated/graphql'
-import { useUserPermission } from '../../../hooks/use-user-permission'
+import { Api } from "@mui/icons-material";
+import { CommonButton } from "../../common";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Link from "next/link";
+import { getArrayDiff } from "../../../utils";
+import { useMeQuery } from "../../../generated/graphql";
+import { useUserPermission } from "../../../hooks/use-user-permission";
 
 export enum FormStates {
 	noChanges,
 	resignAsCurator,
 	renewAuth,
-	save
+	save,
 }
 
 interface SpotifyScopeProps {
-	scopes: string[],
-	toggleScope: (_: React.ChangeEvent<HTMLInputElement>, targetScope: string) => void,
-	formState: FormStates
+	scopes: string[];
+	toggleScope: (
+		_: React.ChangeEvent<HTMLInputElement>,
+		targetScope: string
+	) => void;
+	formState: FormStates;
 }
 
 export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 	scopes,
 	toggleScope,
-	formState
+	formState,
 }) => {
+	const [{ data, fetching }] = useMeQuery();
 
-	const [{ data, fetching }] = useMeQuery()
-
-	const {isCurator, fetching: fetchingPerm} = useUserPermission()
+	const { isCurator, fetching: fetchingPerm } = useUserPermission();
 
 	const diff = useMemo(() => {
-		return getArrayDiff(scopes, data?.me?.spotifyScopes.map(scope => SpotifyScopes[scope]))
-	}, [scopes, data])
+		return getArrayDiff(
+			scopes,
+			data?.me?.spotifyScopes.map((scope) => SpotifyScopes[scope])
+		);
+	}, [scopes, data]);
 
 	const getButtonText = (): string => {
 		switch (formState) {
-			case (FormStates.resignAsCurator): return "Resign as Curator"
-			case (FormStates.renewAuth): return "Renew Authorization"
-			case (FormStates.save): return "Save"
+			case FormStates.resignAsCurator:
+				return "Resign as Curator";
+			case FormStates.renewAuth:
+				return "Renew Authorization";
+			case FormStates.save:
+				return "Save";
 			default:
-				return "No Changes"
+				return "No Changes";
 		}
-	}
+	};
 
 	const buttonText = useMemo(() => {
-		return getButtonText()
-	}, [formState])
+		return getButtonText();
+	}, [formState]);
 
-	if (fetching || fetchingPerm) return null
+	if (fetching || fetchingPerm) return null;
 
 	return (
 		<Accordion>
@@ -63,7 +86,7 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 				<Typography>Spotify Scope</Typography>
 			</AccordionSummary>
 			<Box padding="24px" maxWidth="460px">
-				{Object.values(spotifyScopeData).map(data => (
+				{Object.values(spotifyScopeData).map((data) => (
 					<Stack
 						key={data.scope}
 						direction="row"
@@ -75,13 +98,16 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 							spacing="12px"
 							alignItems="flex-end"
 						>
-							<Typography
-								fontSize={12}
-								fontWeight="600"
-							>
+							<Typography fontSize={12} fontWeight="600">
 								{data.label}
-								{requiredScopes.includes(data.scope as SpotifyScopes) && "*"}
-								{(isCurator && curatorRequiredScopes.includes(data.scope as SpotifyScopes)) && "**"}
+								{requiredScopes.includes(
+									data.scope as SpotifyScopes
+								) && "*"}
+								{isCurator &&
+									curatorRequiredScopes.includes(
+										data.scope as SpotifyScopes
+									) &&
+									"**"}
 							</Typography>
 						</Stack>
 						<Stack
@@ -89,28 +115,32 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 							spacing="12px"
 							alignItems="flex-end"
 							sx={{
-								marginLeft: "auto !important"
+								marginLeft: "auto !important",
 							}}
 						>
-							{
-								(!requiredScopes.includes(data.scope as SpotifyScopes) &&
-								(!isCurator || !curatorRequiredScopes.includes(data.scope as SpotifyScopes))) &&
-								(
+							{!requiredScopes.includes(
+								data.scope as SpotifyScopes
+							) &&
+								(!isCurator ||
+									!curatorRequiredScopes.includes(
+										data.scope as SpotifyScopes
+									)) && (
 									<Switch
 										checked={scopes.includes(data.scope)}
-										onChange={(event) => toggleScope(event, data.scope)}
+										onChange={(event) =>
+											toggleScope(event, data.scope)
+										}
 										size="small"
 									/>
-								)
-							}
-							<Tooltip
-								title={data.endpoint}
-								disableInteractive
-							>
+								)}
+							<Tooltip title={data.endpoint} disableInteractive>
 								<Link href={data.link} target="_blank">
-									<CommonButton size="small" sx={{
-										minWidth: "40px"
-									}}>
+									<CommonButton
+										size="small"
+										sx={{
+											minWidth: "40px",
+										}}
+									>
 										<Api fontSize="small" />
 									</CommonButton>
 								</Link>
@@ -118,22 +148,15 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 						</Stack>
 					</Stack>
 				))}
-				<Typography
-					fontSize={10}
-					fontWeight="600"
-					paddingTop="12px"
-				>
+				<Typography fontSize={10} fontWeight="600" paddingTop="12px">
 					* Required
 				</Typography>
 				{isCurator && (
-					<Typography
-						fontSize={10}
-						fontWeight="600"
-					>
+					<Typography fontSize={10} fontWeight="600">
 						* Required as Curator
 					</Typography>
 				)}
 			</Box>
 		</Accordion>
-	)
-}
+	);
+};
