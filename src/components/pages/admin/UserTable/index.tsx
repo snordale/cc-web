@@ -27,6 +27,7 @@ import { permissions } from "../../../../constants";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { visuallyHidden } from "@mui/utils";
+import { FaceRetouchingNaturalSharp } from "@mui/icons-material";
 
 export interface UserTableData {
 	id: number;
@@ -186,7 +187,7 @@ export function UserTable() {
 
 	if (fetching) return <Spinner />;
 
-	const users = data?.users!;
+	const users = data.users;
 
 	const handleDialogClose = () => {
 		setDialogType(DialogTypes.none);
