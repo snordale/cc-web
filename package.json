@@ -40,8 +40,11 @@
 		"@graphql-codegen/typescript-urql": "latest",
 		"@types/node": "latest",
 		"@types/react": "latest",
-		"eslint": "latest",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"eslint": "^8.26.0",
 		"eslint-config-next": "latest",
+		"eslint-plugin-react": "^7.31.10",
 		"typescript": "latest"
 	}
 }
