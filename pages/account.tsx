@@ -1,15 +1,14 @@
-import { Avatar, Box, Link, Stack, Tooltip, Typography } from "@mui/material";
-import { CommonButton, Dialog, PageHeader } from "../src/components/common";
-import { FormStates, SpotifyScope } from "../src/components/pages/account";
-import { NormalPage, Spinner } from "../src/components/global";
+import { Avatar, Box, Link, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
+import { CommonButton, PageHeader } from "../src/components/common";
+import { NormalPage, Spinner } from "../src/components/global";
+import { FormStates } from "../src/components/pages/account";
 import {
-	SpotifyScopes,
 	curatorRequiredScopes,
 	permissions,
 	requiredScopes,
 	signatureGradientLight,
-	spotifyScopeData,
+	SpotifyScopes,
 } from "../src/constants";
 import {
 	useGetBasicAuthLinkMutation,
@@ -18,16 +17,15 @@ import {
 	useMeQuery,
 } from "../src/generated/graphql";
 
-import { Api } from "@mui/icons-material";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
-import { getArrayDiff } from "../src/utils";
+import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { useRequireLogin } from "../src/hooks";
-import { useRouter } from "next/router";
 import { useUserPermission } from "../src/hooks/use-user-permission";
-import { withUrqlClient } from "next-urql";
+import { getArrayDiff } from "../src/utils";
+import { createUrqlClient } from "../src/utils/createUrqlClient";
 
-const Account: React.FC<{}> = ({}) => {
+const Account: React.FC = () => {
 	const router = useRouter();
 
 	useRequireLogin();

@@ -4,19 +4,19 @@ import {
 	useMeQuery,
 } from "../src/generated/graphql";
 
-import { CommonButton } from "../src/components/common";
-import { NormalPage } from "../src/components/global";
-import { PageHeader } from "../src/components/common/PageHeader";
+import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 import React from "react";
+import toast from "react-hot-toast";
+import { CommonButton } from "../src/components/common";
+import { PageHeader } from "../src/components/common/PageHeader";
+import { NormalPage } from "../src/components/global";
 import { Spinner } from "../src/components/global/animations";
 import { UserTable } from "../src/components/pages/admin";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
 import { permissions } from "../src/constants";
-import toast from "react-hot-toast";
-import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../src/utils/createUrqlClient";
 
-const Admin: React.FC<{}> = ({}) => {
+const Admin: React.FC = () => {
 	const router = useRouter();
 	const [{ data, fetching }] = useMeQuery();
 	const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();

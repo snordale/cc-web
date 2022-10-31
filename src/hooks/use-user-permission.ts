@@ -1,11 +1,8 @@
 import { permissions } from "../constants";
-import router from "next/router";
-import toast from "react-hot-toast";
-import { useEffect } from "react";
 import { useMeQuery } from "../generated/graphql";
 
 class ReturnType {
-	fetching: boolean = true;
+	fetching = true;
 	// subscibers + curators + admin + god
 	isMember?: boolean;
 	// tier1 + tier 2

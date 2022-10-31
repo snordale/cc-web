@@ -1,13 +1,13 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useLogoutMutation, useMeQuery } from "../../../generated/graphql";
 
-import { DesktopLink } from "./DesktopLink";
-import React from "react";
-import { isAdmin } from "../../../utils";
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import React from "react";
+import toast from "react-hot-toast";
+import { isAdmin } from "../../../utils";
+import { DesktopLink } from "./DesktopLink";
 
-export const NavBar: React.FC<{}> = ({}) => {
+export const NavBar: React.FC = () => {
 	const router = useRouter();
 	const [{ data, fetching: isLoading }] = useMeQuery();
 	const [, logout] = useLogoutMutation();
@@ -51,7 +51,7 @@ export const NavBar: React.FC<{}> = ({}) => {
 						<DesktopLink
 							text="Logout"
 							onClick={() => {
-								router.replace("/").then((_) => {
+								router.replace("/").then(() => {
 									logout();
 									toast.success("Logged out.", {
 										id: "logout",

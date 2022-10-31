@@ -14,8 +14,8 @@ export const general: GeneralConfig = {
 };
 
 export const routing: RoutingConfig = {
-	apiRoot: process.env.API_ROOT!,
-	webRoot: process.env.WEB_ROOT!,
+	apiRoot: process.env.API_ROOT ?? "",
+	webRoot: process.env.WEB_ROOT ?? "",
 };
 
 export default {

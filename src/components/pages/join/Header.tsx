@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 
-import { PageHeader } from "../../common";
 import React from "react";
 
 interface HeaderProps {

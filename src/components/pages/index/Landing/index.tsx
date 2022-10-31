@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export const Landing: React.FC<{}> = ({}) => {
+export const Landing: React.FC = () => {
 	return (
 		<Box>
 			<Typography>

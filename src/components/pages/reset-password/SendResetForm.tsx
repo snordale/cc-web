@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
-import { Form, Formik } from "formik";
 import { Stack, TextField } from "@mui/material";
+import { Form, Formik } from "formik";
 
 import { LoadingButton } from "@mui/lab";
 import React from "react";
@@ -12,7 +12,7 @@ const validationSchema = yup.object({
 	email: yup.string().min(6, "Minimum 6 characters length").required(),
 });
 
-export const SendResetForm: React.FC<{}> = ({}) => {
+export const SendResetForm: React.FC = () => {
 	const [, sendPasswordReset] = useSendPasswordResetMutation();
 	return (
 		<Formik

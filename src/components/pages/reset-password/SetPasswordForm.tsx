@@ -1,8 +1,8 @@
 import * as yup from "yup";
 
-import { Form, Formik } from "formik";
 import { Stack, TextField } from "@mui/material";
-import router, { useRouter } from "next/router";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 
 import { LoadingButton } from "@mui/lab";
 import React from "react";
@@ -13,7 +13,7 @@ const validationSchema = yup.object({
 	newPassword: yup.string().min(6, "Minimum 6 characters length").required(),
 });
 
-export const SetPasswordForm: React.FC<{}> = ({}) => {
+export const SetPasswordForm: React.FC = () => {
 	const router = useRouter();
 
 	const [, setPassword] = useSetPasswordMutation();
