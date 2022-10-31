@@ -6,14 +6,16 @@ import { withUrqlClient } from "next-urql";
 import { NormalPage } from "../src/components/global/NormalPage";
 import { createUrqlClient } from "../src/utils/createUrqlClient";
 import { isLocal } from "../src/config";
+import { Spinner } from "../src/components/global";
 
 const Index: NextPage = () => {
-	const [{ data, error }] = useMeQuery();
+	const [{ data, fetching, error }] = useMeQuery();
 
 	console.log("env");
+	console.log(process.env.IS_LOCAL);
 	console.log(isLocal);
 
-	if (!data) return null;
+	if (fetching) return <Spinner />;
 
 	return <NormalPage>{data?.me ? <Home /> : <Landing />}</NormalPage>;
 };
