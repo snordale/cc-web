@@ -15,6 +15,7 @@ import { Spinner } from "../src/components/global/animations";
 import { UserTable } from "../src/components/pages/admin";
 import { permissions } from "../src/constants";
 import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { root } from "../src/config";
 
 const Admin: React.FC = () => {
 	const router = useRouter();
@@ -44,7 +45,7 @@ const Admin: React.FC = () => {
 						if (res.data?.getNewCuratorToken) {
 							const token = res.data.getNewCuratorToken;
 							await navigator.clipboard.writeText(
-								`http://localhost:3000/join?token=${token}`
+								`${root}/join?token=${token}`
 							);
 							toast.success("Copied to clipboard.");
 						} else {

@@ -19,6 +19,7 @@ import {
 } from "urql";
 
 import Router from "next/router";
+import { apiRoot } from "../config";
 
 function typedUpdateQuery<Result, Query>(
 	cache: Cache,
@@ -30,7 +31,7 @@ function typedUpdateQuery<Result, Query>(
 }
 
 export const createUrqlClient = (ssrExchange: any) => ({
-	url: "http://localhost:3001/graphql",
+	url: `${apiRoot}/graphql`,
 	fetchOptions: { credentials: "include" } as const,
 	exchanges: [
 		dedupExchange,

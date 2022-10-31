@@ -5,9 +5,13 @@ import type { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { NormalPage } from "../src/components/global/NormalPage";
 import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { isLocal } from "../src/config";
 
 const Index: NextPage = () => {
-	const [{ data }] = useMeQuery();
+	const [{ data, error }] = useMeQuery();
+
+	console.log("env");
+	console.log(isLocal);
 
 	if (!data) return null;
 
