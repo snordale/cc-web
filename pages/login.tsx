@@ -1,22 +1,22 @@
 import * as yup from "yup";
 
-import { Form, Formik } from "formik";
 import { Stack, TextField } from "@mui/material";
+import { Form, Formik } from "formik";
 import {
 	useLoginMutation,
 	useMeQuery,
-	useSendPasswordResetMutation,
+	useSendPasswordResetMutation
 } from "../src/generated/graphql";
 
-import Link from "next/link";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { NormalPage } from "../src/components/global/NormalPage";
-import React from "react";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
-import toast from "react-hot-toast";
-import { useIsLoggedIn } from "../src/hooks";
-import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import toast from "react-hot-toast";
+import { NormalPage } from "../src/components/global/NormalPage";
+import { useIsLoggedIn } from "../src/hooks";
+import { createUrqlClient } from "../src/utils/createUrqlClient";
 
 const validationSchema = yup.object({
 	emailOrUsername: yup
@@ -26,7 +26,7 @@ const validationSchema = yup.object({
 	password: yup.string().min(6, "Minimum 6 characters length").required(),
 });
 
-const Login: React.FC<{}> = ({}) => {
+const Login: React.FC = () => {
 	useIsLoggedIn();
 	const router = useRouter();
 
