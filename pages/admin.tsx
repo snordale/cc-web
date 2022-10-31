@@ -1,32 +1,34 @@
-import { Box, Typography } from '@mui/material'
-import { LoadingBar, Spinner } from '../src/components/global/animations'
-import { useGetNewCuratorTokenMutation, useMeQuery, useUsersQuery } from '../src/generated/graphql'
+import { Box, Typography } from "@mui/material";
+import {
+	useGetNewCuratorTokenMutation,
+	useMeQuery,
+} from "../src/generated/graphql";
 
-import { CommonButton } from '../src/components/common'
-import { NormalPage } from '../src/components/global'
-import { PageHeader } from '../src/components/common/PageHeader'
-import React from 'react'
-import { UserTable } from "../src/components/pages/admin"
-import { createUrqlClient } from '../src/utils/createUrqlClient'
-import { permissions } from '../src/constants'
-import { routing } from '../src/config'
-import toast from 'react-hot-toast'
-import { useRouter } from 'next/router'
-import { withUrqlClient } from 'next-urql'
+import { CommonButton } from "../src/components/common";
+import { NormalPage } from "../src/components/global";
+import { PageHeader } from "../src/components/common/PageHeader";
+import React from "react";
+import { Spinner } from "../src/components/global/animations";
+import { UserTable } from "../src/components/pages/admin";
+import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { permissions } from "../src/constants";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+import { withUrqlClient } from "next-urql";
 
-const Admin: React.FC<{}> = ({ }) => {
-	const router = useRouter()
-	const [{ data, fetching }] = useMeQuery()
-	const [, getNewCuratorToken] = useGetNewCuratorTokenMutation()
+const Admin: React.FC<{}> = ({}) => {
+	const router = useRouter();
+	const [{ data, fetching }] = useMeQuery();
+	const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();
 	//const [, createPlaylist] = useCreatePlaylist()
 
-	if (fetching) return <Spinner />
+	if (fetching) return <Spinner />;
 
 	if (data?.me?.permission !== permissions.ADMIN) {
-		router.replace("/").then(_ => {
-			toast.error("Admins only.", { id: "admins only" })
-		})
-		return null
+		router.replace("/").then((_) => {
+			toast.error("Admins only.", { id: "admins only" });
+		});
+		return null;
 	}
 
 	return (
@@ -38,14 +40,15 @@ const Admin: React.FC<{}> = ({ }) => {
 					text="Create Curator Link"
 					sx={{ marginTop: "12px" }}
 					onClick={async () => {
-						const res = await getNewCuratorToken()
+						const res = await getNewCuratorToken();
 						if (res.data?.getNewCuratorToken) {
-							const token = res.data.getNewCuratorToken
-							await navigator.clipboard.writeText((`http://localhost:3000/join?token=${token}`))
-							toast.success("Copied to clipboard.")
-						}
-						else {
-							toast.error("Unsuccessful.")
+							const token = res.data.getNewCuratorToken;
+							await navigator.clipboard.writeText(
+								`http://localhost:3000/join?token=${token}`
+							);
+							toast.success("Copied to clipboard.");
+						} else {
+							toast.error("Unsuccessful.");
 						}
 					}}
 				/>
@@ -54,15 +57,12 @@ const Admin: React.FC<{}> = ({ }) => {
 					sx={{ marginTop: "12px" }}
 					//onClick={async () => createPlaylist())}
 				/>
-				<Box
-					width="100%"
-					marginTop="30px"
-				>
+				<Box width="100%" marginTop="30px">
 					<UserTable />
 				</Box>
 			</Box>
 		</NormalPage>
-	)
-}
+	);
+};
 
-export default withUrqlClient(createUrqlClient)(Admin)
+export default withUrqlClient(createUrqlClient)(Admin);
