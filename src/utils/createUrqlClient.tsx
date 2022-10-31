@@ -1,22 +1,12 @@
-import { Cache, QueryInput, cacheExchange } from "@urql/exchange-graphcache";
+import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
+import { dedupExchange, errorExchange, fetchExchange } from "urql";
 import {
 	CreateUserMutation,
-	ExchangeAuthCodeMutation,
 	LoginMutation,
 	LogoutMutation,
 	MeDocument,
 	MeQuery,
-	SetUserPermissionsMutation,
-	UsersDocument,
-	UsersQuery,
-	useUsersQuery,
 } from "../generated/graphql";
-import {
-	createClient,
-	dedupExchange,
-	errorExchange,
-	fetchExchange,
-} from "urql";
 
 import Router from "next/router";
 import { apiRoot } from "../config";

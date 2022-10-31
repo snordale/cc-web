@@ -9,7 +9,7 @@ import { isLocal } from "../src/config";
 import { Spinner } from "../src/components/global";
 
 const Index: NextPage = () => {
-	const [{ data, fetching, error }] = useMeQuery();
+	const [{ data, fetching }] = useMeQuery();
 
 	console.log("env");
 	console.log(process.env.IS_LOCAL);

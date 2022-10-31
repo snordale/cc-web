@@ -26,7 +26,7 @@ const Admin: React.FC = () => {
 	if (fetching) return <Spinner />;
 
 	if (data?.me?.permission !== permissions.ADMIN) {
-		router.replace("/").then((_) => {
+		router.replace("/").then(() => {
 			toast.error("Admins only.", { id: "admins only" });
 		});
 		return null;
