@@ -185,7 +185,7 @@ export function UserTable() {
 	const [{ data, fetching }] = useUsersQuery();
 	const [, setUserPermissions] = useSetUserPermissionsMutation();
 
-	if (fetching) return <Spinner />;
+	if (fetching || !data) return <Spinner />;
 
 	const users = data.users;
 
