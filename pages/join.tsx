@@ -5,7 +5,7 @@ import { createUrqlClient } from "../src/utils/createUrqlClient";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 
-const Join = ({}) => {
+const Join = () => {
 	const router = useRouter();
 
 	const curatorToken = router.query.token
