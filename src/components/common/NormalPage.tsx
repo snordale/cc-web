@@ -1,8 +1,8 @@
 import { Box, useMediaQuery } from "@mui/material";
 
-import { NavBar } from ".";
 import React from "react";
 import { Toaster } from "react-hot-toast";
+import { Footer, NavBar } from "../global";
 
 interface NormalPageProps {
 	children: React.ReactNode;
@@ -25,6 +25,7 @@ export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
 			>
 				{children}
 			</Box>
+			<Footer />
 			<Toaster position="bottom-center" />
 		</Box>
 	);

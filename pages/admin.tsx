@@ -4,18 +4,18 @@ import {
 	useMeQuery,
 } from "../src/generated/graphql";
 
-import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
-import React from "react";
-import toast from "react-hot-toast";
 import { CommonButton } from "../src/components/common";
+import { NormalPage } from "../src/components/common/NormalPage";
 import { PageHeader } from "../src/components/common/PageHeader";
-import { NormalPage } from "../src/components/global";
+import React from "react";
 import { Spinner } from "../src/components/global/animations";
 import { UserTable } from "../src/components/pages/admin";
-import { permissions } from "../src/constants";
 import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { permissions } from "../src/constants";
 import { root } from "../src/config";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+import { withUrqlClient } from "next-urql";
 
 const Admin: React.FC = () => {
 	const router = useRouter();

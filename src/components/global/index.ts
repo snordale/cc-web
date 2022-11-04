@@ -1,4 +1,3 @@
 export * from "./NavBar";
-export * from "./InputField";
-export * from "./NormalPage";
+export * from "./Footer";
 export * from "./animations";
