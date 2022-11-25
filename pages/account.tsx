@@ -1,49 +1,46 @@
 import { Avatar, Box, Link, Stack, Typography } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
 import { CommonButton, PageHeader } from "../src/components/common";
-import { NormalPage, Spinner } from "../src/components/global";
-import { FormStates } from "../src/components/pages/account";
+import React, { useEffect, useMemo, useState } from "react";
 import {
 	curatorRequiredScopes,
 	permissions,
 	requiredScopes,
 	signatureGradientLight,
-	SpotifyScopes,
 } from "../src/constants";
 import {
-	useGetBasicAuthLinkMutation,
-	useGetCuratorAuthLinkMutation,
-	useGetUsersTopTracksQuery,
-	useMeQuery,
-} from "../src/generated/graphql";
+	useCurrentUser,
+	useGetBasicAuthLink,
+	useGetCuratorAuthLink,
+	useGetTopTracks,
+} from "../src/services/query";
 
-import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
+import { FormStates } from "../src/components/pages/account";
+import { NormalPage } from "../src/components/common/NormalPage";
+import { Spinner } from "../src/components/global";
+import { getArrayDiff } from "../src/utils";
 import toast from "react-hot-toast";
 import { useRequireLogin } from "../src/hooks";
-import { useUserPermission } from "../src/hooks/use-user-permission";
-import { getArrayDiff } from "../src/utils";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { useRouter } from "next/router";
+import { useUser } from "../src/hooks/use-user";
+
+//import { useUserPermission } from "../src/hooks/use-user-permission";
 
 const Account: React.FC = () => {
 	const router = useRouter();
 
 	useRequireLogin();
 
-	const [, getCuratorAuthLink] = useGetCuratorAuthLinkMutation();
-	const [, getBasicAuthLink] = useGetBasicAuthLinkMutation();
-
-	const [{ data, fetching }] = useMeQuery();
-	const [{ data: topTracks, fetching: fetchingTracks }] =
-		useGetUsersTopTracksQuery({ variables: { id: 31 } });
-
-	const { isCurator } = useUserPermission();
+	const { data, isLoading, isCurator } = useUser();
+	const { data: topTracksData, isLoading: isLoadingTracks } = useGetTopTracks(
+		data?.user.id
+	);
+	const { mutateAsync: getBasicAuthLink } = useGetBasicAuthLink();
+	const { mutateAsync: getCuratorAuthLink } = useGetCuratorAuthLink();
 
 	const [openDialog, setOpenDialog] = useState(false);
 	const [scopes, setScopes] = useState<string[]>([]);
 
-	const currentScopes: string[] =
-		data?.me?.spotifyScopes.map((scope) => SpotifyScopes[scope]) ?? [];
+	const currentScopes: string[] = data?.user?.spotifyScopes ?? [];
 
 	useEffect(() => {
 		if (currentScopes) {
@@ -56,7 +53,7 @@ const Account: React.FC = () => {
 
 		if (diff.length === 0) return FormStates.noChanges;
 		if (
-			data?.me?.permission === permissions.CURATOR &&
+			data?.user?.permission === permissions.CURATOR &&
 			!curatorRequiredScopes.every((scope) => scopes.includes(scope))
 		) {
 			return FormStates.resignAsCurator;
@@ -68,9 +65,6 @@ const Account: React.FC = () => {
 	}, [scopes, data]);
 
 	const hasRequiredScope = useMemo(() => {
-		console.log("scopes log");
-		console.log(currentScopes);
-		console.log(requiredScopes);
 		if (currentScopes) {
 			const hasBasicScope = requiredScopes.every((rqd) =>
 				currentScopes.includes(rqd as string)
@@ -85,29 +79,21 @@ const Account: React.FC = () => {
 		return false;
 	}, [data]);
 
-	if (fetching || !data) return <Spinner />;
+	const handleSpotifyConnect = async () => {
+		const data = isCurator
+			? await getCuratorAuthLink()
+			: await getBasicAuthLink();
 
-	const handleRedirect = async () => {
-		if (isCurator) {
-			const res = await getCuratorAuthLink();
-			if (!res.data) {
-				toast.error("Something went wrong.", { id: "something" });
-			} else {
-				router.replace(res.data?.getCuratorAuthLink);
-			}
-			return;
+		console.log("data: ", data);
+
+		if (data.link) {
+			router.replace(data.link);
 		} else {
-			const res = await getBasicAuthLink();
-			if (!res.data) {
-				toast.error("Something went wrong.", { id: "something" });
-			} else {
-				router.replace(res.data?.getBasicAuthLink);
-			}
-			return;
+			toast.error("Something went wrong.", { id: "error" });
 		}
 	};
 
-	const spotifyConnected = Boolean(data.me?.spotifyRefreshToken);
+	const spotifyConnected = !!data?.user?.spotifyRefreshToken;
 
 	const renderSpotifyStatus = () => {
 		return (
@@ -121,7 +107,7 @@ const Account: React.FC = () => {
 	};
 
 	const getAccountType = () => {
-		switch (data.me?.permission) {
+		switch (data?.user.permission) {
 			case permissions.NONE:
 				return "Non-member";
 			case permissions.TIER1:
@@ -137,40 +123,24 @@ const Account: React.FC = () => {
 		}
 	};
 
-	const handleDialogClose = () => {
-		setOpenDialog(false);
-	};
-
-	const handleOpenDialog = () => {
-		setOpenDialog(true);
-	};
-
-	const toggleScope = (
-		_: React.ChangeEvent<HTMLInputElement>,
-		targetScope: string
-	) => {
-		if (scopes.includes(targetScope)) {
-			setScopes((prev) => prev.filter((scope) => scope !== targetScope));
-		} else {
-			setScopes((prev) => [...prev, targetScope]);
-		}
-	};
+	console.log("topTracksData");
+	console.log(topTracksData);
 
 	return (
 		<NormalPage>
 			<Stack width="100%" spacing="12px">
 				<PageHeader text="Account" />
 				<Avatar
-					src={data.me?.profilePhoto ?? ""}
+					src={data?.user?.profilePhoto ?? ""}
 					sx={{
 						background: signatureGradientLight,
 						color: "black",
 					}}
 				>
-					{data.me?.username.slice(0, 1)}
+					{data?.user?.username.slice(0, 1)}
 				</Avatar>
 				<Typography fontSize="18px" fontWeight="600">
-					{!fetching && data.me?.username}
+					{data?.user?.username}
 				</Typography>
 				<Typography fontSize="14px" fontWeight="600">
 					Account Type
@@ -185,12 +155,12 @@ const Account: React.FC = () => {
 					<CommonButton
 						text={hasRequiredScope ? "Connected" : "Connect"}
 						disabled={hasRequiredScope}
-						onClick={handleRedirect}
+						onClick={handleSpotifyConnect}
 					/>
 				</Stack>
-				{!fetchingTracks && (
+				{topTracksData && topTracksData.tracks && (
 					<>
-						{topTracks?.getUsersTopTracks.tracks.map((track) => {
+						{topTracksData?.tracks.map((track: any) => {
 							<Box>
 								<Typography>{track.name}</Typography>
 								<Link href={track.href}>Link</Link>
@@ -203,4 +173,4 @@ const Account: React.FC = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(Account);
+export default Account;

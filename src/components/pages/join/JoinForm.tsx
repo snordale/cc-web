@@ -3,11 +3,12 @@ import * as yup from "yup";
 import { Formik, Form as FormikForm } from "formik";
 import { Stack, TextField } from "@mui/material";
 
+import { FieldError } from "../../../types";
 import { LoadingButton } from "@mui/lab";
 import React from "react";
+import { cc } from "../../../services/cc";
 import router from "next/router";
 import toast from "react-hot-toast";
-import { useCreateUserMutation } from "../../../generated/graphql";
 
 const validationSchema = yup.object({
 	email: yup.string().required().email(),
@@ -19,9 +20,7 @@ interface FormProps {
 	curatorToken: string;
 }
 
-export const Form: React.FC<FormProps> = ({ curatorToken }) => {
-	const [, createUser] = useCreateUserMutation();
-
+export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 	return (
 		<Formik
 			initialValues={{
@@ -30,26 +29,19 @@ export const Form: React.FC<FormProps> = ({ curatorToken }) => {
 				password: "",
 			}}
 			onSubmit={async (data, { setErrors }) => {
-				const res = await createUser({
-					...data,
-					token: curatorToken,
-				});
+				const res = await cc.join({ ...data, token: curatorToken });
 
-				const errors = res.data?.createUser.errors;
-
-				if (errors) {
-					const errorObject: { [key: string]: string } = {};
-					errors.forEach((error) => {
-						errorObject[error.field] = error.message;
+				if (res.user) {
+					if (router.query.next) {
+						router.push(router.query.next as string);
+					} else {
+						router.push("/home");
+					}
+					toast.success(`Welcome ${res.user.username}`, {
+						id: "welcome",
 					});
-					setErrors(errorObject);
-					if (errorObject.token) toast.error(errorObject.token);
 				} else {
-					toast.success(
-						`Welcome ${res.data?.createUser.user?.username}`,
-						{ id: "welcome" }
-					);
-					router.push("/");
+					setErrors(res.errors);
 				}
 			}}
 			validationSchema={validationSchema}

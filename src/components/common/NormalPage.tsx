@@ -1,8 +1,8 @@
 import { Box, useMediaQuery } from "@mui/material";
+import { Footer, NavBar } from "../global";
 
 import React from "react";
 import { Toaster } from "react-hot-toast";
-import { Footer, NavBar } from "../global";
 
 interface NormalPageProps {
 	children: React.ReactNode;
@@ -15,10 +15,10 @@ export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
 		<Box width="100%" minHeight="100vh">
 			<NavBar />
 			<Box
+				minHeight="100vh"
 				width="100%"
 				display="flex"
 				flexDirection="column"
-				justifyContent="center"
 				alignItems="center"
 				paddingX={isMobile ? "18px" : "40px"}
 				paddingY={isMobile ? "24px" : "40px"}

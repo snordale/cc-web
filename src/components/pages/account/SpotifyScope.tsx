@@ -22,8 +22,7 @@ import { CommonButton } from "../../common";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Link from "next/link";
 import { getArrayDiff } from "../../../utils";
-import { useMeQuery } from "../../../generated/graphql";
-import { useUserPermission } from "../../../hooks/use-user-permission";
+import { useUser } from "../../../hooks/use-user";
 
 export enum FormStates {
 	noChanges,
@@ -46,16 +45,16 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 	toggleScope,
 	formState,
 }) => {
-	const [{ data, fetching }] = useMeQuery();
+	//const [{ data, fetching }] = useMeQuery();
 
-	const { isCurator, fetching: fetchingPerm } = useUserPermission();
+	const { data, isCurator } = useUser();
 
-	const diff = useMemo(() => {
-		return getArrayDiff(
-			scopes,
-			data?.me?.spotifyScopes.map((scope) => SpotifyScopes[scope])
-		);
-	}, [scopes, data]);
+	//const diff = useMemo(() => {
+	//	return getArrayDiff(
+	//		scopes,
+	//		data?.me?.spotifyScopes.map((scope) => SpotifyScopes[scope])
+	//	);
+	//}, [scopes, data]);
 
 	const getButtonText = (): string => {
 		switch (formState) {
@@ -74,7 +73,7 @@ export const SpotifyScope: React.FC<SpotifyScopeProps> = ({
 		return getButtonText();
 	}, [formState]);
 
-	if (fetching || fetchingPerm) return null;
+	//if (fetching || fetchingPerm) return null;
 
 	return (
 		<Accordion>

@@ -26,6 +26,15 @@ export enum SpotifyScopes {
 	userLibraryModify = "user-library-modify",
 }
 
+export type SpotifyScopesType = {
+	userReadEmail: "user-read-email";
+	userReadPrivate: "user-read-private";
+	userReadRecentlyPlayed: "user-read-recently-played";
+	userTopRead: "user-top-read";
+	playlistReadPrivate: "playlist-read-private";
+	userLibraryModify: "user-library-modify";
+};
+
 export const requiredScopes = [
 	SpotifyScopes.userReadEmail,
 	SpotifyScopes.userReadPrivate,

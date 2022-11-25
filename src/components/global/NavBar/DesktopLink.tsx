@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+
 import Link from "next/link";
 import React from "react";
 import { signatureGradientLight } from "../../../constants";
@@ -21,10 +22,11 @@ export const DesktopLink: React.FC<DesktopLinkProps> = ({
 	const renderButton = () => {
 		return (
 			<Button
+				variant="text"
 				sx={{
+					height: "100%",
 					padding: "6px 18px",
 					"&:hover": {
-						//bgcolor: "green.main"
 						background: signatureGradientLight,
 					},
 					borderRight: borderRight ? "1px solid black" : "none",
@@ -32,13 +34,17 @@ export const DesktopLink: React.FC<DesktopLinkProps> = ({
 				}}
 				onClick={onClick}
 			>
-				{text}
+				<Typography>{text}</Typography>
 			</Button>
 		);
 	};
 
 	if (href) {
-		return <Link href={href}>{renderButton()}</Link>;
+		return (
+			<Link href={href} style={{ textDecoration: "none" }}>
+				{renderButton()}
+			</Link>
+		);
 	}
 
 	return renderButton();

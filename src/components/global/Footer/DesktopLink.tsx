@@ -38,7 +38,11 @@ export const DesktopLink: React.FC<DesktopLinkProps> = ({
 	};
 
 	if (href) {
-		return <Link href={href}>{renderButton()}</Link>;
+		return (
+			<Link href={href} passHref>
+				{renderButton()}
+			</Link>
+		);
 	}
 
 	return renderButton();

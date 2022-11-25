@@ -1,13 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useLogoutMutation, useMeQuery } from "../../../generated/graphql";
 
-import { useRouter } from "next/router";
 import React from "react";
+import { useRouter } from "next/router";
 
 export const Footer: React.FC = () => {
 	const router = useRouter();
-	const [{ data, fetching: isLoading }] = useMeQuery();
-	const [, logout] = useLogoutMutation();
 
 	return (
 		<Box height="200px">

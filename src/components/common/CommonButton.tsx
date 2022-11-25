@@ -24,6 +24,7 @@ export const CommonButton: React.FC<ButtonProps> = ({
 	variant = "outlined",
 	onClick,
 	children,
+	...rest
 }) => {
 	const [loading, setLoading] = useState(false);
 
@@ -37,6 +38,7 @@ export const CommonButton: React.FC<ButtonProps> = ({
 	return (
 		<Box>
 			<MuiButton
+				{...rest}
 				variant={variant}
 				size={size}
 				href={href}

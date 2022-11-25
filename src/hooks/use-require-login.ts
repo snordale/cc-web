@@ -1,15 +1,15 @@
 import router from "next/router";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { useMeQuery } from "../generated/graphql";
+import { useUser } from "./use-user";
 
 export const useRequireLogin = () => {
-	const [{ data, fetching }] = useMeQuery();
+  const { data } = useUser();
 
-	useEffect(() => {
-		if (!fetching && !data?.me) {
-			toast.error("Not logged in.", { id: "Not logged in." });
-			router.replace(`/login?next=${router.pathname}`);
-		}
-	}, [fetching, data]);
+  useEffect(() => {
+    if (data && !data.user) {
+      toast.error("Not logged in.", { id: "Not logged in." });
+      router.replace(`/login?next=${router.pathname}`);
+    }
+  }, [data]);
 };

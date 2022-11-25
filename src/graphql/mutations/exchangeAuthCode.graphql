@@ -1,8 +1,0 @@
-mutation exchangeAuthCode($code: String!, $state: String!) {
-	exchangeAuthCode(code: $code, state: $state) {
-		user {
-			...PrivateUser
-		}
-		error
-	}
-}

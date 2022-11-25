@@ -1,25 +1,20 @@
 import * as yup from "yup";
 
-import { Stack, TextField } from "@mui/material";
 import { Form, Formik } from "formik";
-import {
-	useLoginMutation,
-	useMeQuery,
-	useSendPasswordResetMutation
-} from "../src/generated/graphql";
+import { Stack, TextField } from "@mui/material";
 
-import LoadingButton from "@mui/lab/LoadingButton";
-import { withUrqlClient } from "next-urql";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { NormalPage } from "../src/components/common/NormalPage";
 import React from "react";
+import { cc } from "../src/services/cc";
 import toast from "react-hot-toast";
-import { NormalPage } from "../src/components/global/NormalPage";
 import { useIsLoggedIn } from "../src/hooks";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 const validationSchema = yup.object({
-	emailOrUsername: yup
+	usernameOrEmail: yup
 		.string()
 		.min(3, "Minimum 3 characters length")
 		.required(),
@@ -30,35 +25,30 @@ const Login: React.FC = () => {
 	useIsLoggedIn();
 	const router = useRouter();
 
-	const [, login] = useLoginMutation();
-	const [, sendPasswordReset] = useSendPasswordResetMutation();
-
-	const [{ data, fetching }] = useMeQuery();
+	const { mutateAsync: login } = useMutation(cc.login);
 
 	return (
 		<NormalPage>
 			<Formik
-				initialValues={{ emailOrUsername: "", password: "" }}
+				initialValues={{ usernameOrEmail: "", password: "" }}
 				validationSchema={validationSchema}
 				onSubmit={async (data, { setErrors }) => {
-					const res = await login(data);
+					const res = await login({
+						usernameOrEmail: data.usernameOrEmail,
+						password: data.password,
+					});
 
-					const errors = res.data?.login.errors;
-
-					if (errors) {
-						const errorObject: { [key: string]: string } = {};
-						errors.forEach((error) => {
-							errorObject[error.field] = error.message;
+					if (res.user) {
+						if (router.query.next) {
+							router.push(router.query.next as string);
+						} else {
+							router.push("/home");
+						}
+						toast.success(`Welcome ${res.user.username}`, {
+							id: "welcome",
 						});
-						setErrors(errorObject);
 					} else {
-						toast.success(
-							`Welcome ${res.data?.login.user?.username}`,
-							{ id: "welcome" }
-						);
-						if (typeof router.query.next === "string") {
-							router.push(router.query.next);
-						} else router.push("/");
+						setErrors(res.errors);
 					}
 				}}
 			>
@@ -66,17 +56,17 @@ const Login: React.FC = () => {
 					<Form>
 						<Stack spacing="18px" width="360px">
 							<TextField
-								name="emailOrUsername"
+								name="usernameOrEmail"
 								label="Username or email"
-								value={values.emailOrUsername}
+								value={values.usernameOrEmail}
 								onChange={handleChange}
 								error={
-									touched.emailOrUsername &&
-									Boolean(errors.emailOrUsername)
+									touched.usernameOrEmail &&
+									Boolean(errors.usernameOrEmail)
 								}
 								helperText={
-									touched.emailOrUsername &&
-									errors.emailOrUsername
+									touched.usernameOrEmail &&
+									errors.usernameOrEmail
 								}
 							/>
 							<TextField
@@ -115,4 +105,4 @@ const Login: React.FC = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default Login;

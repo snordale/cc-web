@@ -1,16 +1,23 @@
 import { Box, Stack } from "@mui/material";
-import { useLogoutMutation, useMeQuery } from "../../../generated/graphql";
 
-import { useRouter } from "next/router";
-import React from "react";
-import toast from "react-hot-toast";
-import { isAdmin } from "../../../utils";
 import { DesktopLink } from "./DesktopLink";
+import React from "react";
+import { cc } from "../../../services/cc";
+import { isAdmin } from "../../../utils";
+import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useUser } from "../../../hooks/use-user";
 
 export const NavBar: React.FC = () => {
 	const router = useRouter();
-	const [{ data, fetching: isLoading }] = useMeQuery();
-	const [, logout] = useLogoutMutation();
+
+	const { data, isLoading } = useUser();
+	const { mutateAsync: logout } = useMutation({
+		mutationFn: cc.logout,
+	});
+
+	const user = data ? data.user : null;
 
 	return (
 		<Box
@@ -25,18 +32,22 @@ export const NavBar: React.FC = () => {
 			}}
 		>
 			<Box display="flex" flexDirection="row">
-				<DesktopLink text="Common Collections" href="/" borderRight />
+				<DesktopLink
+					text="Common Collections"
+					href={user ? "/home" : "/"}
+					borderRight
+				/>
 			</Box>
 			<Stack direction="row">
-				{!isLoading && !data?.me && (
+				{!isLoading && !user && (
 					<>
 						<DesktopLink text="Login" href="/login" borderLeft />
 						<DesktopLink text="Join" href="/join" borderLeft />
 					</>
 				)}
-				{!isLoading && data?.me && (
+				{!isLoading && user && (
 					<>
-						{isAdmin(data?.me.permission) && (
+						{isAdmin(user.permission) && (
 							<DesktopLink
 								text="Admin"
 								href="/admin"
@@ -50,13 +61,19 @@ export const NavBar: React.FC = () => {
 						/>
 						<DesktopLink
 							text="Logout"
-							onClick={() => {
-								router.replace("/").then(() => {
-									logout();
-									toast.success("Logged out.", {
-										id: "logout",
+							onClick={async () => {
+								const { success } = await logout();
+								if (success) {
+									router.replace("/").then(() => {
+										toast.success("Logged out.", {
+											id: "logout",
+										});
 									});
-								});
+								} else {
+									toast.error("Unable to logout.", {
+										id: "error",
+									});
+								}
 							}}
 							borderLeft
 						/>
