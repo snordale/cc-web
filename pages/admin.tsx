@@ -1,8 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import {
-	useGetNewCuratorTokenMutation,
-	useMeQuery,
-} from "../src/generated/graphql";
 
 import { CommonButton } from "../src/components/common";
 import { NormalPage } from "../src/components/common/NormalPage";
@@ -10,22 +6,28 @@ import { PageHeader } from "../src/components/common/PageHeader";
 import React from "react";
 import { Spinner } from "../src/components/global/animations";
 import { UserTable } from "../src/components/pages/admin";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
+import { cc } from "../src/services/cc";
+import { getCookie } from "cookies-next";
 import { permissions } from "../src/constants";
-import { root } from "../src/config";
 import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
+import { useUser } from "../src/hooks/use-user";
 
 const Admin: React.FC = () => {
 	const router = useRouter();
-	const [{ data, fetching }] = useMeQuery();
-	const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();
+	const { data, isLoading, isAdmin } = useUser();
+	const { mutateAsync: createCuratorToken } = useMutation(
+		cc.createCuratorToken
+	);
+	//const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();
 	//const [, createPlaylist] = useCreatePlaylist()
+	console.log("cookie: ", getCookie("token"));
+	if (isLoading) return <Spinner />;
 
-	if (fetching) return <Spinner />;
+	//if (!isLoggedIn) router.push("/");
 
-	if (data?.me?.permission !== permissions.ADMIN) {
+	if (!isAdmin) {
 		router.replace("/").then(() => {
 			toast.error("Admins only.", { id: "admins only" });
 		});
@@ -41,16 +43,16 @@ const Admin: React.FC = () => {
 					text="Create Curator Link"
 					sx={{ marginTop: "12px" }}
 					onClick={async () => {
-						const res = await getNewCuratorToken();
-						if (res.data?.getNewCuratorToken) {
-							const token = res.data.getNewCuratorToken;
-							await navigator.clipboard.writeText(
-								`${root}/join?token=${token}`
-							);
-							toast.success("Copied to clipboard.");
-						} else {
-							toast.error("Unsuccessful.");
-						}
+						//const res = await createCuratorToken();
+						//if (res.data?.getNewCuratorToken) {
+						//	const token = res.data.getNewCuratorToken;
+						//	await navigator.clipboard.writeText(
+						//		`${root}${routes.join}?token=${token}`
+						//	);
+						//	toast.success("Copied to clipboard.");
+						//} else {
+						//	toast.error("Unsuccessful.");
+						//}
 					}}
 				/>
 				<CommonButton
@@ -66,4 +68,4 @@ const Admin: React.FC = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(Admin);
+export default Admin;

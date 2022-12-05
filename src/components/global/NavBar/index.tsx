@@ -4,6 +4,7 @@ import { DesktopLink } from "./DesktopLink";
 import React from "react";
 import { cc } from "../../../services/cc";
 import { isAdmin } from "../../../utils";
+import { routes } from "../../../utils/routes";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -41,8 +42,16 @@ export const NavBar: React.FC = () => {
 			<Stack direction="row">
 				{!isLoading && !user && (
 					<>
-						<DesktopLink text="Login" href="/login" borderLeft />
-						<DesktopLink text="Join" href="/join" borderLeft />
+						<DesktopLink
+							text="Login"
+							href={routes.login}
+							borderLeft
+						/>
+						<DesktopLink
+							text="Join"
+							href={routes.join}
+							borderLeft
+						/>
 					</>
 				)}
 				{!isLoading && user && (
@@ -56,7 +65,7 @@ export const NavBar: React.FC = () => {
 						)}
 						<DesktopLink
 							text="Account"
-							href="/account"
+							href={routes.account}
 							borderLeft
 						/>
 						<DesktopLink

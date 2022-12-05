@@ -16,18 +16,17 @@ import {
 	TableSortLabel,
 } from "@mui/material";
 import { DialogTypes, Toolbar } from "./Toolbar";
-import {
-	useSetUserPermissionsMutation,
-	useUsersQuery,
-} from "../../../../generated/graphql";
 
+import { FaceRetouchingNaturalSharp } from "@mui/icons-material";
 import { Row } from "./Row";
 import { Spinner } from "../../../global/animations";
+import { cc } from "../../../../services/cc";
 import { permissions } from "../../../../constants";
 import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useUsers } from "../../../../services/query";
 import { visuallyHidden } from "@mui/utils";
-import { FaceRetouchingNaturalSharp } from "@mui/icons-material";
 
 export interface UserTableData {
 	id: number;
@@ -182,10 +181,14 @@ export function UserTable() {
 	const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none);
 	const [openDialog, setOpenDialog] = useState(false);
 
-	const [{ data, fetching }] = useUsersQuery();
-	const [, setUserPermissions] = useSetUserPermissionsMutation();
-
-	if (fetching || !data) return <Spinner />;
+	const { data, isLoading } = useUsers();
+	const { mutateAsync: setUserPermission } = useMutation(
+		cc.setUserPermission
+	);
+	//const [, setUserPermissions] = useSetUserPermissionsMutation();
+	console.log("data");
+	console.log(data);
+	if (!data) return <Spinner />;
 
 	const users = data.users;
 
@@ -200,12 +203,12 @@ export function UserTable() {
 	};
 
 	const onPermissionSelect = async (permission: string) => {
-		const res = await setUserPermissions({ userIds: selected, permission });
-		if (res) {
-			toast.success("Permissions updated.");
-		}
-		setSelected([]);
-		handleDialogClose();
+		//const res = await setUserPermissions({ userIds: selected, permission });
+		//if (res) {
+		//	toast.success("Permissions updated.");
+		//}
+		//setSelected([]);
+		//handleDialogClose();
 	};
 
 	const handleRequestSort = (
@@ -221,7 +224,7 @@ export function UserTable() {
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		if (event.target.checked) {
-			const newSelected = users.map((user) => user.id);
+			const newSelected = users.map((user: any) => user.id);
 			setSelected(newSelected);
 			return;
 		}

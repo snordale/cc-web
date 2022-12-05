@@ -2,29 +2,35 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { cc } from "./cc";
 
+export function useUsers() {
+  return useQuery({
+    queryKey: ["getUsers"],
+    queryFn: cc.getUsers,
+  });
+}
+
 export function useCurrentUser() {
-	return useQuery({
-		queryKey: ["getCurrentUser"],
-		queryFn: cc.getCurrentUser,
-	});
+  return useQuery({
+    queryKey: ["getCurrentUser"],
+    queryFn: cc.getCurrentUser,
+  });
 }
 
 export function useGetTopTracks(userId: string) {
-	return useQuery({
-		queryKey: ["getTopTracks"],
-		queryFn: () => cc.getUsersTopTracks(userId),
-	});
+  return useQuery({
+    queryKey: ["getTopTracks"],
+    queryFn: () => cc.getUsersTopTracks(userId),
+  });
 }
 
 export function useGetBasicAuthLink() {
-	return useMutation({
-		mutationFn: cc.getBasicAuthLink,
-	});
+  return useMutation({
+    mutationFn: cc.getBasicAuthLink,
+  });
 }
 
 export function useGetCuratorAuthLink() {
-	return useMutation({
-		mutationFn: cc.getCuratorAuthLink,
-	});
+  return useMutation({
+    mutationFn: cc.getCuratorAuthLink,
+  });
 }
-

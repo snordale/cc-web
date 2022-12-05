@@ -1,17 +1,17 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { createUrqlClient } from "../../src/utils/createUrqlClient";
+import { cc } from "../../src/services/cc";
+import { routes } from "../../src/utils/routes";
 import toast from "react-hot-toast";
-import { useExchangeAuthCodeMutation } from "../../src/generated/graphql";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
 
 const SpotifyCallback: React.FC = () => {
 	const router = useRouter();
 	const { query } = router;
 
-	const [, exchangeAuthCode] = useExchangeAuthCodeMutation();
+	const { mutateAsync: exchangeAuthCode } = useMutation(cc.exchangeAuthCode);
 
 	const [loading, setLoading] = useState(true);
 
@@ -19,22 +19,22 @@ const SpotifyCallback: React.FC = () => {
 		if (!query.code || !query.state) return;
 
 		async function doExchange() {
-			const res = await exchangeAuthCode({
+			const data = await exchangeAuthCode({
 				code: query.code as string,
-				state: query.state as string,
+				stateToken: query.state as string,
 			});
 
-			if (res.data?.exchangeAuthCode.user) {
-				toast.success("Spotify linked");
-				router.replace("/account");
+			if (data.success) {
+				toast.success("Spotify linked.", { id: "spotify linked" });
+				router.replace(routes.account);
 			} else {
 				if (
-					res.data?.exchangeAuthCode.error ===
+					data.error ===
 					"Spotify account connected to another account."
 				) {
 					toast.error("Spotify account in use.");
 				}
-				router.replace("/account");
+				router.replace(routes.account);
 			}
 		}
 
@@ -49,4 +49,4 @@ const SpotifyCallback: React.FC = () => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(SpotifyCallback);
+export default SpotifyCallback;

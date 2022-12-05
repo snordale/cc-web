@@ -1,23 +1,20 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 
-import { CommonButton } from "../../common";
 import Image from "next/image";
-import LinearProgress from "../../common/LinearProgress";
 import Link from "next/link";
 import { NormalPage } from "../../common/NormalPage";
 import { fontSizes } from "../../../style";
+import { routes } from "../../../utils/routes";
 import shadow from "../../../../public/shadow.avif";
-import { useCurrentUser } from "../../../services/query";
 import { useRouter } from "next/router";
+import { useUser } from "../../../hooks/use-user";
 
 export const Index = () => {
 	const router = useRouter();
 
-	const { data, isLoading } = useCurrentUser();
+	const { isLoggedIn } = useUser();
 
-	if (isLoading) return <LinearProgress />;
-
-	if (data?.user) router.push("/home");
+	if (isLoggedIn) router.push("/home");
 
 	return (
 		<NormalPage>
@@ -33,7 +30,7 @@ export const Index = () => {
 					</Typography>
 					<Box>
 						<Link
-							href="/join"
+							href={routes.join}
 							style={{ textDecoration: "none" }}
 							passHref
 						>

@@ -53,7 +53,7 @@ const Account: React.FC = () => {
 
 		if (diff.length === 0) return FormStates.noChanges;
 		if (
-			data?.user?.permission === permissions.CURATOR &&
+			data?.user?.permission === permissions.curator &&
 			!curatorRequiredScopes.every((scope) => scopes.includes(scope))
 		) {
 			return FormStates.resignAsCurator;
@@ -108,17 +108,17 @@ const Account: React.FC = () => {
 
 	const getAccountType = () => {
 		switch (data?.user.permission) {
-			case permissions.NONE:
+			case permissions.none:
 				return "Non-member";
-			case permissions.TIER1:
+			case permissions.tier1:
 				return "Tier 1";
-			case permissions.TIER2:
+			case permissions.tier2:
 				return "Tier 2";
-			case permissions.CURATOR:
+			case permissions.curator:
 				return "Curator";
-			case permissions.ADMIN:
+			case permissions.admin:
 				return "Admin";
-			case permissions.GOD:
+			case permissions.god:
 				return "God";
 		}
 	};

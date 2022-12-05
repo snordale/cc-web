@@ -8,10 +8,6 @@ const request = (endpoint: string, config: RequestInit) => {
   const defaultHeaders = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    ),
   };
 
   return fetch(url, {
@@ -48,10 +44,29 @@ export const logout = (): Promise<{ success: boolean }> => {
   return request("/auth/logout", { method: "post" });
 };
 
+export const getUsers = (): Promise<{ users: any }> => {
+  return request("/users", {
+    method: "get",
+  });
+};
+
 export const getCurrentUser = (): Promise<{ user: any }> => {
-  console.log("call user");
   return request("/users/current", {
     method: "get",
+  });
+};
+
+export const setUserPermission = (
+  userId: string
+): Promise<{ success: boolean; error: string }> => {
+  return request(`/users/${userId}`, {
+    method: "put",
+  });
+};
+
+export const createCuratorToken = (): Promise<{ token: string }> => {
+  return request("/auth/create-curator-token", {
+    method: "post",
   });
 };
 
@@ -67,6 +82,23 @@ export const getCuratorAuthLink = (): Promise<{ link: string }> => {
   });
 };
 
+type ExchangeAuthCodeBody = {
+  code: string;
+  stateToken: string;
+};
+
+export const exchangeAuthCode = (
+  body: ExchangeAuthCodeBody
+): Promise<{
+  success?: boolean;
+  error?: string;
+}> => {
+  return request("/spotify/exchange-auth-code", {
+    method: "post",
+    body: JSON.stringify(body),
+  });
+};
+
 export const getUsersTopTracks = (userId: string): Promise<{ tracks: any }> => {
   return request(`/spotify/users-top-tracks?userId=${userId}`, {
     method: "get",
@@ -77,8 +109,12 @@ export const cc = {
   join,
   login,
   logout,
+  createCuratorToken,
+  getUsers,
   getCurrentUser,
   getBasicAuthLink,
   getCuratorAuthLink,
   getUsersTopTracks,
+  exchangeAuthCode,
+  setUserPermission,
 };
