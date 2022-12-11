@@ -1,3 +1,7 @@
+export const paddingX = {
+  global: ["12px", "12px", "120px"],
+};
+
 export enum fontSize {
   XL = "18px",
   L = "16px",
@@ -7,5 +11,6 @@ export enum fontSize {
 }
 
 export const fontSizes = {
-  indexHeader: [30, 36, 42, 48],
+  indexHeader: [24, 30, 36, 48],
+  header: [18, 20, 22, 24],
 };

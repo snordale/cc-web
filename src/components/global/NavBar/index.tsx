@@ -1,9 +1,10 @@
 import { Box, Stack } from "@mui/material";
 
-import { DesktopLink } from "./DesktopLink";
+import { Link } from "./Link";
 import React from "react";
 import { cc } from "../../../services/cc";
 import { isAdmin } from "../../../utils";
+import { paddingX } from "../../../style";
 import { routes } from "../../../utils/routes";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
@@ -28,47 +29,29 @@ export const NavBar: React.FC = () => {
 			position="sticky"
 			top="0px"
 			zIndex={1}
+			paddingX={paddingX.global}
 			sx={{
 				outline: "1px solid black",
+				backgroundColor: "white",
 			}}
 		>
 			<Box display="flex" flexDirection="row">
-				<DesktopLink
-					text="Common Collections"
-					href={user ? "/home" : "/"}
-					borderRight
-				/>
+				<Link text="Common Collections" href={user ? "/home" : "/"} />
 			</Box>
-			<Stack direction="row">
+			<Stack direction="row" spacing={[1, 2]}>
 				{!isLoading && !user && (
 					<>
-						<DesktopLink
-							text="Login"
-							href={routes.login}
-							borderLeft
-						/>
-						<DesktopLink
-							text="Join"
-							href={routes.join}
-							borderLeft
-						/>
+						<Link text="Login" href={routes.login} />
+						<Link text="Join" href={routes.join} />
 					</>
 				)}
 				{!isLoading && user && (
 					<>
 						{isAdmin(user.permission) && (
-							<DesktopLink
-								text="Admin"
-								href="/admin"
-								borderLeft
-							/>
+							<Link text="Admin" href="/admin" />
 						)}
-						<DesktopLink
-							text="Account"
-							href={routes.account}
-							borderLeft
-						/>
-						<DesktopLink
+						<Link text="Account" href={routes.account} />
+						<Link
 							text="Logout"
 							onClick={async () => {
 								const { success } = await logout();
@@ -84,7 +67,6 @@ export const NavBar: React.FC = () => {
 									});
 								}
 							}}
-							borderLeft
 						/>
 					</>
 				)}

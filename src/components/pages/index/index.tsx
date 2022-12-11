@@ -1,13 +1,21 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { fontSizes, paddingX } from "../../../style";
 
+import AspectRatio from "@mui/joy/AspectRatio";
 import Image from "next/image";
+import JoinLink from "./JoinLink";
 import Link from "next/link";
 import { NormalPage } from "../../common/NormalPage";
-import { fontSizes } from "../../../style";
+import WaitlistForm from "./WaitlistForm";
+import blades from "../../../../public/blades.jpg";
+import { isPrerelease } from "../../../config";
+import palms from "../../../../public/palms.jpg";
 import { routes } from "../../../utils/routes";
 import shadow from "../../../../public/shadow.avif";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
+
+const photoHeight = "150px";
 
 export const Index = () => {
 	const router = useRouter();
@@ -18,37 +26,26 @@ export const Index = () => {
 
 	return (
 		<NormalPage>
-			<Box
+			<Stack
 				width="100%"
 				display="flex"
-				flexDirection={["column", "column", "row"]}
+				paddingX={paddingX.global}
+				spacing={4}
 			>
-				<Stack flex={1} p={1} spacing={2}>
-					<Typography fontSize={fontSizes.indexHeader}>
-						Weekly playlist for people who know what's worth
-						listening to.
-					</Typography>
-					<Box>
-						<Link
-							href={routes.join}
-							style={{ textDecoration: "none" }}
-							passHref
-						>
-							<Button variant="outlined" size="large">
-								<Typography>Join</Typography>
-							</Button>
-						</Link>
-					</Box>
-				</Stack>
-				<Box
-					flex={1}
-					p={1}
-					maxHeight={["200px", "200px", "400px"]}
-					overflow="hidden"
-				>
-					<Image src={shadow} alt="Palm tree silhouette." />
+				<Typography fontSize={fontSizes.indexHeader}>
+					Weekly playlist for people who know what's worth listening
+					to.
+				</Typography>
+				{isPrerelease ? <WaitlistForm /> : <JoinLink />}
+				<Box position="relative" height={photoHeight}>
+					<Image
+						src={shadow}
+						alt="Palm tree silhouette."
+						fill
+						objectFit="cover"
+					/>
 				</Box>
-			</Box>
+			</Stack>
 		</NormalPage>
 	);
 };

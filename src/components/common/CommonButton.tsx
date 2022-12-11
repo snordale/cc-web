@@ -49,9 +49,9 @@ export const CommonButton: React.FC<ButtonProps> = ({
 					{
 						borderColor: "primary.main",
 						color: "primary.main",
-						":hover": {
-							background: signatureGradientLight,
-						},
+						//":hover": {
+						//	background: signatureGradientLight,
+						//},
 						"&.Mui-disabled": {
 							borderColor: "#aaa",
 							color: "#aaa",

@@ -20,7 +20,7 @@ export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
 				display="flex"
 				flexDirection="column"
 				alignItems="center"
-				paddingX={isMobile ? "18px" : "40px"}
+				//paddingX={isMobile ? "18px" : "40px"}
 				paddingY={isMobile ? "24px" : "40px"}
 			>
 				{children}
