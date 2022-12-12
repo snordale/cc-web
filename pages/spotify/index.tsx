@@ -1,10 +1,8 @@
 import type { NextPage } from "next";
-import { withUrqlClient } from "next-urql";
-import { NormalPage } from "../../src/components/global/NormalPage";
-import { createUrqlClient } from "../../src/utils/createUrqlClient";
+import { NormalPage } from "../../src/components/common/NormalPage";
 
 const Index: NextPage = () => {
 	return <NormalPage>Spotify</NormalPage>;
 };
 
-export default withUrqlClient(createUrqlClient)(Index);
+export default Index;
