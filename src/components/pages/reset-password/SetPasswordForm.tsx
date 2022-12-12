@@ -20,29 +20,27 @@ export const SetPasswordForm: React.FC = () => {
 			initialValues={{ newPassword: "" }}
 			validationSchema={validationSchema}
 			onSubmit={async (data, { setErrors }) => {
-				const res = await setPassword({
-					token: router.query.token as string,
-					newPassword: data.newPassword,
-				});
-				const errors = res.data?.setPassword.errors;
-
-				if (errors) {
-					const tokenError = errors.find(
-						(error) => error.field === "token"
-					);
-					toast.error(
-						tokenError ? "Invalid token." : "Something went wrong."
-					);
-
-					const errorObject: { [key: string]: string } = {};
-					errors.forEach((error) => {
-						errorObject[error.field] = error.message;
-					});
-					setErrors(errorObject);
-				} else {
-					toast.error("Password set.");
-					router.push("/");
-				}
+				//const res = await setPassword({
+				//	token: router.query.token as string,
+				//	newPassword: data.newPassword,
+				//});
+				//const errors = res.data?.setPassword.errors;
+				//if (errors) {
+				//	const tokenError = errors.find(
+				//		(error) => error.field === "token"
+				//	);
+				//	toast.error(
+				//		tokenError ? "Invalid token." : "Something went wrong."
+				//	);
+				//	const errorObject: { [key: string]: string } = {};
+				//	errors.forEach((error) => {
+				//		errorObject[error.field] = error.message;
+				//	});
+				//	setErrors(errorObject);
+				//} else {
+				//	toast.error("Password set.");
+				//	router.push("/");
+				//}
 			}}
 		>
 			{({ isSubmitting, values, handleChange, touched, errors }) => (
