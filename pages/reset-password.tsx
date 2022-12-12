@@ -1,10 +1,8 @@
 import { NextPage } from "next";
-import { NormalPage } from "../src/components/global/NormalPage";
+import { NormalPage } from "../src/components/common/NormalPage";
 import { SendResetForm } from "../src/components/pages/reset-password/SendResetForm";
 import { SetPasswordForm } from "../src/components/pages/reset-password/SetPasswordForm";
-import { createUrqlClient } from "../src/utils/createUrqlClient";
 import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
 
 const ResetPassword: NextPage<{ token: string | undefined }> = ({ token }) => {
 	const router = useRouter();
@@ -16,4 +14,4 @@ const ResetPassword: NextPage<{ token: string | undefined }> = ({ token }) => {
 	);
 };
 
-export default withUrqlClient(createUrqlClient)(ResetPassword);
+export default ResetPassword;

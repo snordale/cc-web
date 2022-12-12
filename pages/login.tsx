@@ -64,7 +64,7 @@ const Login: React.FC = () => {
 						errors,
 					}) => (
 						<Form>
-							<Stack spacing="18px" width="260px">
+							<Stack spacing="18px" width="240px">
 								<TextField
 									name="usernameOrEmail"
 									label="Username or email"

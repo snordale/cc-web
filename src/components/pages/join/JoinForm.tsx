@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
+import { Box, Stack, TextField } from "@mui/material";
 import { Formik, Form as FormikForm } from "formik";
-import { Stack, TextField } from "@mui/material";
 
 import { LoadingButton } from "@mui/lab";
 import React from "react";
@@ -47,7 +47,7 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 		>
 			{({ isSubmitting, values, handleChange, touched, errors }) => (
 				<FormikForm>
-					<Stack spacing="18px" width="360px">
+					<Stack spacing="18px" width="240px">
 						<TextField
 							name="email"
 							label="Email"
@@ -56,6 +56,7 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 							onChange={handleChange}
 							error={touched.email && Boolean(errors.email)}
 							helperText={touched.email && errors.email}
+							size="small"
 						/>
 						<TextField
 							name="username"
@@ -64,6 +65,7 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 							onChange={handleChange}
 							error={touched.username && Boolean(errors.username)}
 							helperText={touched.username && errors.username}
+							size="small"
 						/>
 						<TextField
 							name="password"
@@ -73,15 +75,19 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 							onChange={handleChange}
 							error={touched.password && Boolean(errors.password)}
 							helperText={touched.password && errors.password}
+							size="small"
 						/>
-						<LoadingButton
-							type="submit"
-							variant="contained"
-							loading={isSubmitting}
-							fullWidth
-						>
-							Join
-						</LoadingButton>
+						<Box display="flex">
+							<LoadingButton
+								type="submit"
+								variant="contained"
+								loading={isSubmitting}
+								size="small"
+								fullWidth
+							>
+								Join
+							</LoadingButton>
+						</Box>
 					</Stack>
 				</FormikForm>
 			)}

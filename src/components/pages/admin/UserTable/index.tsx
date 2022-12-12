@@ -34,6 +34,7 @@ export interface UserTableData {
 	username: string;
 	spotifyId: string;
 	permission: string;
+	token: string;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -98,6 +99,12 @@ const headCells: readonly HeadCell[] = [
 		disablePadding: false,
 		label: "Permission",
 	},
+	{
+		id: "token",
+		numeric: false,
+		disablePadding: false,
+		label: "Token",
+	},
 ];
 
 interface EnhancedTableProps {
@@ -154,6 +161,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 							active={orderBy === headCell.id}
 							direction={orderBy === headCell.id ? order : "asc"}
 							onClick={createSortHandler(headCell.id)}
+							sx={{ whiteSpace: "nowrap" }}
 						>
 							{headCell.label}
 							{orderBy === headCell.id ? (
@@ -186,8 +194,7 @@ export function UserTable() {
 		cc.setUserPermission
 	);
 	//const [, setUserPermissions] = useSetUserPermissionsMutation();
-	console.log("data");
-	console.log(data);
+
 	if (!data) return <Spinner />;
 
 	const users = data.users;

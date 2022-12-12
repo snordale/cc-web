@@ -19,6 +19,8 @@ export const Join = () => {
 
 	if (isLoggedIn) router.replace(routes.home);
 
+	if (!router.isReady) return null;
+
 	return (
 		<NormalPage>
 			<Header curatorToken={curatorToken} />

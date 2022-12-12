@@ -3,7 +3,6 @@ import { permissions } from "../constants";
 import { useCurrentUser } from "../services/query";
 
 export const useUser = () => {
-  console.log("use user");
   const query = useCurrentUser();
 
   const tokenInCookies = getCookie("token");
@@ -13,17 +12,16 @@ export const useUser = () => {
   const isUserLoaded = query.data && query.data.user;
 
   const isCurator = isUserLoaded
-    ? query.data.user.permission === permissions.god ||
-      query.data.user.permission === permissions.admin
+    ? query.data.user.permission === permissions.curator
     : undefined;
 
-  const isMember = isUserLoaded
-    ? query.data.user.permission === permissions.tier1 ||
-      query.data.user.permission === permissions.tier2
+  const isContributor = isUserLoaded
+    ? query.data.user.permission !== permissions.none
     : undefined;
 
   const isAdmin = isUserLoaded
-    ? query.data.user.permission === permissions.curator
+    ? query.data.user.permission === permissions.admin ||
+      query.data.user.permission === permissions.god
     : undefined;
 
   return {
@@ -32,6 +30,6 @@ export const useUser = () => {
     isUserLoaded,
     isCurator,
     isAdmin,
-    isMember,
+    isContributor,
   };
 };

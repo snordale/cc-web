@@ -36,13 +36,20 @@ export const Row: React.FC<RowProps> = ({
 					}}
 				/>
 			</TableCell>
-			<TableCell component="th" id={labelId} scope="row">
+			<TableCell
+				component="th"
+				id={labelId}
+				scope="row"
+				sx={{ whiteSpace: "nowrap" }}
+			>
 				{user.id}
 			</TableCell>
 			<TableCell align="right">{user.username}</TableCell>
-			<TableCell align="right">{user.spotifyId}</TableCell>
-			<TableCell align="right">
-				{new Date(parseInt(user.createdAt)).toLocaleString("default", {
+			<TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+				{user.spotifyId}
+			</TableCell>
+			<TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+				{new Date(user.createdAt).toLocaleString("default", {
 					year: "numeric",
 					month: "2-digit",
 					day: "2-digit",
@@ -51,6 +58,9 @@ export const Row: React.FC<RowProps> = ({
 				})}
 			</TableCell>
 			<TableCell align="right">{user.permission}</TableCell>
+			<TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+				{user.token}
+			</TableCell>
 		</TableRow>
 	);
 };

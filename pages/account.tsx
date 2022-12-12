@@ -18,6 +18,7 @@ import { FormStates } from "../src/components/pages/account";
 import { NormalPage } from "../src/components/common/NormalPage";
 import { Spinner } from "../src/components/global";
 import { getArrayDiff } from "../src/utils";
+import { paddingX } from "../src/style";
 import toast from "react-hot-toast";
 import { useRequireLogin } from "../src/hooks";
 import { useRouter } from "next/router";
@@ -84,8 +85,6 @@ const Account: React.FC = () => {
 			? await getCuratorAuthLink()
 			: await getBasicAuthLink();
 
-		console.log("data: ", data);
-
 		if (data.link) {
 			router.replace(data.link);
 		} else {
@@ -123,12 +122,9 @@ const Account: React.FC = () => {
 		}
 	};
 
-	console.log("topTracksData");
-	console.log(topTracksData);
-
 	return (
 		<NormalPage>
-			<Stack width="100%" spacing="12px">
+			<Stack width="100%" spacing="12px" paddingX={paddingX.global}>
 				<PageHeader text="Account" />
 				<Avatar
 					src={data?.user?.profilePhoto ?? ""}

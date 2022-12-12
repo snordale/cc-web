@@ -43,6 +43,7 @@ const theme = createTheme({
       },
     },
     MuiInputBase: {
+      //smal
       styleOverrides: {
         root: {
           textTransform: "none",

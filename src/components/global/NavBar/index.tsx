@@ -1,5 +1,4 @@
-import { Box, Stack } from "@mui/material";
-
+import { Box } from "@mui/material";
 import { Link } from "./Link";
 import React from "react";
 import { cc } from "../../../services/cc";
