@@ -3,6 +3,7 @@ import { Link } from "./Link";
 import React from "react";
 import { cc } from "../../../services/cc";
 import { isAdmin } from "../../../utils";
+import { isPrerelease } from "../../../config";
 import { paddingX } from "../../../style";
 import { routes } from "../../../utils/routes";
 import toast from "react-hot-toast";
@@ -35,10 +36,13 @@ export const NavBar: React.FC = () => {
 			}}
 		>
 			<Box display="flex" flexDirection="row">
-				<Link text="Common Collections" href={user ? "/home" : "/"} />
+				<Link
+					text="Common Collections"
+					href={user ? routes.home : routes.index}
+				/>
 			</Box>
 			<Box display="flex" gap={[1, 2]}>
-				{!isLoading && !user && (
+				{!isLoading && !user && !isPrerelease && (
 					<>
 						<Link text="Login" href={routes.login} />
 						<Link text="Join" href={routes.join} />

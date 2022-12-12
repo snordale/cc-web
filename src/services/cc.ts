@@ -23,6 +23,13 @@ const request = (endpoint: string, config: RequestInit) => {
     .then((data) => data);
 };
 
+export const joinWaitlist = ({ email }: { email: string }) => {
+  return request("/auth/join-waitlist", {
+    method: "post",
+    body: JSON.stringify({ email }),
+  });
+};
+
 export const join = ({ email, username, password, token }: JoinRequestArgs) => {
   return request("/auth/join", {
     method: "post",
@@ -106,6 +113,7 @@ export const getUsersTopTracks = (userId: string): Promise<{ tracks: any }> => {
 };
 
 export const cc = {
+  joinWaitlist,
   join,
   login,
   logout,
