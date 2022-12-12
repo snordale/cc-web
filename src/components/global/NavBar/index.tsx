@@ -38,7 +38,7 @@ export const NavBar: React.FC = () => {
 			<Box display="flex" flexDirection="row">
 				<Link text="Common Collections" href={user ? "/home" : "/"} />
 			</Box>
-			<Stack direction="row" spacing={[1, 2]}>
+			<Box display="flex" gap={[1, 2]}>
 				{!isLoading && !user && (
 					<>
 						<Link text="Login" href={routes.login} />
@@ -70,7 +70,7 @@ export const NavBar: React.FC = () => {
 						/>
 					</>
 				)}
-			</Stack>
+			</Box>
 		</Box>
 	);
 };

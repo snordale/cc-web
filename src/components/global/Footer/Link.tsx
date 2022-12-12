@@ -13,7 +13,7 @@ export const Link: React.FC<Props> = ({ text, href, onClick }) => {
 		return (
 			<Typography
 				color="black"
-				fontSize="16px"
+				fontSize="14px"
 				onClick={onClick}
 				sx={{
 					":hover": {

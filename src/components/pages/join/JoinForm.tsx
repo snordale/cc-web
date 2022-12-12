@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { Formik, Form as FormikForm } from "formik";
 import { Stack, TextField } from "@mui/material";
 
-import { FieldError } from "../../../types";
 import { LoadingButton } from "@mui/lab";
 import React from "react";
 import { cc } from "../../../services/cc";

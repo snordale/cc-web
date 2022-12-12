@@ -5,23 +5,20 @@ import { Typography } from "@mui/material";
 interface Props {
 	text: string;
 	href?: string;
-	onClick?: () => void;
+	[rest: string]: any;
 }
 
-export const Link: React.FC<Props> = ({ text, href, onClick }) => {
+export const Link: React.FC<Props> = ({ text, href, ...rest }) => {
 	const renderText = () => {
 		return (
 			<Typography
 				color="black"
-				fontSize="16px"
-				marginY="8px"
-				onClick={onClick}
 				sx={{
 					":hover": {
 						textDecoration: "underline",
-						cursor: "pointer",
 					},
 				}}
+				{...rest}
 			>
 				{text}
 			</Typography>
@@ -30,12 +27,7 @@ export const Link: React.FC<Props> = ({ text, href, onClick }) => {
 
 	if (href) {
 		return (
-			<NextLink
-				href={href}
-				style={{
-					textDecoration: "none",
-				}}
-			>
+			<NextLink href={href} style={{ textDecoration: "none" }}>
 				{renderText()}
 			</NextLink>
 		);

@@ -1,8 +1,10 @@
+import { Shadows } from "@mui/material/styles/shadows";
 import { createTheme } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
 
 const theme = createTheme({
+  shadows: Array(25).fill("none") as Shadows,
   typography: {
+    fontSize: 12,
     fontFamily: [
       "Poppins",
       "Joesfin Sans",
@@ -15,8 +17,6 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#222",
-      //main: '#CFBDA0',
-      //main: '#BAAC97',
     },
     secondary: {
       main: "#B0D7FE",
@@ -32,10 +32,21 @@ const theme = createTheme({
   },
   components: {
     MuiButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
       styleOverrides: {
         root: {
           textTransform: "none",
-          //borderRadius: "0px",
+          borderRadius: "1000px",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "1000px !important",
         },
       },
     },
