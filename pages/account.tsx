@@ -8,7 +8,6 @@ import {
 	signatureGradientLight,
 } from "../src/constants";
 import {
-	useCurrentUser,
 	useGetBasicAuthLink,
 	useGetCuratorAuthLink,
 	useGetTopTracks,
@@ -16,7 +15,6 @@ import {
 
 import { FormStates } from "../src/components/pages/account";
 import { NormalPage } from "../src/components/common/NormalPage";
-import { Spinner } from "../src/components/global";
 import { getArrayDiff } from "../src/utils";
 import { paddingX } from "../src/style";
 import toast from "react-hot-toast";
@@ -35,6 +33,8 @@ const Account: React.FC = () => {
 	const { data: topTracksData, isLoading: isLoadingTracks } = useGetTopTracks(
 		data?.user.id
 	);
+	console.log("topTracksData");
+	console.log(topTracksData);
 	const { mutateAsync: getBasicAuthLink } = useGetBasicAuthLink();
 	const { mutateAsync: getCuratorAuthLink } = useGetCuratorAuthLink();
 

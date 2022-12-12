@@ -1,8 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { fontSizes, paddingX } from "../../../style";
 
 import { Link } from "./Link";
 import React from "react";
+import { isPrerelease } from "../../../config";
+import { paddingX } from "../../../style";
 
 export const Footer: React.FC = () => {
 	return (
@@ -17,12 +18,16 @@ export const Footer: React.FC = () => {
 					<Box display="flex">
 						<Link text="Home" href="/" />
 					</Box>
-					<Box display="flex">
-						<Link text="About" href="/about" />
-					</Box>
-					<Box display="flex">
-						<Link text="Join" href="/join" />
-					</Box>
+					{!isPrerelease && (
+						<>
+							<Box display="flex">
+								<Link text="About" href="/about" />
+							</Box>
+							<Box display="flex">
+								<Link text="Join" href="/join" />
+							</Box>
+						</>
+					)}
 				</Stack>
 			</Box>
 		</Box>

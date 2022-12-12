@@ -43,11 +43,17 @@ const theme = createTheme({
       },
     },
     MuiInputBase: {
-      //smal
       styleOverrides: {
         root: {
           textTransform: "none",
           borderRadius: "1000px !important",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          fontSize: "16px !important",
         },
       },
     },

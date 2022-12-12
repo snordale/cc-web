@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { useUser } from "./use-user";
 
 export const useRequireLogin = () => {
-  const { data } = useUser();
+  const { isLoggedIn } = useUser();
 
   useEffect(() => {
-    if (data && !data.user) {
+    if (!isLoggedIn) {
       toast.error("Not logged in.", { id: "Not logged in." });
       router.replace(`/login?next=${router.pathname}`);
     }
-  }, [data]);
+  }, [isLoggedIn]);
 };

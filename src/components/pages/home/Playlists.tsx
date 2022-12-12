@@ -11,9 +11,7 @@ export const Playlists: React.FC = () => {
 	return (
 		<Box>
 			<Typography>Playlists</Typography>
-			<Typography>
-				Contributors get access to our weekly playlists.
-			</Typography>
+			<Typography>Thanks for contributing.</Typography>
 		</Box>
 	);
 };
