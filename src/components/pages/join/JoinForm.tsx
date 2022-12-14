@@ -82,7 +82,6 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 								type="submit"
 								variant="contained"
 								loading={isSubmitting}
-								size="small"
 								fullWidth
 							>
 								Join

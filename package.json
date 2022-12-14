@@ -15,7 +15,6 @@
 		"@emotion/server": "latest",
 		"@emotion/styled": "^11.10.5",
 		"@mui/icons-material": "latest",
-		"@mui/joy": "^5.0.0-alpha.55",
 		"@mui/lab": "latest",
 		"@mui/material": "latest",
 		"@tanstack/react-query": "^4.16.1",

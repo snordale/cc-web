@@ -1,15 +1,13 @@
 import { getCookie } from "cookies-next";
 import { permissions } from "../constants";
 import { useCurrentUser } from "../services/query";
+import { useEffect } from "react";
 
 export const useUser = () => {
   const query = useCurrentUser();
 
-  const tokenInCookies = getCookie("token");
-
-  const isLoggedIn = !!tokenInCookies;
-
-  const isUserLoaded = query.data && query.data.user;
+  const isUserLoaded = query.data && !!query.data.user;
+  const isLoggedIn = isUserLoaded;
 
   const isCurator = isUserLoaded
     ? query.data.user.permission === permissions.curator

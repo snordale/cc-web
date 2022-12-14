@@ -1,35 +1,33 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Fade } from "@mui/material";
 
 import CenteredForm from "../../common/CenteredForm";
 import { Header } from "./Header";
 import Image from "next/image";
-import { JoinForm } from "./JoinForm";
+import { Link } from "../../common/Link";
+import { LoginForm } from "./LoginForm";
 import { NormalPage } from "../../common/NormalPage";
+import { fontSizes } from "../../../style";
+import roseVinyl from "../../../../public/rose-vinyl.png";
 import { routes } from "../../../utils/routes";
-import twentyFive from "../../../../public/twenty-five.png";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
 export * from "./Header";
-export * from "./JoinForm";
+export * from "./LoginForm";
 
-export const Join = () => {
+export const Login = () => {
 	const router = useRouter();
 
 	const { isLoggedIn } = useUser();
-
-	const curatorToken = router.query.token
-		? (router.query.token as string)
-		: "";
 
 	if (isLoggedIn) router.replace(routes.home);
 
 	return (
 		<NormalPage>
 			<CenteredForm>
-				<Box position="relative" width="60px" minHeight="50px">
+				<Box position="relative" width="74px" height="50px">
 					<Image
-						src={twentyFive}
+						src={roseVinyl}
 						alt="Drawing of music sharing website."
 						fill
 						style={{
@@ -37,8 +35,15 @@ export const Join = () => {
 						}}
 					/>
 				</Box>
-				<Header curatorToken={curatorToken} />
-				<JoinForm curatorToken={curatorToken} />
+				<Header />
+				<LoginForm />
+				<Box display="flex">
+					<Link
+						text="Forgot Password?"
+						href="/reset-password"
+						fontSize={fontSizes.small}
+					/>
+				</Box>
 			</CenteredForm>
 		</NormalPage>
 	);

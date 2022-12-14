@@ -10,8 +10,8 @@ export const Header: React.FC<HeaderProps> = ({ curatorToken }) => {
 	const text = curatorToken ? "Thanks for coming." : "Welcome.";
 
 	return (
-		<Box paddingBottom="24px">
-			<Typography>{text}</Typography>
+		<Box>
+			<Typography fontSize={16}>{text}</Typography>
 		</Box>
 	);
 };

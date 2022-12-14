@@ -20,6 +20,8 @@ export const Index = () => {
 
 	if (isLoggedIn) router.push("/home");
 
+	console.log("isPrerelease: ", isPrerelease);
+
 	return (
 		<NormalPage>
 			<Box
@@ -61,7 +63,9 @@ export const Index = () => {
 							src={graphic}
 							alt="Drawing of music sharing website."
 							fill
-							objectFit="cover"
+							style={{
+								objectFit: "cover",
+							}}
 						/>
 					</Box>
 				</Box>
@@ -81,7 +85,9 @@ export const Index = () => {
 							src={second}
 							alt="Drawing of music sharing website."
 							fill
-							objectFit="cover"
+							style={{
+								objectFit: "cover",
+							}}
 						/>
 					</Box>
 					<Stack width="100%" spacing={2} flex={1}>

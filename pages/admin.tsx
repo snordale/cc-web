@@ -25,7 +25,7 @@ const Admin: React.FC = () => {
 	);
 	//const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();
 	//const [, createPlaylist] = useCreatePlaylist()
-	console.log("cookie: ", getCookie("token"));
+	//console.log("cookie: ", getCookie("token"));
 	if (isLoading) return <Spinner />;
 
 	//if (!isLoggedIn) router.push("/");

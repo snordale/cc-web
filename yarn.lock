@@ -249,22 +249,6 @@
   dependencies:
     "@babel/runtime" "^7.20.1"
 
-"@mui/joy@^5.0.0-alpha.55":
-  version "5.0.0-alpha.55"
-  resolved "https://registry.yarnpkg.com/@mui/joy/-/joy-5.0.0-alpha.55.tgz#767c5f4df0cb6e124b6f70b6e2a1e05261e22ab8"
-  integrity sha512-y1tnTFerrdx5efN3oqzoLw3g6CgDTWhhK7Wle6o3s6xFYABJZy8J5tVLPS9sKyS4xBX/mdqM6MbAmOHcFfpiiA==
-  dependencies:
-    "@babel/runtime" "^7.20.1"
-    "@mui/base" "5.0.0-alpha.107"
-    "@mui/core-downloads-tracker" "^5.10.15"
-    "@mui/system" "^5.10.15"
-    "@mui/types" "^7.2.1"
-    "@mui/utils" "^5.10.15"
-    clsx "^1.2.1"
-    csstype "^3.1.1"
-    prop-types "^15.8.1"
-    react-is "^18.2.0"
-
 "@mui/lab@latest":
   version "5.0.0-alpha.109"
   resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.109.tgz#e0004174be4c3bcefcdbe674955e201d24ce96e0"

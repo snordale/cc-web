@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { fontSizes, paddingX } from "../../../style";
 
-import { BecomeMember } from "./BecomeMember";
+import { Contributor } from "./Contributor";
+import { NonContributor } from "./NonContributor";
 import { NormalPage } from "../../common/NormalPage";
-import { Playlists } from "./Playlists";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
 				<Typography fontSize={fontSizes.header}>
 					Welcome {data?.user.username}.
 				</Typography>
-				{isContributor ? <Playlists /> : <BecomeMember />}
+				{isContributor ? <Contributor /> : <NonContributor />}
 			</Box>
 		</NormalPage>
 	);
