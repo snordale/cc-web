@@ -11,16 +11,14 @@ import second from "../../../../public/selected.png";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
-const photoSize = ["200px", "300px", "450px"];
+const photoSize = ["200px", "300px", "350px"];
 
 export const Index = () => {
 	const router = useRouter();
 
-	const { isLoggedIn } = useUser();
+	//const { isLoggedIn } = useUser();
 
-	if (isLoggedIn) router.push("/home");
-
-	console.log("isPrerelease: ", isPrerelease);
+	//if (isLoggedIn) router.push("/home");
 
 	return (
 		<NormalPage>
@@ -53,20 +51,21 @@ export const Index = () => {
 						</Typography>
 						{isPrerelease ? <WaitlistForm /> : <JoinLink />}
 					</Stack>
-					<Box
-						flex={1}
-						position="relative"
-						minWidth={photoSize}
-						minHeight={photoSize}
-					>
-						<Image
-							src={graphic}
-							alt="Drawing of music sharing website."
-							fill
-							style={{
-								objectFit: "cover",
-							}}
-						/>
+					<Box flex={1} display="flex">
+						<Box
+							position="relative"
+							minWidth={photoSize}
+							minHeight={photoSize}
+						>
+							<Image
+								src={graphic}
+								alt="Drawing of music sharing website."
+								fill
+								style={{
+									objectFit: "cover",
+								}}
+							/>
+						</Box>
 					</Box>
 				</Box>
 				<Box

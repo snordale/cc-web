@@ -15,9 +15,11 @@ export const Link: React.FC<Props> = ({ text, href, ...rest }) => {
 				color="black"
 				sx={{
 					":hover": {
-						textDecoration: "underline",
+						textDecoration: "none",
+						opacity: 0.5,
 					},
 				}}
+				fontSize={16}
 				{...rest}
 			>
 				{text}

@@ -18,8 +18,9 @@ export const Link: React.FC<Props> = ({ text, href, onClick }) => {
 				onClick={onClick}
 				sx={{
 					":hover": {
-						textDecoration: "underline",
-						cursor: "pointer",
+						textDecoration: "none",
+						opacity: 0.5,
+						//cursor: "pointer",
 					},
 				}}
 			>

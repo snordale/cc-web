@@ -1,7 +1,5 @@
-import { getCookie } from "cookies-next";
 import { permissions } from "../constants";
 import { useCurrentUser } from "../services/query";
-import { useEffect } from "react";
 
 export const useUser = () => {
   const query = useCurrentUser();
@@ -10,16 +8,16 @@ export const useUser = () => {
   const isLoggedIn = isUserLoaded;
 
   const isCurator = isUserLoaded
-    ? query.data.user.permission === permissions.curator
+    ? query.data?.user.permission === permissions.curator
     : undefined;
 
   const isContributor = isUserLoaded
-    ? query.data.user.permission !== permissions.none
+    ? query.data?.user.permission !== permissions.none
     : undefined;
 
   const isAdmin = isUserLoaded
-    ? query.data.user.permission === permissions.admin ||
-      query.data.user.permission === permissions.god
+    ? query.data?.user.permission === permissions.admin ||
+      query.data?.user.permission === permissions.god
     : undefined;
 
   return {

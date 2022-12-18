@@ -5,17 +5,17 @@ import React from "react";
 import { Toaster } from "react-hot-toast";
 import { navHeight } from "../../style";
 
-interface NormalPageProps {
-	children: React.ReactNode;
+interface Props {
+	children: any;
 }
 
-export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
+export const NormalPage: React.FC<Props> = ({ children }) => {
 	const isMobile = useMediaQuery("(max-width:600px)");
 
 	return (
 		<Box width="100%" minHeight="100vh">
 			<NavBar />
-			<Fade in={true} timeout={400}>
+			{/*<Fade in={true} timeout={400}>
 				<Box
 					minHeight={`calc(100vh - ${navHeight}px)`}
 					width="100%"
@@ -24,10 +24,10 @@ export const NormalPage: React.FC<NormalPageProps> = ({ children }) => {
 					alignItems="center"
 					paddingX={isMobile ? "18px" : "40px"}
 					paddingY={isMobile ? "24px" : "40px"}
-				>
-					{children}
-				</Box>
-			</Fade>
+				>*/}
+			{children}
+			{/*</Box>
+			</Fade>*/}
 			<Footer />
 			<Toaster position="bottom-center" />
 		</Box>
