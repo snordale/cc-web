@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import { useUser } from "./use-user";
 
 export const useRequireLogin = () => {
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, data } = useUser();
+
+  console.log("data");
+  console.log(data);
 
   useEffect(() => {
     if (!isLoggedIn) {

@@ -5,7 +5,6 @@ const theme = createTheme({
   shadows: Array(25).fill("none") as Shadows,
   typography: {
     fontSize: 12,
-    fontWeightRegular: 500,
     fontFamily: [
       "Poppins",
       "Joesfin Sans",

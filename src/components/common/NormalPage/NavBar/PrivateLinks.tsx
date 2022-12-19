@@ -1,10 +1,10 @@
-import { Link } from "../../common";
-import { cc } from "../../../services/cc";
-import { routes } from "../../../utils/routes";
+import { Link } from "../../Link";
+import { cc } from "../../../../services/cc";
+import { routes } from "../../../../utils/routes";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useUser } from "../../../hooks/use-user";
+import { useUser } from "../../../../hooks/use-user";
 
 const PrivateLinks = () => {
 	const router = useRouter();

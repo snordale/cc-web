@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
-import { Link } from "../../common";
+import { Link } from "../../Link";
 import PrivateLinks from "./PrivateLinks";
 import PublicLinks from "./PublicLinks";
-import React from "react";
-import { isPrerelease } from "../../../config";
-import { paddingX } from "../../../style";
-import { routes } from "../../../utils/routes";
-import { useUser } from "../../../hooks/use-user";
+import { isPrerelease } from "../../../../config";
+import { paddingX } from "../../../../style";
+import { routes } from "../../../../utils/routes";
+import { useUser } from "../../../../hooks/use-user";
 
-export const NavBar: React.FC = () => {
+export const NavBar = () => {
 	const { data, isLoading } = useUser();
 
 	const user = data ? data.user : null;
@@ -30,8 +29,9 @@ export const NavBar: React.FC = () => {
 			top="0px"
 			zIndex={1}
 			paddingX={paddingX.global}
+			paddingY={1}
 			sx={{
-				outline: "1px solid #ccc",
+				outline: "1px solid black",
 				backgroundColor: "white",
 			}}
 		>

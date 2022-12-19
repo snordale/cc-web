@@ -2,9 +2,10 @@ import * as yup from "yup";
 
 import { Box, Button, Fade, Stack, TextField, Typography } from "@mui/material";
 import { Formik, Form as FormikForm } from "formik";
+import { easing, fontSizes } from "../../../style";
 
+import { LoadingButton } from "@mui/lab";
 import { cc } from "../../../services/cc";
-import { fontSizes } from "../../../style";
 import toast from "react-hot-toast";
 
 const validationSchema = yup.object({
@@ -33,40 +34,46 @@ const JoinLink = () => {
 				}}
 				validationSchema={validationSchema}
 			>
-				{({ values, handleChange, touched, errors }) => (
-					<FormikForm>
-						<Box
-							width={["100%", "350px"]}
-							display="flex"
-							flexDirection={["column", "row"]}
-							gap={1}
-						>
-							<TextField
-								name="email"
-								label="Email"
-								type="email"
-								value={values.email}
-								onChange={handleChange}
-								error={touched.email && Boolean(errors.email)}
-								helperText={touched.email && errors.email}
-								size="small"
-								sx={{ flex: 1 }}
-							/>
-							<Fade
-								in={Boolean(values.email.length)}
-								timeout={300}
-								easing={{
-									enter: "ease-in-out",
-									exit: "ease-in-out",
-								}}
+				{({ values, handleChange, touched, errors, isSubmitting }) => {
+					return (
+						<FormikForm>
+							<Box
+								width={["100%", "350px"]}
+								display="flex"
+								flexDirection={["column", "row"]}
+								gap={1}
 							>
-								<Button variant="contained" size="large">
-									<Typography>Join</Typography>
-								</Button>
-							</Fade>
-						</Box>
-					</FormikForm>
-				)}
+								<TextField
+									name="email"
+									label="Email"
+									type="email"
+									value={values.email}
+									onChange={handleChange}
+									error={
+										touched.email && Boolean(errors.email)
+									}
+									helperText={touched.email && errors.email}
+									size="small"
+									sx={{ flex: 1 }}
+								/>
+								<Fade
+									in={Boolean(values.email.length)}
+									timeout={300}
+									easing={easing.default}
+								>
+									<LoadingButton
+										variant="contained"
+										size="large"
+										type="submit"
+										loading={isSubmitting}
+									>
+										<Typography>Join</Typography>
+									</LoadingButton>
+								</Fade>
+							</Box>
+						</FormikForm>
+					);
+				}}
 			</Formik>
 		</Stack>
 	);

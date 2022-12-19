@@ -7,10 +7,10 @@ import {
 	requiredScopes,
 	signatureGradientLight,
 } from "../src/constants";
+import { green, red } from "@mui/material/colors";
 import {
 	useGetBasicAuthLink,
 	useGetCuratorAuthLink,
-	useGetTopTracks,
 } from "../src/services/query";
 
 import { FormStates } from "../src/components/pages/account";
@@ -29,12 +29,12 @@ const Account: React.FC = () => {
 
 	useRequireLogin();
 
-	const { data, isLoading, isCurator } = useUser();
-	const { data: topTracksData, isLoading: isLoadingTracks } = useGetTopTracks(
-		data?.user.id
-	);
-	console.log("topTracksData");
-	console.log(topTracksData);
+	const { data, isLoading, isCurator, isAdmin } = useUser();
+	//const { data: topTracksData, isLoading: isLoadingTracks } = useGetTopTracks(
+	//	data?.user.id
+	//);
+	//console.log("topTracksData");
+	//console.log(topTracksData);
 	const { mutateAsync: getBasicAuthLink } = useGetBasicAuthLink();
 	const { mutateAsync: getCuratorAuthLink } = useGetCuratorAuthLink();
 
@@ -71,7 +71,7 @@ const Account: React.FC = () => {
 				currentScopes.includes(rqd as string)
 			);
 
-			if (!isCurator) return hasBasicScope;
+			if (!isCurator && !isAdmin) return hasBasicScope;
 
 			return curatorRequiredScopes.every((rqd) =>
 				currentScopes.includes(rqd)
@@ -81,9 +81,10 @@ const Account: React.FC = () => {
 	}, [data]);
 
 	const handleSpotifyConnect = async () => {
-		const data = isCurator
-			? await getCuratorAuthLink()
-			: await getBasicAuthLink();
+		const data =
+			isCurator || isAdmin
+				? await getCuratorAuthLink()
+				: await getBasicAuthLink();
 
 		if (data.link) {
 			router.replace(data.link);
@@ -148,22 +149,18 @@ const Account: React.FC = () => {
 							Spotify Link
 						</Typography>
 					</Stack>
+					<Typography
+						color={hasRequiredScope ? green[900] : red[900]}
+					>
+						{hasRequiredScope
+							? "Authenticated"
+							: "Not Authenticated"}
+					</Typography>
 					<CommonButton
-						text={hasRequiredScope ? "Connected" : "Connect"}
-						disabled={hasRequiredScope}
+						text={"Authenticate"}
 						onClick={handleSpotifyConnect}
 					/>
 				</Stack>
-				{topTracksData && topTracksData.tracks && (
-					<>
-						{topTracksData?.tracks.map((track: any) => {
-							<Box>
-								<Typography>{track.name}</Typography>
-								<Link href={track.href}>Link</Link>
-							</Box>;
-						})}
-					</>
-				)}
 			</Stack>
 		</NormalPage>
 	);

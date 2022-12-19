@@ -1,5 +1,5 @@
-import { Link } from "../../common";
-import { routes } from "../../../utils/routes";
+import { Link } from "../../Link";
+import { routes } from "../../../../utils/routes";
 
 const PublicLinks = () => {
 	return (

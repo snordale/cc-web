@@ -70,10 +70,10 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
 	{
-		id: "id",
-		numeric: true,
+		id: "createdAt",
+		numeric: false,
 		disablePadding: false,
-		label: "ID",
+		label: "Joined",
 	},
 	{
 		id: "username",
@@ -82,16 +82,16 @@ const headCells: readonly HeadCell[] = [
 		label: "Username",
 	},
 	{
+		id: "id",
+		numeric: false,
+		disablePadding: false,
+		label: "CC Id",
+	},
+	{
 		id: "spotifyId",
 		numeric: false,
 		disablePadding: false,
 		label: "Spotify ID",
-	},
-	{
-		id: "createdAt",
-		numeric: false,
-		disablePadding: false,
-		label: "Joined",
 	},
 	{
 		id: "permission",
@@ -181,7 +181,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export function UserTable() {
 	const [order, setOrder] = useState<Order>("asc");
-	const [orderBy, setOrderBy] = useState<keyof UserTableData>("id");
+	const [orderBy, setOrderBy] = useState<keyof UserTableData>("createdAt");
 	const [selected, setSelected] = useState<number[]>([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);

@@ -16,9 +16,9 @@ const photoSize = ["200px", "300px", "350px"];
 export const Index = () => {
 	const router = useRouter();
 
-	//const { isLoggedIn } = useUser();
+	const { isLoggedIn } = useUser();
 
-	//if (isLoggedIn) router.push("/home");
+	if (isLoggedIn) router.push("/home");
 
 	return (
 		<NormalPage>
@@ -27,7 +27,7 @@ export const Index = () => {
 				display="flex"
 				flexDirection="column"
 				paddingX={paddingX.global}
-				paddingY={[2, 4]}
+				paddingY={[0, 4]}
 				gap={[6, 18]}
 			>
 				<Box
@@ -35,9 +35,8 @@ export const Index = () => {
 					display="flex"
 					gap={3}
 					flexDirection={["column", "row"]}
-					alignItems={["center", "center"]}
 				>
-					<Stack flex={1} spacing={1} alignItems="center">
+					<Stack flex={1} spacing={1}>
 						<Typography fontSize={fontSizes.indexHeader}>
 							Weekly playlist for people who know what's worth
 							listening to.
@@ -51,18 +50,20 @@ export const Index = () => {
 						</Typography>
 						{isPrerelease ? <WaitlistForm /> : <JoinLink />}
 					</Stack>
-					<Box flex={1} display="flex">
-						<Box
-							position="relative"
-							minWidth={photoSize}
-							minHeight={photoSize}
-						>
+					<Box
+						flex={1}
+						display="flex"
+						justifyContent="center"
+						alignItems="center"
+						padding={[2, 0]}
+					>
+						<Box position="relative" width="100%">
 							<Image
 								src={graphic}
 								alt="Drawing of music sharing website."
-								fill
 								style={{
-									objectFit: "cover",
+									width: "100%",
+									height: "auto",
 								}}
 							/>
 						</Box>

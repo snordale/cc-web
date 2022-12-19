@@ -25,3 +25,10 @@ export const fontWeights = {
   semiBold: 500,
   regular: 400,
 };
+
+export const easing = {
+  default: {
+    enter: "ease-in-out",
+    exit: "ease-in-out",
+  },
+};
