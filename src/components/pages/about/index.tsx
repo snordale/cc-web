@@ -6,13 +6,7 @@ import { paddingX } from "../../../style";
 const About = () => {
 	return (
 		<NormalPage>
-			<Box
-				width="100%"
-				display="flex"
-				paddingX={paddingX.global}
-				gap={2}
-				flexDirection={"column"}
-			>
+			<Box width="100%" display="flex" gap={2} flexDirection={"column"}>
 				<Typography>
 					Welcome to the About page of our music sharing platform! Our
 					platform was founded with the goal of providing music lovers

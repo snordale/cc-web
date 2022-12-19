@@ -1,8 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+
 import { Link } from "../../Link";
+import { articlesData } from "../../../pages/articles/data";
 import { paddingX } from "../../../../style";
 
 export const Footer = () => {
+	const renderArticleLinks = () => {
+		return Object.keys(articlesData).map((key) => {
+			const { title, href } = articlesData[key as never];
+			return <Link text={title} href={href} fontSize={14} />;
+		});
+	};
 	return (
 		<Box
 			paddingX={paddingX.global}
@@ -12,7 +20,16 @@ export const Footer = () => {
 			display="flex"
 			justifyContent="space-between"
 		>
-			<Link text="Common Collections" href="/" fontSize={16} />
+			<Link
+				text="Common Collections"
+				href="/"
+				fontSize={16}
+				marginRight="auto"
+			/>
+			<Stack spacing={1}>
+				<Typography fontWeight={600}>Articles</Typography>
+				{renderArticleLinks()}
+			</Stack>
 		</Box>
 	);
 };

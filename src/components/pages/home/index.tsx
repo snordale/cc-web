@@ -18,12 +18,7 @@ export const Home: React.FC = () => {
 
 	return (
 		<NormalPage>
-			<Box
-				display="flex"
-				width="100%"
-				paddingX={paddingX.global}
-				flexDirection="column"
-			>
+			<Box display="flex" width="100%" flexDirection="column">
 				<Typography fontSize={fontSizes.header}>
 					Welcome {data?.user.username}.
 				</Typography>

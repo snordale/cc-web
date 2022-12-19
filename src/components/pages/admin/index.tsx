@@ -33,7 +33,7 @@ const Admin: React.FC = () => {
 
 	return (
 		<NormalPage>
-			<Box width="100%" paddingX={paddingX.global}>
+			<Box width="100%">
 				<PageHeader text="Admin" />
 				<Typography>The world is yours.</Typography>
 				<CommonButton

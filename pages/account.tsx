@@ -33,8 +33,6 @@ const Account: React.FC = () => {
 	//const { data: topTracksData, isLoading: isLoadingTracks } = useGetTopTracks(
 	//	data?.user.id
 	//);
-	//console.log("topTracksData");
-	//console.log(topTracksData);
 	const { mutateAsync: getBasicAuthLink } = useGetBasicAuthLink();
 	const { mutateAsync: getCuratorAuthLink } = useGetCuratorAuthLink();
 
@@ -107,6 +105,8 @@ const Account: React.FC = () => {
 	};
 
 	const getAccountType = () => {
+		if (!data?.user) return "";
+
 		switch (data?.user.permission) {
 			case permissions.none:
 				return "Non-member";
@@ -125,7 +125,7 @@ const Account: React.FC = () => {
 
 	return (
 		<NormalPage>
-			<Stack width="100%" spacing="12px" paddingX={paddingX.global}>
+			<Stack width="100%" spacing="12px">
 				<PageHeader text="Account" />
 				<Avatar
 					src={data?.user?.profilePhoto ?? ""}

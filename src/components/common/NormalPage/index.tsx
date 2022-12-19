@@ -1,16 +1,17 @@
 import { Box, Fade, useMediaQuery } from "@mui/material";
+import { navHeight, paddingX } from "../../../style";
 
 import { Footer } from "./Footer";
 import { NavBar } from "./NavBar";
 import React from "react";
 import { Toaster } from "react-hot-toast";
-import { navHeight } from "../../../style";
 
 interface Props {
 	children: React.ReactNode;
+	[x: string]: any;
 }
 
-export const NormalPage: React.FC<Props> = ({ children }) => {
+export const NormalPage: React.FC<Props> = ({ children, ...rest }) => {
 	const isMobile = useMediaQuery("(max-width:600px)");
 
 	return (
@@ -23,8 +24,9 @@ export const NormalPage: React.FC<Props> = ({ children }) => {
 					display="flex"
 					flexDirection="column"
 					alignItems="center"
-					//paddingX={isMobile ? "18px" : "40px"}
+					paddingX={paddingX.global}
 					paddingY={isMobile ? "24px" : "40px"}
+					{...rest}
 				>
 					{children}
 				</Box>

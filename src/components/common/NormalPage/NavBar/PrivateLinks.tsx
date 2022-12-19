@@ -19,23 +19,7 @@ const PrivateLinks = () => {
 		<>
 			{isAdmin && <Link text="Admin" href="/admin" />}
 			<Link text="Account" href={routes.account} />
-			<Link
-				text="Logout"
-				onClick={async () => {
-					const { success } = await logout();
-					if (success) {
-						router.replace("/").then(() => {
-							toast.success("Logged out.", {
-								id: "logout",
-							});
-						});
-					} else {
-						toast.error("Unable to logout.", {
-							id: "error",
-						});
-					}
-				}}
-			/>
+			<Link text="Logout" href={routes.logout} />
 		</>
 	);
 };

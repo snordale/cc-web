@@ -1,10 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { fontSizes, paddingX } from "../../../style";
 
 import Image from "next/image";
 import JoinLink from "./JoinLink";
 import { NormalPage } from "../../common/NormalPage";
 import WaitlistForm from "./WaitlistForm";
+import { fontSizes } from "../../../style";
 import graphic from "../../../../public/graphic.png";
 import { isPrerelease } from "../../../config";
 import second from "../../../../public/selected.png";
@@ -26,7 +26,6 @@ export const Index = () => {
 				width="100%"
 				display="flex"
 				flexDirection="column"
-				paddingX={paddingX.global}
 				paddingY={[0, 4]}
 				gap={[6, 18]}
 			>
