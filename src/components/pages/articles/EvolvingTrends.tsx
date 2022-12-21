@@ -1,11 +1,14 @@
+import ArticleImage from "./common/Image";
 import { NormalPage } from "../../common";
 import { Paragraph } from "./common/Paragraph";
 import { Stack } from "@mui/material";
 import { Title } from "./common/Title";
+import playButtons from "../../../../public/play-buttons.png";
 
 export const EvolvingTrends = () => {
 	return (
 		<NormalPage>
+			<ArticleImage image={playButtons} />
 			<Stack paddingX={[0, 4, 8, 18]} paddingY={2} spacing={2}>
 				<Title text="Evolving Trends in Music" />
 				<Paragraph>

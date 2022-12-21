@@ -1,12 +1,15 @@
 import { Stack, Typography } from "@mui/material";
 
+import ArticleImage from "./common/Image";
 import { NormalPage } from "../../common";
 import { Paragraph } from "./common/Paragraph";
+import cluster from "../../../../public/cluster.png";
 import { paddingX } from "../../../style";
 
 export const CommunityPlaylists = () => {
 	return (
 		<NormalPage paddingX={paddingX.global}>
+			<ArticleImage image={cluster} />
 			<Stack paddingX={[0, 4, 8, 18]} paddingY={2} spacing={2}>
 				<Typography fontSize={[20, 32]}>
 					The Value of Community Playlists
