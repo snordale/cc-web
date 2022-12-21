@@ -1,6 +1,9 @@
+import { SetPermissionsBody, cc } from "./cc";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { cc } from "./cc";
+/*
+	Queries
+*/
 
 export function useUsers() {
   return useQuery({
@@ -23,6 +26,17 @@ export function useGetTopTracks(userId: string) {
   });
 }
 
+export function useGetPlaylists() {
+  return useQuery({
+    queryKey: ["getPlaylists"],
+    queryFn: cc.getPlaylists,
+  });
+}
+
+/*
+	Mutations
+*/
+
 export function useGetBasicAuthLink() {
   return useMutation({
     mutationFn: cc.getBasicAuthLink,
@@ -32,5 +46,11 @@ export function useGetBasicAuthLink() {
 export function useGetCuratorAuthLink() {
   return useMutation({
     mutationFn: cc.getCuratorAuthLink,
+  });
+}
+
+export function useSetPermissions() {
+  return useMutation({
+    mutationFn: (body: SetPermissionsBody) => cc.setPermissions(body),
   });
 }

@@ -9,7 +9,7 @@ import { cc } from "../../../services/cc";
 import toast from "react-hot-toast";
 
 const validationSchema = yup.object({
-	email: yup.string().required().email(),
+	email: yup.string().email(),
 });
 
 const JoinLink = () => {
@@ -23,7 +23,8 @@ const JoinLink = () => {
 				initialValues={{ email: "" }}
 				onSubmit={async (data, { setErrors }) => {
 					const res = await cc.joinWaitlist({ ...data });
-
+					console.log("res");
+					console.log(res);
 					if (res.success) {
 						toast.success("Joined waitlist.", {
 							id: "waitlist",
@@ -61,14 +62,18 @@ const JoinLink = () => {
 									timeout={300}
 									easing={easing.default}
 								>
-									<LoadingButton
-										variant="contained"
-										size="large"
-										type="submit"
-										loading={isSubmitting}
-									>
-										<Typography>Join</Typography>
-									</LoadingButton>
+									<Box display="flex" alignItems="flex-start">
+										<LoadingButton
+											variant="contained"
+											size="large"
+											type="submit"
+											loading={isSubmitting}
+											sx={{ height: "40px" }}
+											fullWidth
+										>
+											<Typography>Join</Typography>
+										</LoadingButton>
+									</Box>
 								</Fade>
 							</Box>
 						</FormikForm>

@@ -6,7 +6,7 @@ import {
 	alpha,
 } from "@mui/material";
 
-import FilterListIcon from "@mui/icons-material/FilterList";
+import Filter from "./Filter";
 import KeyIcon from "@mui/icons-material/Key";
 import React from "react";
 
@@ -67,9 +67,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 				</Tooltip>
 			) : (
 				<Tooltip title="Filter list">
-					<IconButton>
-						<FilterListIcon />
-					</IconButton>
+					<Filter />
 				</Tooltip>
 			)}
 		</MuiToolbar>

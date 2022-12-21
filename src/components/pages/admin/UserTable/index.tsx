@@ -1,6 +1,5 @@
 import {
 	Box,
-	Checkbox,
 	Dialog,
 	List,
 	ListItem,
@@ -10,14 +9,15 @@ import {
 	TableBody,
 	TableCell,
 	TableContainer,
-	TableHead,
 	TablePagination,
 	TableRow,
-	TableSortLabel,
 } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { DialogTypes, Toolbar } from "./Toolbar";
+import Head, { headCells } from "./Head";
+import { Order, UserTableData } from "./types";
+import { useSetPermissions, useUsers } from "../../../../services/rq";
 
-import { FaceRetouchingNaturalSharp } from "@mui/icons-material";
 import { Row } from "./Row";
 import { Spinner } from "../../../global/animations";
 import { cc } from "../../../../services/cc";
@@ -25,17 +25,6 @@ import { permissions } from "../../../../constants";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { useUsers } from "../../../../services/query";
-import { visuallyHidden } from "@mui/utils";
-
-export interface UserTableData {
-	id: number;
-	createdAt: string;
-	username: string;
-	spotifyId: string;
-	permission: string;
-	token: string;
-}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 	if (b[orderBy] < a[orderBy]) {
@@ -46,8 +35,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 	}
 	return 0;
 }
-
-type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof any>(
 	order: Order,
@@ -61,139 +48,18 @@ function getComparator<Key extends keyof any>(
 		: (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-interface HeadCell {
-	disablePadding: boolean;
-	id: keyof UserTableData;
-	label: string;
-	numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-	{
-		id: "createdAt",
-		numeric: false,
-		disablePadding: false,
-		label: "Joined",
-	},
-	{
-		id: "username",
-		numeric: false,
-		disablePadding: false,
-		label: "Username",
-	},
-	{
-		id: "id",
-		numeric: false,
-		disablePadding: false,
-		label: "CC Id",
-	},
-	{
-		id: "spotifyId",
-		numeric: false,
-		disablePadding: false,
-		label: "Spotify ID",
-	},
-	{
-		id: "permission",
-		numeric: false,
-		disablePadding: false,
-		label: "Permission",
-	},
-	{
-		id: "token",
-		numeric: false,
-		disablePadding: false,
-		label: "Token",
-	},
-];
-
-interface EnhancedTableProps {
-	numSelected: number;
-	onRequestSort: (
-		event: React.MouseEvent<unknown>,
-		property: keyof UserTableData
-	) => void;
-	onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	order: Order;
-	orderBy: string;
-	rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-	const {
-		onSelectAllClick,
-		order,
-		orderBy,
-		numSelected,
-		rowCount,
-		onRequestSort,
-	} = props;
-	const createSortHandler =
-		(property: keyof UserTableData) =>
-		(event: React.MouseEvent<unknown>) => {
-			onRequestSort(event, property);
-		};
-
-	return (
-		<TableHead>
-			<TableRow>
-				<TableCell padding="checkbox">
-					<Checkbox
-						color="primary"
-						indeterminate={
-							numSelected > 0 && numSelected < rowCount
-						}
-						checked={rowCount > 0 && numSelected === rowCount}
-						onChange={onSelectAllClick}
-						inputProps={{
-							"aria-label": "select all desserts",
-						}}
-					/>
-				</TableCell>
-				{headCells.map((headCell) => (
-					<TableCell
-						key={headCell.id}
-						align={headCell.numeric ? "right" : "left"}
-						padding={headCell.disablePadding ? "none" : "normal"}
-						sortDirection={orderBy === headCell.id ? order : false}
-					>
-						<TableSortLabel
-							active={orderBy === headCell.id}
-							direction={orderBy === headCell.id ? order : "asc"}
-							onClick={createSortHandler(headCell.id)}
-							sx={{ whiteSpace: "nowrap" }}
-						>
-							{headCell.label}
-							{orderBy === headCell.id ? (
-								<Box component="span" sx={visuallyHidden}>
-									{order === "desc"
-										? "sorted descending"
-										: "sorted ascending"}
-								</Box>
-							) : null}
-						</TableSortLabel>
-					</TableCell>
-				))}
-			</TableRow>
-		</TableHead>
-	);
-}
-
 export function UserTable() {
 	const [order, setOrder] = useState<Order>("asc");
 	const [orderBy, setOrderBy] = useState<keyof UserTableData>("createdAt");
-	const [selected, setSelected] = useState<number[]>([]);
+	const [selected, setSelected] = useState<string[]>([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 
 	const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none);
 	const [openDialog, setOpenDialog] = useState(false);
 
-	const { data, isLoading } = useUsers();
-	const { mutateAsync: setUserPermission } = useMutation(
-		cc.setUserPermission
-	);
-	//const [, setUserPermissions] = useSetUserPermissionsMutation();
+	const { data } = useUsers();
+	const { mutateAsync: setPermissions } = useSetPermissions();
 
 	if (!data) return <Spinner />;
 
@@ -210,12 +76,12 @@ export function UserTable() {
 	};
 
 	const onPermissionSelect = async (permission: string) => {
-		//const res = await setUserPermissions({ userIds: selected, permission });
-		//if (res) {
-		//	toast.success("Permissions updated.");
-		//}
-		//setSelected([]);
-		//handleDialogClose();
+		const res = await setPermissions({ userIds: selected, permission });
+
+		if (res) toast.success("Permissions updated.");
+
+		setSelected([]);
+		handleDialogClose();
 	};
 
 	const handleRequestSort = (
@@ -238,9 +104,9 @@ export function UserTable() {
 		setSelected([]);
 	};
 
-	const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+	const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
 		const selectedIndex = selected.indexOf(id);
-		let newSelected: number[] = [];
+		let newSelected: string[] = [];
 
 		if (selectedIndex === -1) {
 			newSelected = newSelected.concat(selected, id);
@@ -269,11 +135,24 @@ export function UserTable() {
 		setPage(0);
 	};
 
-	const isSelected = (id: number) => selected.indexOf(id) !== -1;
+	const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows =
 		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+
+	return (
+		<DataGrid
+			rows={users}
+			columns={headCells}
+			pageSize={5}
+			rowsPerPageOptions={[5]}
+			checkboxSelection
+			disableSelectionOnClick
+			experimentalFeatures={{ newEditingApi: true }}
+			components={{ Toolbar: GridToolbar }}
+		/>
+	);
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -288,7 +167,7 @@ export function UserTable() {
 						aria-labelledby="tableTitle"
 						size="medium"
 					>
-						<EnhancedTableHead
+						<Head
 							numSelected={selected.length}
 							order={order}
 							orderBy={orderBy}

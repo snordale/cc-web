@@ -1,5 +1,5 @@
 import { permissions } from "../constants";
-import { useCurrentUser } from "../services/query";
+import { useCurrentUser } from "../services/rq";
 
 export const useUser = () => {
   const query = useCurrentUser();

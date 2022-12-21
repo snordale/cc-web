@@ -5,7 +5,7 @@ import { Playlists } from "./Playlists";
 export const Contributor: React.FC = () => {
 	return (
 		<Box>
-			<Typography>Thanks for contributing.</Typography>
+			<Typography>Contributor View.</Typography>
 			<Playlists />
 		</Box>
 	);

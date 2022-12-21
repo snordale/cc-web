@@ -1,13 +1,13 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material";
 
 import React from "react";
-import { UserTableData } from ".";
+import { UserTableData } from "./types";
 
 interface RowProps {
 	user: UserTableData;
 	index: number;
-	isSelected: (id: number) => boolean;
-	handleClick: (event: React.MouseEvent<unknown>, id: number) => void;
+	isSelected: (id: string) => boolean;
+	handleClick: (event: React.MouseEvent<unknown>, id: string) => void;
 }
 
 export const Row: React.FC<RowProps> = ({

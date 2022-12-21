@@ -8,10 +8,7 @@ import {
 	signatureGradientLight,
 } from "../src/constants";
 import { green, red } from "@mui/material/colors";
-import {
-	useGetBasicAuthLink,
-	useGetCuratorAuthLink,
-} from "../src/services/query";
+import { useGetBasicAuthLink, useGetCuratorAuthLink } from "../src/services/rq";
 
 import { FormStates } from "../src/components/pages/account";
 import { NormalPage } from "../src/components/common/NormalPage";

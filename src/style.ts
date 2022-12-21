@@ -4,14 +4,6 @@ export const paddingX = {
 
 export const navHeight = 40;
 
-export enum fontSize {
-  XL = "18px",
-  L = "16px",
-  M = "14px",
-  S = "12px",
-  XS = "10px",
-}
-
 export const fontSizes = {
   indexHeader: [24, 30, 36, 36],
   indexSubheader: [16, 16, 18, 20],

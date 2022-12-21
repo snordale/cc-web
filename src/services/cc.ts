@@ -89,6 +89,20 @@ export const getCuratorAuthLink = (): Promise<{ link: string }> => {
   });
 };
 
+export type SetPermissionsBody = {
+  userIds: string[];
+  permission: string;
+};
+
+export const setPermissions = (
+  body: SetPermissionsBody
+): Promise<{ success: string }> => {
+  return request("/users/set-permissions", {
+    method: "post",
+    body: JSON.stringify(body),
+  });
+};
+
 type ExchangeAuthCodeBody = {
   code: string;
   stateToken: string;
@@ -112,6 +126,12 @@ export const getUsersTopTracks = (userId: string): Promise<{ tracks: any }> => {
   });
 };
 
+export const getPlaylists = (): Promise<{ playlists: any }> => {
+  return request("/playlists", {
+    method: "get",
+  });
+};
+
 export const cc = {
   joinWaitlist,
   join,
@@ -119,10 +139,12 @@ export const cc = {
   logout,
   createCuratorToken,
   getUsers,
+  getPlaylists,
   getCurrentUser,
   getBasicAuthLink,
   getCuratorAuthLink,
   getUsersTopTracks,
   exchangeAuthCode,
   setUserPermission,
+  setPermissions,
 };
