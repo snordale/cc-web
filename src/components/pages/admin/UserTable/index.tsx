@@ -1,30 +1,54 @@
-import {
-	Box,
-	Dialog,
-	List,
-	ListItem,
-	ListItemText,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TablePagination,
-	TableRow,
-} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { DialogTypes, Toolbar } from "./Toolbar";
-import Head, { headCells } from "./Head";
 import { Order, UserTableData } from "./types";
 import { useSetPermissions, useUsers } from "../../../../services/rq";
 
-import { Row } from "./Row";
+import { Box } from "@mui/material";
+import { DialogTypes } from "./Toolbar";
 import { Spinner } from "../../../global/animations";
-import { cc } from "../../../../services/cc";
-import { permissions } from "../../../../constants";
+import { titleCase } from "title-case";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+
+const columns = [
+	{
+		field: "createdAt",
+		headerName: "Joined",
+		width: 150,
+		valueParser: (params) => new Date(params.value),
+		valueFormatter: (params) =>
+			new Date(params.value).toLocaleString("en-US", {
+				year: "2-digit",
+				month: "2-digit",
+				day: "2-digit",
+				hour: "numeric",
+				minute: "2-digit",
+			}),
+	},
+	{
+		field: "username",
+		headerName: "Username",
+	},
+	{
+		field: "permission",
+		headerName: "Permission",
+		valueFormatter: (params) => titleCase(params.value),
+	},
+	{
+		field: "id",
+		headerName: "CC Id",
+		width: 250,
+	},
+	{
+		field: "token",
+		headerName: "Token",
+		width: 250,
+	},
+	{
+		field: "spotifyId",
+		headerName: "Spotify Id",
+		width: 200,
+	},
+];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 	if (b[orderBy] < a[orderBy]) {
@@ -142,90 +166,24 @@ export function UserTable() {
 		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 	return (
-		<DataGrid
-			rows={users}
-			columns={headCells}
-			pageSize={5}
-			rowsPerPageOptions={[5]}
-			checkboxSelection
-			disableSelectionOnClick
-			experimentalFeatures={{ newEditingApi: true }}
-			components={{ Toolbar: GridToolbar }}
-		/>
-	);
-
-	return (
-		<Box sx={{ width: "100%" }}>
-			<Paper sx={{ width: "100%", mb: 2 }}>
-				<Toolbar
-					numSelected={selected.length}
-					onActionSelect={onActionSelect}
+		<Box sx={{ height: 400, width: "100%" }}>
+			<Box style={{ flexGrow: 1, height: "100%" }}>
+				<DataGrid
+					rows={users}
+					columns={columns}
+					pageSize={5}
+					rowsPerPageOptions={[5]}
+					checkboxSelection
+					disableSelectionOnClick
+					experimentalFeatures={{ newEditingApi: true }}
+					components={{ Toolbar: GridToolbar }}
+					initialState={{
+						sorting: {
+							sortModel: [{ field: "createdAt", sort: "asc" }],
+						},
+					}}
 				/>
-				<TableContainer>
-					<Table
-						sx={{ minWidth: 750 }}
-						aria-labelledby="tableTitle"
-						size="medium"
-					>
-						<Head
-							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
-							onSelectAllClick={handleSelectAllClick}
-							onRequestSort={handleRequestSort}
-							rowCount={users.length}
-						/>
-						<TableBody>
-							{(users as UserTableData[])
-								.sort(getComparator(order, orderBy))
-								.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage
-								)
-								.map((user, index) => (
-									<Row
-										key={index}
-										user={user}
-										index={index}
-										isSelected={isSelected}
-										handleClick={handleClick}
-									/>
-								))}
-							{emptyRows > 0 && (
-								<TableRow
-									style={{
-										height: 53 * emptyRows,
-									}}
-								>
-									<TableCell colSpan={6} />
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				<TablePagination
-					rowsPerPageOptions={[5, 10, 25]}
-					component="div"
-					count={users.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
-			</Paper>
-			<Dialog open={openDialog} onClose={handleDialogClose}>
-				<List sx={{ pt: 0 }}>
-					{Object.values(permissions).map((perm) => (
-						<ListItem
-							button
-							onClick={() => onPermissionSelect(perm)}
-							key={perm}
-						>
-							<ListItemText primary={perm} />
-						</ListItem>
-					))}
-				</List>
-			</Dialog>
+			</Box>
 		</Box>
 	);
 }

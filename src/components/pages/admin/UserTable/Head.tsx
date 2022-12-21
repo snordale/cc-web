@@ -10,46 +10,8 @@ import { EnhancedTableProps, HeadCell, UserTableData } from "./types";
 
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
+import { titleCase } from "title-case";
 import { visuallyHidden } from "@mui/utils";
-
-export const headCells: GridColDef[] = [
-	{
-		id: "createdAt",
-		numeric: false,
-		disablePadding: false,
-		label: "Joined",
-	},
-	{
-		id: "username",
-		numeric: false,
-		disablePadding: false,
-		label: "Username",
-	},
-	{
-		id: "id",
-		numeric: false,
-		disablePadding: false,
-		label: "CC Id",
-	},
-	{
-		id: "spotifyId",
-		numeric: false,
-		disablePadding: false,
-		label: "Spotify ID",
-	},
-	{
-		id: "permission",
-		numeric: false,
-		disablePadding: false,
-		label: "Permission",
-	},
-	{
-		id: "token",
-		numeric: false,
-		disablePadding: false,
-		label: "Token",
-	},
-];
 
 const Head = (props: EnhancedTableProps) => {
 	const {
@@ -69,7 +31,7 @@ const Head = (props: EnhancedTableProps) => {
 
 	return (
 		<TableHead>
-			<TableRow>
+			{/*<TableRow>
 				<TableCell padding="checkbox">
 					<Checkbox
 						color="primary"
@@ -107,7 +69,7 @@ const Head = (props: EnhancedTableProps) => {
 						</TableSortLabel>
 					</TableCell>
 				))}
-			</TableRow>
+			</TableRow>*/}
 		</TableHead>
 	);
 };
