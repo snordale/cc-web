@@ -1,24 +1,25 @@
-import { Box, Stack, Typography } from "@mui/material";
-
+import ArticleImage from "./common/Image";
 import { NormalPage } from "../../common";
-import { paddingX } from "../../../style";
+import { Paragraph } from "./common/Paragraph";
+import { Stack } from "@mui/material";
+import { Title } from "./common/Title";
+import musicNote from "../../../../public/music-note.png";
 
 export const MusicXTechnology = () => {
 	return (
-		<NormalPage>
-			<Stack paddingX={[0, 9]} paddingY={[2, 4]} spacing={2}>
-				<Typography width="100%" fontSize={[24, 36]}>
-					The Future of Music and Technology
-				</Typography>
-				<Typography fontSize={14}>
+		<NormalPage paddingY={[2, 8]}>
+			<ArticleImage image={musicNote} />
+			<Stack paddingX={[0, 4, 8, 18]} paddingY={2} spacing={2}>
+				<Title text="The Future of Music and Technology" />
+				<Paragraph>
 					The role of technology in music production and consumption
 					is constantly evolving, and it's difficult to predict
 					exactly how it will change over the next 100 years. However,
 					it's safe to say that technology will continue to play a
 					significant role in shaping the way we create and consume
 					music.
-				</Typography>
-				<Typography fontSize={14}>
+				</Paragraph>
+				<Paragraph>
 					One potential area of change is the way music is produced.
 					With the increasing prevalence of virtual instruments and
 					software-based production tools, it's becoming easier for
@@ -30,8 +31,8 @@ export const MusicXTechnology = () => {
 					with technology enabling even more musicians to bypass
 					traditional industry gatekeepers and get their music out
 					into the world.
-				</Typography>
-				<Typography fontSize={14}>
+				</Paragraph>
+				<Paragraph>
 					Another area where technology could have a significant
 					impact is in the distribution and consumption of music.
 					Streaming services have already revolutionized the way we
@@ -44,8 +45,8 @@ export const MusicXTechnology = () => {
 					you're right there in the front row, or exploring a virtual
 					world while listening to a playlist tailored specifically to
 					your tastes.
-				</Typography>
-				<Typography fontSize={14}>
+				</Paragraph>
+				<Paragraph>
 					One thing that is certain is that technology will continue
 					to play a major role in the way we create and consume music.
 					Whether it's through new production tools, distribution
@@ -55,7 +56,7 @@ export const MusicXTechnology = () => {
 					be exciting and unpredictable, and it will be fascinating to
 					see how technology continues to influence the way we create
 					and consume music.
-				</Typography>
+				</Paragraph>
 			</Stack>
 		</NormalPage>
 	);

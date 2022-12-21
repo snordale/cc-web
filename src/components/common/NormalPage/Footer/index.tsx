@@ -11,6 +11,7 @@ export const Footer = () => {
 			return <Link text={title} href={href} fontSize={14} />;
 		});
 	};
+
 	return (
 		<Box
 			paddingX={paddingX.global}
@@ -18,13 +19,15 @@ export const Footer = () => {
 			borderTop="1px solid #c4c4c4"
 			width="100%"
 			display="flex"
+			flexDirection={["column", "row"]}
 			justifyContent="space-between"
 		>
 			<Link
 				text="Common Collections"
 				href="/"
-				fontSize={16}
+				fontSize={18}
 				marginRight="auto"
+				marginBottom={2}
 			/>
 			<Stack spacing={1}>
 				<Typography fontWeight={600}>Articles</Typography>
