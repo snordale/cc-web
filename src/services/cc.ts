@@ -51,7 +51,10 @@ export const logout = (): Promise<{ success: boolean }> => {
   return request("/auth/logout", { method: "post" });
 };
 
-export const getUsers = (): Promise<{ users: any }> => {
+export const getUsers = (): Promise<{
+  users?: any;
+  error?: string | undefined;
+}> => {
   return request("/users", {
     method: "get",
   });

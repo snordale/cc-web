@@ -1,31 +1,53 @@
+import { createContext } from "react";
 import { permissions } from "../constants";
-import { useCurrentUser } from "../services/rq";
+import rq from "../services/rq";
+
+interface AuthContextType {
+  user: any;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  isCurator: boolean;
+  isContributor: boolean;
+  isNotUser: boolean;
+}
+
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isLoading: false,
+  isAuthenticated: false,
+  isAdmin: false,
+  isCurator: false,
+  isContributor: false,
+  isNotUser: true,
+});
 
 export const useUser = () => {
-  const query = useCurrentUser();
+  const { data, isLoading } = rq.useCurrentUser();
 
-  const isUserLoaded = query.data && !!query.data.user;
-  const isLoggedIn = isUserLoaded;
+  const isAuthenticated = !isLoading && !!data?.user;
+  const isNotUser = !isLoading && !data?.user;
 
-  const isCurator = isUserLoaded
-    ? query.data?.user.permission === permissions.curator
-    : undefined;
+  const isCurator = isAuthenticated
+    ? data?.user.permission === permissions.curator
+    : false;
 
-  const isContributor = isUserLoaded
-    ? query.data?.user.permission !== permissions.none
-    : undefined;
+  const isContributor = isAuthenticated
+    ? data?.user.permission !== permissions.none
+    : false;
 
-  const isAdmin = isUserLoaded
-    ? query.data?.user.permission === permissions.admin ||
-      query.data?.user.permission === permissions.god
-    : undefined;
+  const isAdmin = isAuthenticated
+    ? data?.user.permission === permissions.admin ||
+      data?.user.permission === permissions.god
+    : false;
 
   return {
-    ...query,
-    isLoggedIn,
-    isUserLoaded,
-    isCurator,
+    user: data && data.user,
+    isLoading,
+    isAuthenticated,
     isAdmin,
+    isCurator,
     isContributor,
+    isNotUser,
   };
 };

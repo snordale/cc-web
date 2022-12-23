@@ -29,7 +29,6 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 			}}
 			onSubmit={async (data, { setErrors }) => {
 				const res = await cc.join({ ...data, token: curatorToken });
-
 				if (res.user) {
 					if (router.query.next) {
 						router.push(router.query.next as string);
@@ -40,7 +39,7 @@ export const JoinForm: React.FC<FormProps> = ({ curatorToken }) => {
 						id: "welcome",
 					});
 				} else {
-					setErrors(res.errors);
+					setErrors(res);
 				}
 			}}
 			validationSchema={validationSchema}

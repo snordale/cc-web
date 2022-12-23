@@ -1,3 +1,4 @@
+import { AuthContext, AuthContextProvider } from "../src/providers/AuthContext";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -34,10 +35,12 @@ export default function MyApp(props: MyAppProps) {
 				/>
 			</Head>
 			<QueryClientProvider client={queryClient}>
-				<ThemeProvider theme={theme}>
-					<CssBaseline />
-					<Component {...pageProps} />
-				</ThemeProvider>
+				<AuthContextProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<Component {...pageProps} />
+					</ThemeProvider>
+				</AuthContextProvider>
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>
 		</CacheProvider>

@@ -1,34 +1,42 @@
 import { SetPermissionsBody, cc } from "./cc";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+export const keys = {
+  getUsers: "getUsers",
+  getCurrentUser: "getCurrentUser",
+  getTopTracks: "getTopTracks",
+  getPlaylists: "getPlaylists",
+};
+
 /*
 	Queries
 */
 
 export function useUsers() {
   return useQuery({
-    queryKey: ["getUsers"],
+    queryKey: [keys.getUsers],
     queryFn: cc.getUsers,
   });
 }
 
 export function useCurrentUser() {
   return useQuery({
-    queryKey: ["getCurrentUser"],
+    queryKey: [keys.getCurrentUser],
     queryFn: cc.getCurrentUser,
+    staleTime: Infinity,
   });
 }
 
 export function useGetTopTracks(userId: string) {
   return useQuery({
-    queryKey: ["getTopTracks"],
+    queryKey: [keys.getTopTracks],
     queryFn: () => cc.getUsersTopTracks(userId),
   });
 }
 
 export function useGetPlaylists() {
   return useQuery({
-    queryKey: ["getPlaylists"],
+    queryKey: [keys.getPlaylists],
     queryFn: cc.getPlaylists,
   });
 }
@@ -54,3 +62,14 @@ export function useSetPermissions() {
     mutationFn: (body: SetPermissionsBody) => cc.setPermissions(body),
   });
 }
+
+export default {
+  keys,
+  useGetBasicAuthLink,
+  useGetCuratorAuthLink,
+  useSetPermissions,
+  useUsers,
+  useGetPlaylists,
+  useGetTopTracks,
+  useCurrentUser,
+};

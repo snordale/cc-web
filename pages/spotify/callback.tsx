@@ -8,45 +8,42 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 const SpotifyCallback: React.FC = () => {
-	const router = useRouter();
-	const { query } = router;
+  const router = useRouter();
+  const { query } = router;
 
-	const { mutateAsync: exchangeAuthCode } = useMutation(cc.exchangeAuthCode);
+  const { mutateAsync: exchangeAuthCode } = useMutation(cc.exchangeAuthCode);
 
-	const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		if (!query.code || !query.state) return;
+  useEffect(() => {
+    if (!query.code || !query.state) return;
 
-		async function doExchange() {
-			const data = await exchangeAuthCode({
-				code: query.code as string,
-				stateToken: query.state as string,
-			});
+    async function doExchange() {
+      const data = await exchangeAuthCode({
+        code: query.code as string,
+        stateToken: query.state as string,
+      });
 
-			if (data.success) {
-				toast.success("Spotify linked.", { id: "spotify linked" });
-				router.replace(routes.account);
-			} else {
-				if (
-					data.error ===
-					"Spotify account connected to another account."
-				) {
-					toast.error("Spotify account in use.");
-				}
-				router.replace(routes.account);
-			}
-		}
+      if (data.success) {
+        toast.success("Spotify linked.", { id: "spotify linked" });
+        router.replace(routes.account);
+      } else {
+        if (data.error === "Spotify account connected to another account.") {
+          toast.error("Spotify account in use.", { id: "error" });
+        }
+        router.replace(routes.account);
+      }
+    }
 
-		doExchange();
-	}, [query]);
+    doExchange();
+  }, [query]);
 
-	return (
-		<Box>
-			<div>spotify callback</div>
-			<Typography>{loading ? "loading..." : "complete"}</Typography>
-		</Box>
-	);
+  return (
+    <Box>
+      <div>spotify callback</div>
+      <Typography>{loading ? "loading..." : "complete"}</Typography>
+    </Box>
+  );
 };
 
 export default SpotifyCallback;

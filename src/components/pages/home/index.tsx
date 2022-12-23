@@ -1,29 +1,30 @@
 import { Box, Typography } from "@mui/material";
-import { fontSizes, paddingX } from "../../../style";
 
 import { Contributor } from "./Contributor";
+import LinearProgress from "../../common/LinearProgress";
 import { NonContributor } from "./NonContributor";
 import { NormalPage } from "../../common/NormalPage";
+import { fontSizes } from "../../../style";
+import { useRequireLogin } from "../../../hooks";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
 export const Home: React.FC = () => {
-	const router = useRouter();
+  const router = useRouter();
 
-	const { data, isUserLoaded, isLoggedIn, isContributor } = useUser();
+  const { user, isLoading, isContributor, isNotUser } = useUser();
 
-	if (!isLoggedIn && router.isReady) router.push("/");
+  if (isNotUser) router.replace(`/login?next=${router.pathname}`);
+  if (isLoading || !user) return <LinearProgress />;
 
-	if (!isUserLoaded) return null;
-
-	return (
-		<NormalPage>
-			<Box display="flex" width="100%" flexDirection="column">
-				<Typography fontSize={fontSizes.header}>
-					Welcome {data?.user.username}.
-				</Typography>
-				{isContributor ? <Contributor /> : <NonContributor />}
-			</Box>
-		</NormalPage>
-	);
+  return (
+    <NormalPage>
+      <Box display="flex" width="100%" flexDirection="column">
+        <Typography fontSize={fontSizes.header}>
+          Welcome {user.username}.
+        </Typography>
+        {isContributor ? <Contributor /> : <NonContributor />}
+      </Box>
+    </NormalPage>
+  );
 };
