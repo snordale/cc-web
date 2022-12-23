@@ -20,7 +20,6 @@ export const Login = () => {
 
   const { user, isLoading } = useUser();
 
-  // Don't need to redirect. If initial page, will fetch user. If not
   if (router.isReady && user)
     router.push(
       router.query.next ? (router.query.next as string) : routes.home

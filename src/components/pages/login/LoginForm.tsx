@@ -9,7 +9,6 @@ import { login } from "../../../services/cc";
 import rq from "../../../services/rq";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUser } from "../../../hooks";
 
 const validationSchema = yup.object({
   usernameOrEmail: yup
@@ -21,7 +20,6 @@ const validationSchema = yup.object({
 
 export const LoginForm: React.FC = () => {
   const queryClient = useQueryClient();
-  const { handleLogin } = useUser();
 
   return (
     <Formik
