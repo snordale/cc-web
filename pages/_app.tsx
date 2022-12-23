@@ -1,4 +1,3 @@
-import { AuthContext, AuthContextProvider } from "../src/providers/AuthContext";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -14,35 +13,26 @@ import theme from "../src/theme";
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
-	emotionCache?: EmotionCache;
+  emotionCache?: EmotionCache;
 }
 
 const queryClient = new QueryClient();
 
 export default function MyApp(props: MyAppProps) {
-	const {
-		Component,
-		emotionCache = clientSideEmotionCache,
-		pageProps,
-	} = props;
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-	return (
-		<CacheProvider value={emotionCache}>
-			<Head>
-				<meta
-					name="viewport"
-					content="initial-scale=1, width=device-width"
-				/>
-			</Head>
-			<QueryClientProvider client={queryClient}>
-				<AuthContextProvider>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						<Component {...pageProps} />
-					</ThemeProvider>
-				</AuthContextProvider>
-				<ReactQueryDevtools initialIsOpen={false} />
-			</QueryClientProvider>
-		</CacheProvider>
-	);
+  return (
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </CacheProvider>
+  );
 }
