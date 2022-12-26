@@ -1,5 +1,4 @@
 import {
-  Box,
   Paper,
   Table,
   TableBody,
@@ -7,22 +6,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 
-import { Link } from "../../../../../common";
-import NextLink from "next/link";
-import PlayButton from "@mui/icons-material/PlayCircle";
-import Song from "./Song";
+import { Song } from "./Song";
+import { useState } from "react";
 
 export const SongList = ({ songs }) => {
-  return songs.map((song, index) => (
-    //<Box width="100%" display="flex" gap={2}>
-    //  <Typography>
-    //    {index}. {song.name}
-    //  </Typography>
-    //  <Link href={song.uri} text="Link" />
-    //</Box>
+  const [songPlaying, setSongPlaying] = useState<any>(null);
+
+  return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="song-table">
         <TableHead>
@@ -30,6 +22,7 @@ export const SongList = ({ songs }) => {
             <TableCell>#</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Artists</TableCell>
+            <TableCell>Length</TableCell>
             <TableCell align="right">Popularity</TableCell>
             <TableCell>Preview</TableCell>
             <TableCell>Link</TableCell>
@@ -37,10 +30,16 @@ export const SongList = ({ songs }) => {
         </TableHead>
         <TableBody>
           {songs.map((song, index) => (
-            <Song song={song} index={index} />
+            <Song
+              key={song.isrc}
+              song={song}
+              index={index}
+              songPlaying={songPlaying}
+              setSongPlaying={setSongPlaying}
+            />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-  ));
+  );
 };

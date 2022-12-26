@@ -11,11 +11,12 @@ import { SongList } from "./SongList";
 
 const Playlist = ({ playlist }) => {
   return (
-    <Accordion>
+    <Accordion disableGutters>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="playlist-content"
         id="playlist-header"
+        sx={{ padding: "0px" }}
       >
         <Typography>{playlist.name}</Typography>
       </AccordionSummary>

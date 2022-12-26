@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 export const useAudio = (url) => {
-  const [audio] = useState(new Audio(url));
+  const [audio, setAudio] = useState(new Audio(url));
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const toggle = () => setIsPlaying(!isPlaying);
+  const toggle = () => setIsPlaying((prev) => !prev);
 
   useEffect(() => {
     isPlaying ? audio.play() : audio.pause();
@@ -17,5 +17,5 @@ export const useAudio = (url) => {
     };
   }, []);
 
-  return { isPlaying, toggle };
+  return { isPlaying, toggle, setAudio };
 };
