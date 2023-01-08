@@ -1,7 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { CommonButton, NormalPage, PageHeader } from "../../common";
 
+import { GridSelectionModel } from "@mui/x-data-grid";
 import LinearProgress from "../../common/LinearProgress";
+import { LoadingButton } from "@mui/lab";
 import { UserTable } from "./UserTable";
 import { cc } from "../../../services/cc";
 import { root } from "../../../config";
@@ -10,6 +12,7 @@ import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRequireAdmin } from "../../../hooks/use-require-admin";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useUser } from "../../../hooks/use-user";
 
 const Admin: React.FC = () => {
@@ -18,8 +21,35 @@ const Admin: React.FC = () => {
   const { mutateAsync: createCuratorToken } = useMutation(
     cc.createCuratorToken
   );
-  //const [, getNewCuratorToken] = useGetNewCuratorTokenMutation();
-  //const [, createPlaylist] = useCreatePlaylist()
+  const { mutateAsync: createPlaylist, isLoading: isCreatingPlaylist } =
+    useMutation(cc.createPlaylist);
+
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  const handleCreateCuratorLink = async () => {
+    const data = await createCuratorToken();
+
+    if (data.token) {
+      await navigator.clipboard.writeText(
+        `${root}${routes.join}?token=${data.token}`
+      );
+      toast.success("Copied to clipboard.");
+    } else {
+      toast.error("Unsuccessful.");
+    }
+  };
+
+  const handleCreatePlaylist = async () => {
+    const data = await createPlaylist({ userIds: selectedUsers });
+    console.log("data");
+    console.log(data);
+    if (data.success) {
+      setSelectedUsers([]);
+      toast.success("Created 🛠");
+    } else {
+      toast.error("Unsuccessful.");
+    }
+  };
 
   if (isLoading || !user) return <LinearProgress />;
 
@@ -28,30 +58,31 @@ const Admin: React.FC = () => {
       <Box width="100%">
         <PageHeader text="Admin" />
         <Typography>The world is yours.</Typography>
-        <CommonButton
-          text="Create Curator Link"
-          sx={{ marginTop: "12px" }}
-          onClick={async () => {
-            const data = await createCuratorToken();
-            console.log("data");
-            console.log(data);
-            if (data.token) {
-              await navigator.clipboard.writeText(
-                `${root}${routes.join}?token=${data.token}`
-              );
-              toast.success("Copied to clipboard.");
-            } else {
-              toast.error("Unsuccessful.");
-            }
-          }}
-        />
-        <CommonButton
-          text="Create Playlist"
-          sx={{ marginTop: "12px" }}
-          //onClick={async () => createPlaylist())}
-        />
+        <Box>
+          <Button
+            variant="outlined"
+            sx={{ marginTop: "12px" }}
+            onClick={handleCreateCuratorLink}
+          >
+            Create Curator Link
+          </Button>
+        </Box>
+        <Box>
+          <LoadingButton
+            variant="outlined"
+            onClick={handleCreatePlaylist}
+            loading={isCreatingPlaylist}
+            disabled={!selectedUsers.length}
+            sx={{ marginTop: "12px" }}
+          >
+            Create Playlist
+          </LoadingButton>
+        </Box>
         <Box width="100%" marginTop="30px">
-          <UserTable />
+          <UserTable
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+          />
         </Box>
       </Box>
     </NormalPage>

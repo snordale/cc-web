@@ -4,8 +4,8 @@ import { Contributor } from "./Contributor";
 import LinearProgress from "../../common/LinearProgress";
 import { NonContributor } from "./NonContributor";
 import { NormalPage } from "../../common/NormalPage";
+import { Playlists } from "./Playlists";
 import { fontSizes } from "../../../style";
-import { useRequireLogin } from "../../../hooks";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
         <Typography fontSize={fontSizes.header}>
           Welcome {user.username}.
         </Typography>
-        {isContributor ? <Contributor /> : <NonContributor />}
+        <Playlists />
       </Box>
     </NormalPage>
   );

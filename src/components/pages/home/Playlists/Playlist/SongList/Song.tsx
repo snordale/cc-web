@@ -1,10 +1,19 @@
-import { Box, IconButton, TableCell, TableRow } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  TableCell as MuiTableCell,
+  TableRow,
+} from "@mui/material";
 
 import { OpenInNew } from "@mui/icons-material";
 import { PreviewIcon } from "./PreviewIcon";
 import { formatDuration } from "../../../../../../utils";
 import { useAudio } from "../../../../../../hooks/use-audio";
 import { useEffect } from "react";
+
+const TableCell = ({ children, ...rest }) => {
+  return <MuiTableCell {...rest}>{children}</MuiTableCell>;
+};
 
 export const Song = ({ song, index, songPlaying, setSongPlaying }) => {
   const { isPlaying, toggle } = useAudio(song.preview);
@@ -17,14 +26,14 @@ export const Song = ({ song, index, songPlaying, setSongPlaying }) => {
     toggle();
     setSongPlaying(song);
   };
-  console.log(song);
+
   return (
     <TableRow
       key={song.isrc}
       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
     >
       <TableCell component="th" scope="row" align="right">
-        {index}
+        {index + 1}
       </TableCell>
       <TableCell>{song.name}</TableCell>
       <TableCell>{song.artists.join(", ")}</TableCell>

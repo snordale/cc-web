@@ -1,14 +1,12 @@
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Order, UserTableData } from "./types";
+import { DataGrid, GridSelectionModel } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import { useSetPermissions, useUsers } from "../../../../services/rq";
 
 import { Box } from "@mui/material";
-import { DialogTypes } from "./Toolbar";
+import { Order } from "./types";
 import { Spinner } from "../../../global/animations";
-import router from "next/router";
+import { Toolbar } from "./Toolbar";
 import { titleCase } from "title-case";
-import toast from "react-hot-toast";
-import { useState } from "react";
 
 const columns = [
   {
@@ -73,108 +71,27 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export function UserTable() {
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof UserTableData>("createdAt");
-  const [selected, setSelected] = useState<string[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const [dialogType, setDialogType] = useState<DialogTypes>(DialogTypes.none);
-  const [openDialog, setOpenDialog] = useState(false);
-
+export function UserTable({ selectedUsers, setSelectedUsers }) {
   const { data } = useUsers();
-  const { mutateAsync: setPermissions } = useSetPermissions();
+
+  //const [selectedUsers, setSelectedUsers] = useState<GridSelectionModel>([]);
 
   if (!data) return <Spinner />;
 
-  if (data.error) {
-    //router
-    //  .replace(`/login?next=${router.pathname}`)
-    //  .then(() => toast.error(data.error as string, { id: "error" }));
-    return null;
-  }
+  if (data.error) return null;
 
   const users = data.users;
 
-  const handleDialogClose = () => {
-    setDialogType(DialogTypes.none);
-    setOpenDialog(false);
-  };
-
-  const onActionSelect = (type: DialogTypes) => {
-    setDialogType(type);
-    setOpenDialog(true);
-  };
-
-  const onPermissionSelect = async (permission: string) => {
-    const res = await setPermissions({ userIds: selected, permission });
-
-    if (res) toast.success("Permissions updated.");
-
-    setSelected([]);
-    handleDialogClose();
-  };
-
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof UserTableData
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = users.map((user: any) => user.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (_event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id: string) => selected.indexOf(id) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+  //const handleSetPermissions = async () => {
+  //  const res = await setPermissions({userIds: selectedUsers, permission})
+  //}
 
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <Box style={{ flexGrow: 1, height: "100%" }}>
         <DataGrid
+          onSelectionModelChange={setSelectedUsers}
+          selectionModel={selectedUsers}
           rows={users}
           columns={columns}
           pageSize={5}
@@ -182,7 +99,9 @@ export function UserTable() {
           checkboxSelection
           disableSelectionOnClick
           experimentalFeatures={{ newEditingApi: true }}
-          components={{ Toolbar: GridToolbar }}
+          components={{
+            Toolbar: () => <Toolbar selectedUsers={selectedUsers} />,
+          }}
           initialState={{
             sorting: {
               sortModel: [{ field: "createdAt", sort: "asc" }],

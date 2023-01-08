@@ -16,7 +16,7 @@ export const SongList = ({ songs }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="song-table">
+      <Table sx={{ minWidth: 650 }} aria-label="song-table" size="small">
         <TableHead>
           <TableRow>
             <TableCell>#</TableCell>

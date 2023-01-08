@@ -100,8 +100,8 @@ export type SetPermissionsBody = {
 export const setPermissions = (
   body: SetPermissionsBody
 ): Promise<{ success: string }> => {
-  return request("/users/set-permissions", {
-    method: "post",
+  return request("/users/permissions", {
+    method: "put",
     body: JSON.stringify(body),
   });
 };
@@ -135,6 +135,13 @@ export const getPlaylists = (): Promise<{ playlists: any }> => {
   });
 };
 
+export const createPlaylist = (body: { userIds: string[] }): Promise<any> => {
+  return request("/playlists", {
+    method: "post",
+    body: JSON.stringify(body),
+  });
+};
+
 export const cc = {
   joinWaitlist,
   join,
@@ -150,4 +157,5 @@ export const cc = {
   exchangeAuthCode,
   setUserPermission,
   setPermissions,
+  createPlaylist,
 };

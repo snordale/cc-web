@@ -6,9 +6,12 @@ import { useGetPlaylists } from "../../../../services/rq";
 
 export const Playlists: React.FC = () => {
   const { data } = useGetPlaylists();
-
+  console.log("data");
+  console.log(data);
   const renderPlaylists = (playlists) => {
-    return playlists.map((playlist) => <Playlist playlist={playlist} />);
+    return playlists.map((playlist) => (
+      <Playlist key={playlist.id} playlist={playlist} />
+    ));
   };
 
   return (

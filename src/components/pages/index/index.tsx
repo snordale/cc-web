@@ -16,12 +16,8 @@ const photoSize = ["200px", "300px", "350px"];
 export const Index = () => {
   const router = useRouter();
 
-  const { isLoading, user, isAuthenticated } = useUser();
+  const { isAuthenticated } = useUser();
 
-  console.log("da");
-  console.log(user);
-  console.log(isLoading);
-  console.log(isAuthenticated);
   if (isAuthenticated) router.push("/home");
 
   return (

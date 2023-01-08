@@ -1,75 +1,63 @@
+import { Box, Dialog, IconButton, MenuItem, Tooltip } from "@mui/material";
 import {
-	IconButton,
-	Toolbar as MuiToolbar,
-	Tooltip,
-	Typography,
-	alpha,
-} from "@mui/material";
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 
-import Filter from "./Filter";
 import KeyIcon from "@mui/icons-material/Key";
-import React from "react";
+import { permissions } from "../../../../constants";
+import { titleCase } from "title-case";
+import { useSetPermissions } from "../../../../services/rq";
+import { useState } from "react";
 
 export enum DialogTypes {
-	none = "none",
-	permissions = "permissions",
+  none = "none",
+  permissions = "permissions",
 }
 
-interface ToolbarProps {
-	numSelected: number;
-	onActionSelect: (type: DialogTypes) => void;
-}
+type Props = {
+  selectedUsers: any[];
+};
 
-export const Toolbar: React.FC<ToolbarProps> = ({
-	numSelected,
-	onActionSelect,
-}) => {
-	return (
-		<MuiToolbar
-			sx={{
-				pl: { sm: 2 },
-				pr: { xs: 1, sm: 1 },
-				...(numSelected > 0 && {
-					bgcolor: (theme) =>
-						alpha(
-							theme.palette.primary.main,
-							theme.palette.action.activatedOpacity
-						),
-				}),
-			}}
-		>
-			{numSelected > 0 ? (
-				<Typography
-					sx={{ flex: "1 1 100%" }}
-					color="inherit"
-					variant="subtitle1"
-					component="div"
-				>
-					{numSelected} selected
-				</Typography>
-			) : (
-				<Typography
-					sx={{ flex: "1 1 100%" }}
-					variant="h6"
-					id="tableTitle"
-					component="div"
-				>
-					Users
-				</Typography>
-			)}
-			{numSelected > 0 ? (
-				<Tooltip title="Set Permissions">
-					<IconButton
-						onClick={() => onActionSelect(DialogTypes.permissions)}
-					>
-						<KeyIcon />
-					</IconButton>
-				</Tooltip>
-			) : (
-				<Tooltip title="Filter list">
-					<Filter />
-				</Tooltip>
-			)}
-		</MuiToolbar>
-	);
+export const Toolbar = ({ selectedUsers }: Props) => {
+  const [open, setOpen] = useState(false);
+
+  const { mutateAsync: setPermissions } = useSetPermissions();
+
+  const handleClickOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
+
+  return (
+    <GridToolbarContainer sx={{ justifyContent: "space-between" }}>
+      <Box>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+      </Box>
+      <Box display="flex">
+        <Tooltip title="Set Permissions">
+          <IconButton onClick={handleClickOpen}>
+            <KeyIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Dialog onClose={handleClose} open={open}>
+        {Object.keys(permissions).map((permission) => (
+          <MenuItem
+            value={permission}
+            onClick={() =>
+              setPermissions({ userIds: selectedUsers, permission })
+            }
+          >
+            {titleCase(permission)}
+          </MenuItem>
+        ))}
+      </Dialog>
+    </GridToolbarContainer>
+  );
 };
