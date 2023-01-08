@@ -7,13 +7,11 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ curatorToken }) => {
-	const text = curatorToken
-		? "The red carpet is waiting..."
-		: "The party is waiting...";
+	const text = curatorToken ? "Thanks for coming." : "Welcome.";
 
 	return (
-		<Box paddingBottom="24px">
-			<Typography fontSize="24px">{text}</Typography>
+		<Box>
+			<Typography fontSize={16}>{text}</Typography>
 		</Box>
 	);
 };

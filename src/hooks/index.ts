@@ -1,2 +1,3 @@
-export * from "./use-is-logged-in";
+export * from "./use-user";
+export * from "./use-require-admin";
 export * from "./use-require-login";

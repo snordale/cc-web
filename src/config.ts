@@ -1,30 +1,33 @@
 interface GeneralConfig {
-	isProd: boolean;
-	isLocal: boolean;
+  isProd: boolean;
+  isLocal: boolean;
+  isPrerelease: boolean;
 }
 
 interface RoutingConfig {
-	apiRoot: string;
-	root: string;
+  apiRoot: string;
+  root: string;
 }
 
 export const isProd = process.env.NODE_ENV !== "development";
 export const isLocal = process.env.IS_LOCAL !== "false";
+export const isPrerelease = process.env.IS_PRERELEASE === "false" || true;
 
 export const general: GeneralConfig = {
-	isProd,
-	isLocal,
+  isProd,
+  isLocal,
+  isPrerelease,
 };
 
 export const root = process.env.ROOT ?? "http://localhost:3000";
 export const apiRoot = process.env.API_ROOT ?? "http://localhost:3001";
 
 export const routing: RoutingConfig = {
-	root,
-	apiRoot,
+  root,
+  apiRoot,
 };
 
 export default {
-	general,
-	routing,
+  general,
+  routing,
 } as const;

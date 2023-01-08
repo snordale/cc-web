@@ -7,37 +7,33 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
-		"gen": "graphql-codegen"
+		"post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
 	},
 	"dependencies": {
 		"@emotion/cache": "latest",
-		"@emotion/react": "latest",
+		"@emotion/react": "^11.10.5",
 		"@emotion/server": "latest",
-		"@emotion/styled": "latest",
+		"@emotion/styled": "^11.10.5",
 		"@mui/icons-material": "latest",
 		"@mui/lab": "latest",
 		"@mui/material": "latest",
-		"@urql/exchange-graphcache": "^4.4.3",
+		"@mui/x-data-grid": "^5.17.16",
+		"@tanstack/react-query": "^4.16.1",
+		"@tanstack/react-query-devtools": "^4.16.1",
+		"cookies-next": "^2.1.1",
 		"formik": "^2.2.9",
-		"graphql": "^16.5.0",
 		"isomorphic-fetch": "^3.0.0",
 		"next": "latest",
-		"next-urql": "^3.3.3",
 		"react": "latest",
 		"react-dom": "latest",
 		"react-hot-toast": "^2.3.0",
 		"react-is": "^18.2.0",
 		"spotify-web-api-node": "^5.0.2",
-		"urql": "^2.2.3",
+		"title-case": "^3.0.3",
 		"uuid": "^8.3.2",
 		"yup": "^0.32.11"
 	},
 	"devDependencies": {
-		"@graphql-codegen/cli": "^2.11.2",
-		"@graphql-codegen/typescript": "latest",
-		"@graphql-codegen/typescript-operations": "latest",
-		"@graphql-codegen/typescript-urql": "latest",
 		"@types/node": "latest",
 		"@types/react": "latest",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
@@ -45,6 +41,10 @@
 		"eslint": "^8.26.0",
 		"eslint-config-next": "latest",
 		"eslint-plugin-react": "^7.31.10",
+		"prettier": "^2.8.0",
 		"typescript": "latest"
+	},
+	"prettier": {
+		"useTabs": false
 	}
 }

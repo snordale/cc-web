@@ -1,3 +1,0 @@
-mutation setUserPermissions($userIds: [Int!]!, $permission: String!) {
-	setUserPermissions(userIds: $userIds, permission: $permission)
-}

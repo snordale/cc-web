@@ -1,13 +1,13 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material";
 
 import React from "react";
-import { UserTableData } from ".";
+import { UserTableData } from "./types";
 
 interface RowProps {
 	user: UserTableData;
 	index: number;
-	isSelected: (id: number) => boolean;
-	handleClick: (event: React.MouseEvent<unknown>, id: number) => void;
+	isSelected: (id: string) => boolean;
+	handleClick: (event: React.MouseEvent<unknown>, id: string) => void;
 }
 
 export const Row: React.FC<RowProps> = ({
@@ -36,21 +36,31 @@ export const Row: React.FC<RowProps> = ({
 					}}
 				/>
 			</TableCell>
-			<TableCell component="th" id={labelId} scope="row">
-				{user.id}
-			</TableCell>
-			<TableCell align="right">{user.username}</TableCell>
-			<TableCell align="right">{user.spotifyId}</TableCell>
-			<TableCell align="right">
-				{new Date(parseInt(user.createdAt)).toLocaleString("default", {
-					year: "numeric",
-					month: "2-digit",
+			<TableCell align="left" sx={{ whiteSpace: "nowrap" }}>
+				{new Date(user.createdAt).toLocaleString("en-US", {
+					year: "2-digit",
+					month: "short",
 					day: "2-digit",
-					hour: "2-digit",
+					hour: "numeric",
 					minute: "2-digit",
 				})}
 			</TableCell>
-			<TableCell align="right">{user.permission}</TableCell>
+			<TableCell align="left">{user.username}</TableCell>
+			<TableCell
+				component="th"
+				id={labelId}
+				scope="row"
+				sx={{ whiteSpace: "nowrap" }}
+			>
+				{user.id}
+			</TableCell>
+			<TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+				{user.spotifyId}
+			</TableCell>
+			<TableCell align="left">{user.permission}</TableCell>
+			<TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+				{user.token}
+			</TableCell>
 		</TableRow>
 	);
 };
