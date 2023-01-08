@@ -23,7 +23,10 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const useUser = () => {
+  console.log("use user");
   const { data, isLoading } = rq.useCurrentUser();
+  console.log(isLoading);
+  console.log(data);
 
   const isAuthenticated = !isLoading && !!data?.user;
   const isNotUser = !isLoading && !data?.user;

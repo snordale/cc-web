@@ -10,6 +10,7 @@ const request = (endpoint: string, config: RequestInit) => {
     Accept: "application/json",
   };
 
+  console.log(url);
   return fetch(url, {
     ...config,
     credentials: "include",
