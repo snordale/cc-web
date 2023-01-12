@@ -1,17 +1,16 @@
 import { Box, Button, Typography } from "@mui/material";
-import { CommonButton, NormalPage, PageHeader } from "../../common";
+import { NormalPage, PageHeader } from "../../common";
 
-import { GridSelectionModel } from "@mui/x-data-grid";
 import LinearProgress from "../../common/LinearProgress";
 import { LoadingButton } from "@mui/lab";
 import { UserTable } from "./UserTable";
 import { cc } from "../../../services/cc";
+import copy from "copy-to-clipboard";
 import { root } from "../../../config";
 import { routes } from "../../../utils/routes";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRequireAdmin } from "../../../hooks/use-require-admin";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useUser } from "../../../hooks/use-user";
 
@@ -26,31 +25,10 @@ const Admin: React.FC = () => {
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
-  const createCuratorToken2 = () =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve({ token: "swag" });
-      }, 300);
-    });
-
   const handleCreateCuratorLink = () => {
     createCuratorToken().then(async (data) => {
       if (data.token) {
-        await navigator.clipboard.writeText(
-          `${root}${routes.join}?token=${data.token}`
-        );
-        toast.success("Copied to clipboard.");
-      } else {
-        toast.error("Unsuccessful.");
-      }
-    });
-  };
-  const handleCreateCuratorLink2 = () => {
-    createCuratorToken2().then(async (data: any) => {
-      if (data.token) {
-        await navigator.clipboard.writeText(
-          `${root}${routes.join}?token=${data.token}`
-        );
+        await copy(`${root}${routes.join}?token=${data.token}`);
         toast.success("Copied to clipboard.");
       } else {
         toast.error("Unsuccessful.");
@@ -60,8 +38,6 @@ const Admin: React.FC = () => {
 
   const handleCreatePlaylist = async () => {
     const data = await createPlaylist({ userIds: selectedUsers });
-    console.log("data");
-    console.log(data);
     if (data.success) {
       setSelectedUsers([]);
       toast.success("Created 🛠");
@@ -84,15 +60,6 @@ const Admin: React.FC = () => {
             onClick={handleCreateCuratorLink}
           >
             Create Curator Link
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            variant="outlined"
-            sx={{ marginTop: "12px" }}
-            onClick={handleCreateCuratorLink2}
-          >
-            Create Curator Link2
           </Button>
         </Box>
         <Box>
