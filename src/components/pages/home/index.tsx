@@ -1,8 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import { Contributor } from "./Contributor";
 import LinearProgress from "../../common/LinearProgress";
-import { NonContributor } from "./NonContributor";
 import { NormalPage } from "../../common/NormalPage";
 import { Playlists } from "./Playlists";
 import { fontSizes } from "../../../style";

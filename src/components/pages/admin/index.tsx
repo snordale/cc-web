@@ -27,16 +27,16 @@ const Admin: React.FC = () => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleCreateCuratorLink = async () => {
-    const data = await createCuratorToken();
-
-    if (data.token) {
-      await navigator.clipboard.writeText(
-        `${root}${routes.join}?token=${data.token}`
-      );
-      toast.success("Copied to clipboard.");
-    } else {
-      toast.error("Unsuccessful.");
-    }
+    createCuratorToken().then(async (data) => {
+      if (data.token) {
+        await navigator.clipboard.writeText(
+          `${root}${routes.join}?token=${data.token}`
+        );
+        toast.success("Copied to clipboard.");
+      } else {
+        toast.error("Unsuccessful.");
+      }
+    });
   };
 
   const handleCreatePlaylist = async () => {
