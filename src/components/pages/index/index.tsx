@@ -1,17 +1,13 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { isPrerelease, root } from "../../../config";
+import { Box, Stack, Typography } from "@mui/material";
 
 import Image from "next/image";
 import JoinLink from "./JoinLink";
 import { NormalPage } from "../../common/NormalPage";
 import WaitlistForm from "./WaitlistForm";
-import { cc } from "../../../services/cc";
 import { fontSizes } from "../../../style";
 import graphic from "../../../../public/graphic.png";
-import { routes } from "../../../utils/routes";
+import { isPrerelease } from "../../../config";
 import second from "../../../../public/selected.png";
-import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks/use-user";
 
@@ -21,34 +17,11 @@ export const Index = () => {
   const router = useRouter();
 
   const { isAuthenticated } = useUser();
-  const createCuratorToken: () => Promise<{ token: string }> = () =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({ token: "swag" });
-      }, 300);
-    });
 
   if (isAuthenticated) router.push("/home");
 
   return (
     <NormalPage>
-      <Button
-        onClick={async () => {
-          createCuratorToken().then(async (data) => {
-            console.log(data);
-            if (data.token) {
-              await navigator.clipboard.writeText(
-                `${root}${routes.join}?token=${data.token}`
-              );
-              toast.success("Copied to clipboard.");
-            } else {
-              toast.error("Unsuccessful.");
-            }
-          });
-        }}
-      >
-        button
-      </Button>
       <Box
         width="100%"
         display="flex"
