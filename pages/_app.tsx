@@ -1,6 +1,7 @@
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { Analytics } from "@vercel/analytics/react";
 import { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
 import Head from "next/head";
@@ -30,6 +31,7 @@ export default function MyApp(props: MyAppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Component {...pageProps} />
+          <Analytics />
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
