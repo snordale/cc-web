@@ -26,8 +26,27 @@ const Admin: React.FC = () => {
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
-  const handleCreateCuratorLink = async () => {
+  const createCuratorToken2 = () =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve({ token: "swag" });
+      }, 300);
+    });
+
+  const handleCreateCuratorLink = () => {
     createCuratorToken().then(async (data) => {
+      if (data.token) {
+        await navigator.clipboard.writeText(
+          `${root}${routes.join}?token=${data.token}`
+        );
+        toast.success("Copied to clipboard.");
+      } else {
+        toast.error("Unsuccessful.");
+      }
+    });
+  };
+  const handleCreateCuratorLink2 = () => {
+    createCuratorToken2().then(async (data: any) => {
       if (data.token) {
         await navigator.clipboard.writeText(
           `${root}${routes.join}?token=${data.token}`
@@ -65,6 +84,15 @@ const Admin: React.FC = () => {
             onClick={handleCreateCuratorLink}
           >
             Create Curator Link
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant="outlined"
+            sx={{ marginTop: "12px" }}
+            onClick={handleCreateCuratorLink2}
+          >
+            Create Curator Link2
           </Button>
         </Box>
         <Box>

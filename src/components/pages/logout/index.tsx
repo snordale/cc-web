@@ -43,7 +43,7 @@ export const Logout = () => {
   return (
     <NormalPage>
       <Box width="100%">
-        <Typography>Logging out...</Typography>
+        <Typography>See you space cowboy...</Typography>
       </Box>
     </NormalPage>
   );
